@@ -69,6 +69,11 @@
             btn_Save = new Button();
             btn_new_prg = new Button();
             textBox2 = new TextBox();
+            menuStrip1 = new MenuStrip();
+            toolStripMenuItem1 = new ToolStripMenuItem();
+            fileToolStripMenuItem = new ToolStripMenuItem();
+            openToolStripMenuItem = new ToolStripMenuItem();
+            communicationToolStripMenuItem = new ToolStripMenuItem();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
             groupBox3.SuspendLayout();
@@ -77,6 +82,7 @@
             ((System.ComponentModel.ISupportInitialize)dg_prg).BeginInit();
             groupBox7.SuspendLayout();
             groupBox8.SuspendLayout();
+            menuStrip1.SuspendLayout();
             SuspendLayout();
             // 
             // txt_Status
@@ -466,6 +472,41 @@
             textBox2.Size = new Size(83, 27);
             textBox2.TabIndex = 0;
             // 
+            // menuStrip1
+            // 
+            menuStrip1.ImageScalingSize = new Size(20, 20);
+            menuStrip1.Items.AddRange(new ToolStripItem[] { toolStripMenuItem1, openToolStripMenuItem, communicationToolStripMenuItem });
+            menuStrip1.Location = new Point(0, 0);
+            menuStrip1.Name = "menuStrip1";
+            menuStrip1.Size = new Size(1882, 28);
+            menuStrip1.TabIndex = 12;
+            menuStrip1.Text = "menuStrip1";
+            // 
+            // toolStripMenuItem1
+            // 
+            toolStripMenuItem1.DropDownItems.AddRange(new ToolStripItem[] { fileToolStripMenuItem });
+            toolStripMenuItem1.Name = "toolStripMenuItem1";
+            toolStripMenuItem1.Size = new Size(156, 24);
+            toolStripMenuItem1.Text = "toolStripMenuItem1";
+            // 
+            // fileToolStripMenuItem
+            // 
+            fileToolStripMenuItem.Name = "fileToolStripMenuItem";
+            fileToolStripMenuItem.Size = new Size(224, 26);
+            fileToolStripMenuItem.Text = "File";
+            // 
+            // openToolStripMenuItem
+            // 
+            openToolStripMenuItem.Name = "openToolStripMenuItem";
+            openToolStripMenuItem.Size = new Size(59, 24);
+            openToolStripMenuItem.Text = "Open";
+            // 
+            // communicationToolStripMenuItem
+            // 
+            communicationToolStripMenuItem.Name = "communicationToolStripMenuItem";
+            communicationToolStripMenuItem.Size = new Size(128, 24);
+            communicationToolStripMenuItem.Text = "Communication";
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
@@ -480,6 +521,8 @@
             Controls.Add(groupBox2);
             Controls.Add(groupBox1);
             Controls.Add(txt_Status);
+            Controls.Add(menuStrip1);
+            MainMenuStrip = menuStrip1;
             Name = "Form1";
             Text = "Form1";
             WindowState = FormWindowState.Maximized;
@@ -496,6 +539,8 @@
             groupBox7.ResumeLayout(false);
             groupBox8.ResumeLayout(false);
             groupBox8.PerformLayout();
+            menuStrip1.ResumeLayout(false);
+            menuStrip1.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -544,5 +589,10 @@
         private Button btn_Open;
         private Button btn_export;
         private Button btn_prg_send;
+        private MenuStrip menuStrip1;
+        private ToolStripMenuItem toolStripMenuItem1;
+        private ToolStripMenuItem fileToolStripMenuItem;
+        private ToolStripMenuItem openToolStripMenuItem;
+        private ToolStripMenuItem communicationToolStripMenuItem;
     }
 }

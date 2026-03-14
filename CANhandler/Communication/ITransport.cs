@@ -4,7 +4,15 @@ using System.Text;
 
 namespace CANhandler.Communication
 {
-    internal interface ITransport
+    public interface ITransport
     {
+        bool IsConnected { get; }
+
+        void Connect();
+        void Disconnect();
+
+        void Send(byte[] data);
+
+        event Action<byte[]> DataReceived;
     }
 }
