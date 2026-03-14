@@ -33,13 +33,21 @@ namespace CANhandler
         public Form1()
         {
             InitializeComponent();
-            _serialPort = new SerialPort("COM7", 38400);   // change COM port if needed
-            _serialPort.Open();
-            _kbus = new KBusComm(_serialPort);
+            //_serialPort = new SerialPort("COM7", 38400);   // change COM port if needed
+            //_serialPort.Open();
+            //_kbus = new KBusComm(_serialPort);
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            //comboComPort.Text = ConfigManager.Config.Communication.CommPort;
+            //comboBaud.Text = ConfigManager.Config.Communication.BaudRate.ToString();
+
+            //ConfigManager.Config.Communication.CommPort = comboComPort.Text;
+            //ConfigManager.Config.Communication.BaudRate = int.Parse(comboBaud.Text);
+
+            //ConfigManager.Save();
+
             pb_connect.BackColor = Color.Gray;
             GridConfigurator.ConfigureProgramGrid(dg_prg);
             dg_prg.RowPostPaint += dg_prg_RowPostPaint;
