@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace CANhandler
+namespace CANhandler.Models
 {
     public class KBusPacket
     {
@@ -12,7 +12,7 @@ namespace CANhandler
         public byte Multicast { get; set; }
         public ushort Address { get; set; }
         public byte RWFlag { get; set; }
-        public Command CmdParameter { get; set; }
+        public byte CmdParameter { get; set; }
         public byte[] Data { get; set; }
         public ushort CRC { get; set; }
         public ushort Postamble { get; set; }

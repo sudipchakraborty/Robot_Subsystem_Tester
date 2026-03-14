@@ -1,0 +1,2 @@
+Line,Enable,PIC Type,Action,Command,MSB,LSB,Delay,Loop
+1,True,PIC_DISP_3X3_LIQUID,Read,PB6_LED,1,1,1,1

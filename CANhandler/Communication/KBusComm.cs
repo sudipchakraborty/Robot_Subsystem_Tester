@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.IO.Ports;
 using System.Threading;
 
-namespace CANhandler
+namespace CANhandler.Communication
 {
     public class KBusComm
     {
@@ -39,6 +39,17 @@ namespace CANhandler
                 return _responsePacket;
 
             return null;
+        }
+
+        public void SendOnly(byte[] txBuffer)
+        {
+            if (_serialPort == null || !_serialPort.IsOpen)
+                throw new InvalidOperationException("Serial port is not open.");
+
+            if (txBuffer == null || txBuffer.Length == 0)
+                throw new ArgumentException("TX buffer empty");
+
+            _serialPort.Write(txBuffer, 0, txBuffer.Length);
         }
 
         private void SerialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)

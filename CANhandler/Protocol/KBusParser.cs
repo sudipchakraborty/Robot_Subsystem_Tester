@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CANhandler.Models;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -31,7 +32,7 @@ namespace CANhandler
                 index += 2;
 
                 packet.RWFlag = buffer[index++];
-                packet.CmdParameter = (Command)buffer[index++];
+                packet.CmdParameter = buffer[index++];
 
                 int dataLength = packet.Length - 13;
 

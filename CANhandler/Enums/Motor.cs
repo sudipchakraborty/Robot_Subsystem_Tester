@@ -1,8 +1,10 @@
-﻿using System;
+﻿using Microsoft.VisualBasic.Logging;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 
-namespace CANhandler
+namespace CANhandler.Enums
 {
     public static class Address
     {
@@ -20,5 +22,22 @@ namespace CANhandler
             public const int L3 = 309;
             public const int L4 = 310;
         }
+
+        public static class Dispenser
+        {
+            public const int PIC_DISP_3X3_GRAINS = 101;
+            public const int PIC_DISP_3X3_LIQUID = 102;
+            public const int PIC_DISP_3X3_PUREE = 103;
+            public const int PIC_DISP_6X6_GRAINS = 104;
+            public const int PIC_DISP_6X6_LIQUID = 105;
+            public const int PIC_DISP_6X6_PUREE = 106;
+
+         
+        }
+  
+
+
+
+
     }
 }

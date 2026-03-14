@@ -1,11 +1,10 @@
-﻿using System;
+﻿using CANhandler.Models;
+using System;
 using System.Collections.Generic;
 using System.Text;
-using static CANhandler.ProtocolConstants;
+using static CANhandler.Constants.ProtocolConstants;
 
-namespace CANhandler
-{
-    namespace CANhandler
+namespace CANhandler.Protocol
     {
         public static class KBusBuilder
         {
@@ -103,4 +102,3 @@ namespace CANhandler
             }
         }
     }
-}
