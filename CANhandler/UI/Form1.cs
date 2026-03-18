@@ -40,7 +40,7 @@ namespace CANhandler
             dg_prg.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dg_prg.MultiSelect = true;
         }
-
+        //________________________________________________________________________
         private void Form1_Load(object sender, EventArgs e)
         {
 
