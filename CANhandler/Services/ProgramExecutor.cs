@@ -10,40 +10,100 @@ namespace CANhandler.Services
     public class ProgramExecutor
     {
         private readonly KBusComm _kbus;
+        private readonly DataGridView _grid;
+        private bool _isPaused = false;
+        private bool _isStopped = false;
 
-        public ProgramExecutor(KBusComm kbus)
+        public ProgramExecutor(KBusComm kbus, DataGridView grid)
         {
             _kbus = kbus;
+            _grid = grid;
         }
 
         public async Task RunProgramAsync(List<ProgramStep> steps)
         {
-            foreach (var step in steps)
+            _isStopped = false;
+
+            do
             {
-                if (!step.Enable)
-                    continue;
-
-                for (int i = 0; i < step.Loop; i++)
+                for (int rowIndex = 0; rowIndex < steps.Count; rowIndex++)
                 {
-                    DispenseRequest req = new DispenseRequest
+                    if (_isStopped)
+                        return;
+
+                    var step = steps[rowIndex];
+
+                    if (!step.Enable)
+                        continue;
+
+                    // Highlight row
+                    _grid.Invoke(() =>
                     {
-                        DispenserType = step.PicType,
-                        Action = step.Action,
-                        Command = step.Command,
-                        MSB =Convert.ToString(step.MSB),
-                        LSB = Convert.ToString(step.LSB)
-                    };
+                        GridExecutionService.HighlightExecutingRow(_grid, rowIndex);
+                    });
 
-                    KBusPacket pkt = DispenserCommandService.CreatePacket(req);
+                    for (int i = 0; i < step.Loop; i++)
+                    {
+                        if (_isStopped)
+                            return;
 
-                    byte[] buffer = KBusBuilder.BuildPacket(pkt);
+                        // 🔥 Pause handling
+                        while (_isPaused)
+                        {
+                            await Task.Delay(100);
+                        }
 
-                    //_kbus.SendAndReceive(buffer);
-                    _kbus.SendOnly(buffer);
+                        DispenseRequest req = new DispenseRequest
+                        {
+                            DispenserType = step.PicType,
+                            Action = step.Action,
+                            Command = step.Command,
+                            MSB = Convert.ToString(step.MSB),
+                            LSB = Convert.ToString(step.LSB)
+                        };
 
-                    await Task.Delay(step.Delay);
+                        KBusPacket pkt = DispenserCommandService.CreatePacket(req);
+                        byte[] buffer = KBusBuilder.BuildPacket(pkt);
+
+                        UIConfig config = ConfigManager.Config.UI;
+
+                        if (config.SelectedInterface == InterfaceType.RealHardware)
+                            _kbus?.SendOnly(buffer);
+
+                        await Task.Delay(step.Delay);
+                    }
                 }
-            }
+
+            } while (!_isStopped && ConfigManager.Config.UI.LoopEnable);
         }
+
+
+        public void Pause()
+        {
+            _isPaused = true;
+        }
+
+        public void Resume()
+        {
+            _isPaused = false;
+        }
+
+        public void Stop()
+        {
+            _isStopped = true;
+        }
+
+        public void Reset()
+        {
+            _isStopped = true;
+            _isPaused = false;
+
+            _grid.Invoke(() =>
+            {
+                GridExecutionService.HighlightExecutingRow(_grid, 0);
+            });
+        }
+
+
     }
 }

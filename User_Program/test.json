@@ -4,10 +4,10 @@
     "Enable": true,
     "PicType": "PIC_DISP_3X3_LIQUID",
     "Action": "Read",
-    "Command": "PB6_LED",
-    "MSB": 1,
-    "LSB": 1,
-    "Delay": 1,
+    "Command": "",
+    "MSB": 0,
+    "LSB": 0,
+    "Delay": 0,
     "Loop": 1
   }
 ]

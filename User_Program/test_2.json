@@ -1,0 +1,57 @@
+[
+  {
+    "LineNo": 1,
+    "Enable": true,
+    "PicType": "PIC_DISP_3X3_PUREE",
+    "Action": "Read",
+    "Command": "PB6_LED",
+    "MSB": 0,
+    "LSB": 0,
+    "Delay": 100,
+    "Loop": 1
+  },
+  {
+    "LineNo": 2,
+    "Enable": false,
+    "PicType": "PIC_DISP_6X6_LIQUID",
+    "Action": "Write",
+    "Command": "Who_Are_You",
+    "MSB": 0,
+    "LSB": 0,
+    "Delay": 100,
+    "Loop": 1
+  },
+  {
+    "LineNo": 3,
+    "Enable": true,
+    "PicType": "SM_PIC_MOTOR_DRIVER_Y",
+    "Action": "Read",
+    "Command": "PB6_LED",
+    "MSB": 0,
+    "LSB": 0,
+    "Delay": 100,
+    "Loop": 1
+  },
+  {
+    "LineNo": 4,
+    "Enable": true,
+    "PicType": "SM_PIC_MOTOR_DRIVER_Y",
+    "Action": "Write",
+    "Command": "PB5_LED",
+    "MSB": 0,
+    "LSB": 0,
+    "Delay": 100,
+    "Loop": 1
+  },
+  {
+    "LineNo": 5,
+    "Enable": false,
+    "PicType": "",
+    "Action": "",
+    "Command": "",
+    "MSB": 0,
+    "LSB": 0,
+    "Delay": 0,
+    "Loop": 1
+  }
+]

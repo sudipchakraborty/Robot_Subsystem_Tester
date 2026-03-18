@@ -1,6 +1,6 @@
 ﻿namespace CANhandler
 {
-    partial class Form1
+    partial class frm_main
     {
         /// <summary>
         ///  Required designer variable.
@@ -28,22 +28,44 @@
         /// </summary>
         private void InitializeComponent()
         {
-            txt_Status = new TextBox();
+            components = new System.ComponentModel.Container();
+            groupBox7 = new GroupBox();
+            chk_loop = new CheckBox();
+            btn_prg_send = new Button();
+            btn_Stop = new Button();
             groupBox1 = new GroupBox();
-            lst_History = new ListBox();
-            txt_cmd = new TextBox();
-            groupBox2 = new GroupBox();
-            groupBox3 = new GroupBox();
-            label7 = new Label();
-            pb_connect = new PictureBox();
-            cbo_Baudrate = new ComboBox();
-            cbo_port = new ComboBox();
-            btn_Disconnect = new Button();
-            btn_Connect = new Button();
-            label2 = new Label();
-            label1 = new Label();
-            label6 = new Label();
-            groupBox5 = new GroupBox();
+            rbtn_externalSim = new RadioButton();
+            rbtn_InbuiltSim = new RadioButton();
+            rbtn_real_hardware = new RadioButton();
+            btn_run = new Button();
+            btn_pause = new Button();
+            menuStrip1 = new MenuStrip();
+            toolStripMenuItem1 = new ToolStripMenuItem();
+            fileToolStripMenuItem = new ToolStripMenuItem();
+            openToolStripMenuItem1 = new ToolStripMenuItem();
+            recentFilesToolStripMenuItem = new ToolStripMenuItem();
+            saveToolStripMenuItem = new ToolStripMenuItem();
+            saveAsToolStripMenuItem = new ToolStripMenuItem();
+            exportToolStripMenuItem = new ToolStripMenuItem();
+            exutToolStripMenuItem = new ToolStripMenuItem();
+            communicationToolStripMenuItem = new ToolStripMenuItem();
+            serialToolStripMenuItem = new ToolStripMenuItem();
+            tCPToolStripMenuItem = new ToolStripMenuItem();
+            uDPToolStripMenuItem = new ToolStripMenuItem();
+            disconnectToolStripMenuItem = new ToolStripMenuItem();
+            communicationBusToolStripMenuItem = new ToolStripMenuItem();
+            cANToolStripMenuItem = new ToolStripMenuItem();
+            modBusToolStripMenuItem = new ToolStripMenuItem();
+            programToolStripMenuItem = new ToolStripMenuItem();
+            rUNToolStripMenuItem = new ToolStripMenuItem();
+            sTOPToolStripMenuItem = new ToolStripMenuItem();
+            pAUSEToolStripMenuItem = new ToolStripMenuItem();
+            resetToolStripMenuItem = new ToolStripMenuItem();
+            toolsToolStripMenuItem = new ToolStripMenuItem();
+            settingsToolStripMenuItem = new ToolStripMenuItem();
+            packetMonitorToolStripMenuItem = new ToolStripMenuItem();
+            helpToolStripMenuItem = new ToolStripMenuItem();
+            aboutToolStripMenuItem = new ToolStripMenuItem();
             dg_prg = new DataGridView();
             col_line_no = new DataGridViewTextBoxColumn();
             col_enable = new DataGridViewCheckBoxColumn();
@@ -54,202 +76,326 @@
             col_LSB = new DataGridViewTextBoxColumn();
             col_delay = new DataGridViewTextBoxColumn();
             col_loop = new DataGridViewTextBoxColumn();
-            groupBox7 = new GroupBox();
-            btn_prg_send = new Button();
-            button7 = new Button();
-            button5 = new Button();
-            btn_run = new Button();
-            button3 = new Button();
-            button2 = new Button();
-            label13 = new Label();
-            textBox1 = new TextBox();
-            groupBox8 = new GroupBox();
-            btn_export = new Button();
-            btn_Open = new Button();
-            btn_Save = new Button();
-            btn_new_prg = new Button();
-            textBox2 = new TextBox();
-            menuStrip1 = new MenuStrip();
-            toolStripMenuItem1 = new ToolStripMenuItem();
-            fileToolStripMenuItem = new ToolStripMenuItem();
-            openToolStripMenuItem = new ToolStripMenuItem();
-            communicationToolStripMenuItem = new ToolStripMenuItem();
-            groupBox1.SuspendLayout();
-            groupBox2.SuspendLayout();
-            groupBox3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)pb_connect).BeginInit();
-            groupBox5.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)dg_prg).BeginInit();
+            statusStrip = new StatusStrip();
+            toolStripStatusLabel1 = new ToolStripStatusLabel();
+            lbl_message = new ToolStripStatusLabel();
+            contextMenuStrip1 = new ContextMenuStrip(components);
+            InsertRow = new ToolStripMenuItem();
+            DeleteRow = new ToolStripMenuItem();
+            btn_resume = new Button();
             groupBox7.SuspendLayout();
-            groupBox8.SuspendLayout();
+            groupBox1.SuspendLayout();
             menuStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dg_prg).BeginInit();
+            statusStrip.SuspendLayout();
+            contextMenuStrip1.SuspendLayout();
             SuspendLayout();
             // 
-            // txt_Status
+            // groupBox7
             // 
-            txt_Status.Location = new Point(1378, 903);
-            txt_Status.Name = "txt_Status";
-            txt_Status.Size = new Size(467, 27);
-            txt_Status.TabIndex = 2;
+            groupBox7.Controls.Add(btn_resume);
+            groupBox7.Controls.Add(chk_loop);
+            groupBox7.Controls.Add(btn_prg_send);
+            groupBox7.Controls.Add(btn_Stop);
+            groupBox7.Controls.Add(groupBox1);
+            groupBox7.Controls.Add(btn_run);
+            groupBox7.Controls.Add(btn_pause);
+            groupBox7.Location = new Point(1303, 31);
+            groupBox7.Name = "groupBox7";
+            groupBox7.Size = new Size(167, 619);
+            groupBox7.TabIndex = 10;
+            groupBox7.TabStop = false;
+            groupBox7.Text = "Control Panel";
+            // 
+            // chk_loop
+            // 
+            chk_loop.AutoSize = true;
+            chk_loop.ForeColor = Color.White;
+            chk_loop.Location = new Point(10, 430);
+            chk_loop.Name = "chk_loop";
+            chk_loop.Size = new Size(67, 24);
+            chk_loop.TabIndex = 14;
+            chk_loop.Text = "LOOP";
+            chk_loop.UseVisualStyleBackColor = true;
+            chk_loop.CheckedChanged += chk_loop_CheckedChanged;
+            // 
+            // btn_prg_send
+            // 
+            btn_prg_send.Location = new Point(6, 227);
+            btn_prg_send.Name = "btn_prg_send";
+            btn_prg_send.Size = new Size(143, 152);
+            btn_prg_send.TabIndex = 3;
+            btn_prg_send.Text = "SEND";
+            btn_prg_send.UseVisualStyleBackColor = true;
+            btn_prg_send.Click += btn_prg_send_Click;
+            // 
+            // btn_Stop
+            // 
+            btn_Stop.Location = new Point(6, 162);
+            btn_Stop.Name = "btn_Stop";
+            btn_Stop.Size = new Size(155, 59);
+            btn_Stop.TabIndex = 2;
+            btn_Stop.Text = "STOP";
+            btn_Stop.UseVisualStyleBackColor = true;
+            btn_Stop.Click += btn_Stop_Click;
             // 
             // groupBox1
             // 
-            groupBox1.BackColor = Color.Black;
-            groupBox1.Controls.Add(lst_History);
-            groupBox1.ForeColor = Color.Cyan;
-            groupBox1.Location = new Point(725, 785);
+            groupBox1.Controls.Add(rbtn_externalSim);
+            groupBox1.Controls.Add(rbtn_InbuiltSim);
+            groupBox1.Controls.Add(rbtn_real_hardware);
+            groupBox1.ForeColor = Color.White;
+            groupBox1.Location = new Point(4, 471);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(766, 66);
-            groupBox1.TabIndex = 3;
+            groupBox1.Size = new Size(145, 142);
+            groupBox1.TabIndex = 13;
             groupBox1.TabStop = false;
-            groupBox1.Text = "History";
+            groupBox1.Text = "Interface";
             // 
-            // lst_History
+            // rbtn_externalSim
             // 
-            lst_History.FormattingEnabled = true;
-            lst_History.Location = new Point(20, 26);
-            lst_History.Name = "lst_History";
-            lst_History.Size = new Size(721, 24);
-            lst_History.TabIndex = 0;
+            rbtn_externalSim.AutoSize = true;
+            rbtn_externalSim.Location = new Point(6, 56);
+            rbtn_externalSim.Name = "rbtn_externalSim";
+            rbtn_externalSim.Size = new Size(114, 24);
+            rbtn_externalSim.TabIndex = 2;
+            rbtn_externalSim.TabStop = true;
+            rbtn_externalSim.Text = "External-Sim";
+            rbtn_externalSim.UseVisualStyleBackColor = true;
+            rbtn_externalSim.CheckedChanged += rbtn_externalSim_CheckedChanged;
             // 
-            // txt_cmd
+            // rbtn_InbuiltSim
             // 
-            txt_cmd.BackColor = Color.Black;
-            txt_cmd.ForeColor = Color.White;
-            txt_cmd.Location = new Point(15, 33);
-            txt_cmd.Name = "txt_cmd";
-            txt_cmd.Size = new Size(435, 27);
-            txt_cmd.TabIndex = 4;
+            rbtn_InbuiltSim.AutoSize = true;
+            rbtn_InbuiltSim.Location = new Point(6, 26);
+            rbtn_InbuiltSim.Name = "rbtn_InbuiltSim";
+            rbtn_InbuiltSim.Size = new Size(103, 24);
+            rbtn_InbuiltSim.TabIndex = 1;
+            rbtn_InbuiltSim.TabStop = true;
+            rbtn_InbuiltSim.Text = "Inbuilt-Sim";
+            rbtn_InbuiltSim.UseVisualStyleBackColor = true;
+            rbtn_InbuiltSim.CheckedChanged += rbtn_InbuiltSim_CheckedChanged;
             // 
-            // groupBox2
+            // rbtn_real_hardware
             // 
-            groupBox2.Controls.Add(txt_cmd);
-            groupBox2.Location = new Point(12, 824);
-            groupBox2.Name = "groupBox2";
-            groupBox2.Size = new Size(469, 106);
-            groupBox2.TabIndex = 5;
-            groupBox2.TabStop = false;
-            groupBox2.Text = "Command Terminal";
+            rbtn_real_hardware.AutoSize = true;
+            rbtn_real_hardware.Location = new Point(6, 86);
+            rbtn_real_hardware.Name = "rbtn_real_hardware";
+            rbtn_real_hardware.Size = new Size(128, 24);
+            rbtn_real_hardware.TabIndex = 0;
+            rbtn_real_hardware.TabStop = true;
+            rbtn_real_hardware.Text = "Real Hardware";
+            rbtn_real_hardware.UseVisualStyleBackColor = true;
+            rbtn_real_hardware.CheckedChanged += rbtn_real_hardware_CheckedChanged;
             // 
-            // groupBox3
+            // btn_run
             // 
-            groupBox3.BackColor = Color.FromArgb(0, 192, 192);
-            groupBox3.Controls.Add(label7);
-            groupBox3.Controls.Add(pb_connect);
-            groupBox3.Controls.Add(cbo_Baudrate);
-            groupBox3.Controls.Add(cbo_port);
-            groupBox3.Controls.Add(btn_Disconnect);
-            groupBox3.Controls.Add(btn_Connect);
-            groupBox3.Controls.Add(label2);
-            groupBox3.Controls.Add(label1);
-            groupBox3.Location = new Point(12, 119);
-            groupBox3.Name = "groupBox3";
-            groupBox3.Size = new Size(314, 143);
-            groupBox3.TabIndex = 6;
-            groupBox3.TabStop = false;
-            groupBox3.Text = "Communicate";
+            btn_run.Location = new Point(4, 26);
+            btn_run.Name = "btn_run";
+            btn_run.Size = new Size(157, 58);
+            btn_run.TabIndex = 2;
+            btn_run.Text = "RUN";
+            btn_run.UseVisualStyleBackColor = true;
+            btn_run.Click += btn_run_Click;
             // 
-            // label7
+            // btn_pause
             // 
-            label7.AutoSize = true;
-            label7.Location = new Point(245, 39);
-            label7.Name = "label7";
-            label7.Size = new Size(63, 20);
-            label7.TabIndex = 7;
-            label7.Text = "Connect";
+            btn_pause.Location = new Point(6, 90);
+            btn_pause.Name = "btn_pause";
+            btn_pause.Size = new Size(71, 66);
+            btn_pause.TabIndex = 2;
+            btn_pause.Text = "PAUSE";
+            btn_pause.UseVisualStyleBackColor = true;
+            btn_pause.Click += btn_pause_Click;
             // 
-            // pb_connect
+            // menuStrip1
             // 
-            pb_connect.Location = new Point(263, 62);
-            pb_connect.Name = "pb_connect";
-            pb_connect.Size = new Size(28, 22);
-            pb_connect.TabIndex = 6;
-            pb_connect.TabStop = false;
+            menuStrip1.ImageScalingSize = new Size(20, 20);
+            menuStrip1.Items.AddRange(new ToolStripItem[] { toolStripMenuItem1, communicationToolStripMenuItem, communicationBusToolStripMenuItem, programToolStripMenuItem, toolsToolStripMenuItem, helpToolStripMenuItem });
+            menuStrip1.Location = new Point(0, 0);
+            menuStrip1.Name = "menuStrip1";
+            menuStrip1.Size = new Size(1482, 28);
+            menuStrip1.TabIndex = 12;
+            menuStrip1.Text = "menuStrip1";
             // 
-            // cbo_Baudrate
+            // toolStripMenuItem1
             // 
-            cbo_Baudrate.FormattingEnabled = true;
-            cbo_Baudrate.Items.AddRange(new object[] { "9600", "19200", "38400", "115200" });
-            cbo_Baudrate.Location = new Point(81, 63);
-            cbo_Baudrate.Name = "cbo_Baudrate";
-            cbo_Baudrate.Size = new Size(142, 28);
-            cbo_Baudrate.TabIndex = 5;
+            toolStripMenuItem1.DropDownItems.AddRange(new ToolStripItem[] { fileToolStripMenuItem, openToolStripMenuItem1, recentFilesToolStripMenuItem, saveToolStripMenuItem, saveAsToolStripMenuItem, exportToolStripMenuItem, exutToolStripMenuItem });
+            toolStripMenuItem1.Name = "toolStripMenuItem1";
+            toolStripMenuItem1.Size = new Size(46, 24);
+            toolStripMenuItem1.Text = "File";
             // 
-            // cbo_port
+            // fileToolStripMenuItem
             // 
-            cbo_port.FormattingEnabled = true;
-            cbo_port.Items.AddRange(new object[] { "COM 1", "COM 2", "COM 3", "COM 4" });
-            cbo_port.Location = new Point(83, 31);
-            cbo_port.Name = "cbo_port";
-            cbo_port.Size = new Size(140, 28);
-            cbo_port.TabIndex = 4;
+            fileToolStripMenuItem.Name = "fileToolStripMenuItem";
+            fileToolStripMenuItem.Size = new Size(170, 26);
+            fileToolStripMenuItem.Text = "New";
+            fileToolStripMenuItem.Click += fileToolStripMenuItem_Click;
             // 
-            // btn_Disconnect
+            // openToolStripMenuItem1
             // 
-            btn_Disconnect.Location = new Point(117, 97);
-            btn_Disconnect.Name = "btn_Disconnect";
-            btn_Disconnect.Size = new Size(106, 40);
-            btn_Disconnect.TabIndex = 3;
-            btn_Disconnect.Text = "Disconnect";
-            btn_Disconnect.UseVisualStyleBackColor = true;
+            openToolStripMenuItem1.Name = "openToolStripMenuItem1";
+            openToolStripMenuItem1.Size = new Size(170, 26);
+            openToolStripMenuItem1.Text = "Open";
+            openToolStripMenuItem1.Click += openToolStripMenuItem1_Click;
             // 
-            // btn_Connect
+            // recentFilesToolStripMenuItem
             // 
-            btn_Connect.Location = new Point(19, 97);
-            btn_Connect.Name = "btn_Connect";
-            btn_Connect.Size = new Size(92, 40);
-            btn_Connect.TabIndex = 3;
-            btn_Connect.Text = "Connect";
-            btn_Connect.UseVisualStyleBackColor = true;
-            btn_Connect.Click += btn_Connect_Click;
+            recentFilesToolStripMenuItem.Name = "recentFilesToolStripMenuItem";
+            recentFilesToolStripMenuItem.Size = new Size(170, 26);
+            recentFilesToolStripMenuItem.Text = "Recent Files";
             // 
-            // label2
+            // saveToolStripMenuItem
             // 
-            label2.AutoSize = true;
-            label2.Location = new Point(4, 64);
-            label2.Name = "label2";
-            label2.Size = new Size(73, 20);
-            label2.TabIndex = 0;
-            label2.Text = "BaudRate";
+            saveToolStripMenuItem.Name = "saveToolStripMenuItem";
+            saveToolStripMenuItem.Size = new Size(170, 26);
+            saveToolStripMenuItem.Text = "Save";
+            saveToolStripMenuItem.Click += saveToolStripMenuItem_Click;
             // 
-            // label1
+            // saveAsToolStripMenuItem
             // 
-            label1.AutoSize = true;
-            label1.Location = new Point(33, 34);
-            label1.Name = "label1";
-            label1.Size = new Size(44, 20);
-            label1.TabIndex = 0;
-            label1.Text = "PORT";
+            saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
+            saveAsToolStripMenuItem.Size = new Size(170, 26);
+            saveAsToolStripMenuItem.Text = "Save As";
             // 
-            // label6
+            // exportToolStripMenuItem
             // 
-            label6.AutoSize = true;
-            label6.ForeColor = Color.Yellow;
-            label6.Location = new Point(1378, 881);
-            label6.Name = "label6";
-            label6.Size = new Size(128, 20);
-            label6.TabIndex = 1;
-            label6.Text = "STATUS MESSAGE";
+            exportToolStripMenuItem.Name = "exportToolStripMenuItem";
+            exportToolStripMenuItem.Size = new Size(170, 26);
+            exportToolStripMenuItem.Text = "Export";
+            exportToolStripMenuItem.Click += exportToolStripMenuItem_Click;
             // 
-            // groupBox5
+            // exutToolStripMenuItem
             // 
-            groupBox5.Controls.Add(dg_prg);
-            groupBox5.Location = new Point(361, 176);
-            groupBox5.Name = "groupBox5";
-            groupBox5.Size = new Size(1343, 555);
-            groupBox5.TabIndex = 8;
-            groupBox5.TabStop = false;
-            groupBox5.Text = "PROGRAM";
+            exutToolStripMenuItem.Name = "exutToolStripMenuItem";
+            exutToolStripMenuItem.Size = new Size(170, 26);
+            exutToolStripMenuItem.Text = "Exit";
+            // 
+            // communicationToolStripMenuItem
+            // 
+            communicationToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { serialToolStripMenuItem, tCPToolStripMenuItem, uDPToolStripMenuItem, disconnectToolStripMenuItem });
+            communicationToolStripMenuItem.Name = "communicationToolStripMenuItem";
+            communicationToolStripMenuItem.Size = new Size(114, 24);
+            communicationToolStripMenuItem.Text = "Physical Layer";
+            // 
+            // serialToolStripMenuItem
+            // 
+            serialToolStripMenuItem.Name = "serialToolStripMenuItem";
+            serialToolStripMenuItem.Size = new Size(165, 26);
+            serialToolStripMenuItem.Text = "Serial";
+            // 
+            // tCPToolStripMenuItem
+            // 
+            tCPToolStripMenuItem.Name = "tCPToolStripMenuItem";
+            tCPToolStripMenuItem.Size = new Size(165, 26);
+            tCPToolStripMenuItem.Text = "TCP";
+            // 
+            // uDPToolStripMenuItem
+            // 
+            uDPToolStripMenuItem.Name = "uDPToolStripMenuItem";
+            uDPToolStripMenuItem.Size = new Size(165, 26);
+            uDPToolStripMenuItem.Text = "UDP";
+            // 
+            // disconnectToolStripMenuItem
+            // 
+            disconnectToolStripMenuItem.Name = "disconnectToolStripMenuItem";
+            disconnectToolStripMenuItem.Size = new Size(165, 26);
+            disconnectToolStripMenuItem.Text = "Disconnect";
+            // 
+            // communicationBusToolStripMenuItem
+            // 
+            communicationBusToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { cANToolStripMenuItem, modBusToolStripMenuItem });
+            communicationBusToolStripMenuItem.Name = "communicationBusToolStripMenuItem";
+            communicationBusToolStripMenuItem.Size = new Size(155, 24);
+            communicationBusToolStripMenuItem.Text = "Communication Bus";
+            // 
+            // cANToolStripMenuItem
+            // 
+            cANToolStripMenuItem.Name = "cANToolStripMenuItem";
+            cANToolStripMenuItem.Size = new Size(146, 26);
+            cANToolStripMenuItem.Text = "CAN";
+            // 
+            // modBusToolStripMenuItem
+            // 
+            modBusToolStripMenuItem.Name = "modBusToolStripMenuItem";
+            modBusToolStripMenuItem.Size = new Size(146, 26);
+            modBusToolStripMenuItem.Text = "ModBus";
+            // 
+            // programToolStripMenuItem
+            // 
+            programToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { rUNToolStripMenuItem, sTOPToolStripMenuItem, pAUSEToolStripMenuItem, resetToolStripMenuItem });
+            programToolStripMenuItem.Name = "programToolStripMenuItem";
+            programToolStripMenuItem.Size = new Size(80, 24);
+            programToolStripMenuItem.Text = "Program";
+            // 
+            // rUNToolStripMenuItem
+            // 
+            rUNToolStripMenuItem.Name = "rUNToolStripMenuItem";
+            rUNToolStripMenuItem.Size = new Size(129, 26);
+            rUNToolStripMenuItem.Text = "Run";
+            rUNToolStripMenuItem.Click += rUNToolStripMenuItem_Click;
+            // 
+            // sTOPToolStripMenuItem
+            // 
+            sTOPToolStripMenuItem.Name = "sTOPToolStripMenuItem";
+            sTOPToolStripMenuItem.Size = new Size(129, 26);
+            sTOPToolStripMenuItem.Text = "Stop";
+            // 
+            // pAUSEToolStripMenuItem
+            // 
+            pAUSEToolStripMenuItem.Name = "pAUSEToolStripMenuItem";
+            pAUSEToolStripMenuItem.Size = new Size(129, 26);
+            pAUSEToolStripMenuItem.Text = "Pause";
+            // 
+            // resetToolStripMenuItem
+            // 
+            resetToolStripMenuItem.Name = "resetToolStripMenuItem";
+            resetToolStripMenuItem.Size = new Size(129, 26);
+            resetToolStripMenuItem.Text = "Reset";
+            // 
+            // toolsToolStripMenuItem
+            // 
+            toolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { settingsToolStripMenuItem, packetMonitorToolStripMenuItem });
+            toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
+            toolsToolStripMenuItem.Size = new Size(58, 24);
+            toolsToolStripMenuItem.Text = "Tools";
+            // 
+            // settingsToolStripMenuItem
+            // 
+            settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
+            settingsToolStripMenuItem.Size = new Size(191, 26);
+            settingsToolStripMenuItem.Text = "Settings";
+            // 
+            // packetMonitorToolStripMenuItem
+            // 
+            packetMonitorToolStripMenuItem.Name = "packetMonitorToolStripMenuItem";
+            packetMonitorToolStripMenuItem.Size = new Size(191, 26);
+            packetMonitorToolStripMenuItem.Text = "Packet Monitor";
+            // 
+            // helpToolStripMenuItem
+            // 
+            helpToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { aboutToolStripMenuItem });
+            helpToolStripMenuItem.Name = "helpToolStripMenuItem";
+            helpToolStripMenuItem.Size = new Size(55, 24);
+            helpToolStripMenuItem.Text = "Help";
+            // 
+            // aboutToolStripMenuItem
+            // 
+            aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
+            aboutToolStripMenuItem.Size = new Size(133, 26);
+            aboutToolStripMenuItem.Text = "About";
             // 
             // dg_prg
             // 
             dg_prg.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dg_prg.Columns.AddRange(new DataGridViewColumn[] { col_line_no, col_enable, col_pic_type, col_Action, col_Command, col_MSB, col_LSB, col_delay, col_loop });
-            dg_prg.Location = new Point(18, 34);
+            dg_prg.Location = new Point(0, 31);
             dg_prg.Name = "dg_prg";
             dg_prg.RowHeadersWidth = 51;
-            dg_prg.Size = new Size(1311, 511);
+            dg_prg.Size = new Size(1297, 618);
             dg_prg.TabIndex = 0;
+            dg_prg.CellMouseDown += dg_prg_CellMouseDown;
+            dg_prg.KeyDown += dg_prg_KeyDown;
             // 
             // col_line_no
             // 
@@ -321,226 +467,87 @@
             col_loop.Name = "col_loop";
             col_loop.Width = 125;
             // 
-            // groupBox7
+            // statusStrip
             // 
-            groupBox7.Controls.Add(btn_prg_send);
-            groupBox7.Controls.Add(button7);
-            groupBox7.Controls.Add(button5);
-            groupBox7.Controls.Add(btn_run);
-            groupBox7.Controls.Add(button3);
-            groupBox7.Controls.Add(button2);
-            groupBox7.Location = new Point(1710, 15);
-            groupBox7.Name = "groupBox7";
-            groupBox7.Size = new Size(148, 552);
-            groupBox7.TabIndex = 10;
-            groupBox7.TabStop = false;
-            groupBox7.Text = "Control Panel";
+            statusStrip.BackColor = Color.FromArgb(0, 192, 192);
+            statusStrip.ImageScalingSize = new Size(20, 20);
+            statusStrip.Items.AddRange(new ToolStripItem[] { toolStripStatusLabel1, lbl_message });
+            statusStrip.Location = new Point(0, 653);
+            statusStrip.Name = "statusStrip";
+            statusStrip.Size = new Size(1482, 26);
+            statusStrip.TabIndex = 14;
+            statusStrip.Text = "statusStrip1";
             // 
-            // btn_prg_send
+            // toolStripStatusLabel1
             // 
-            btn_prg_send.Location = new Point(22, 143);
-            btn_prg_send.Name = "btn_prg_send";
-            btn_prg_send.Size = new Size(86, 44);
-            btn_prg_send.TabIndex = 3;
-            btn_prg_send.Text = "SEND";
-            btn_prg_send.UseVisualStyleBackColor = true;
-            btn_prg_send.Click += btn_prg_send_Click;
+            toolStripStatusLabel1.Name = "toolStripStatusLabel1";
+            toolStripStatusLabel1.Size = new Size(119, 20);
+            toolStripStatusLabel1.Text = "Current Line: 000";
             // 
-            // button7
+            // lbl_message
             // 
-            button7.Location = new Point(22, 476);
-            button7.Name = "button7";
-            button7.Size = new Size(86, 65);
-            button7.TabIndex = 2;
-            button7.Text = "RESET";
-            button7.UseVisualStyleBackColor = true;
+            lbl_message.Name = "lbl_message";
+            lbl_message.Size = new Size(148, 20);
+            lbl_message.Text = "Message: Data saved";
             // 
-            // button5
+            // contextMenuStrip1
             // 
-            button5.Location = new Point(22, 383);
-            button5.Name = "button5";
-            button5.Size = new Size(86, 87);
-            button5.TabIndex = 2;
-            button5.Text = "STOP";
-            button5.UseVisualStyleBackColor = true;
+            contextMenuStrip1.ImageScalingSize = new Size(20, 20);
+            contextMenuStrip1.Items.AddRange(new ToolStripItem[] { InsertRow, DeleteRow });
+            contextMenuStrip1.Name = "contextMenuStrip1";
+            contextMenuStrip1.Size = new Size(172, 52);
             // 
-            // btn_run
+            // InsertRow
             // 
-            btn_run.Location = new Point(22, 288);
-            btn_run.Name = "btn_run";
-            btn_run.Size = new Size(86, 45);
-            btn_run.TabIndex = 2;
-            btn_run.Text = "RUN";
-            btn_run.UseVisualStyleBackColor = true;
-            btn_run.Click += button3_Click;
+            InsertRow.Name = "InsertRow";
+            InsertRow.Size = new Size(171, 24);
+            InsertRow.Text = "Insert Row";
+            InsertRow.Click += InsertRow_Click;
             // 
-            // button3
+            // DeleteRow
             // 
-            button3.Location = new Point(22, 193);
-            button3.Name = "button3";
-            button3.Size = new Size(86, 89);
-            button3.TabIndex = 2;
-            button3.Text = "PAUSE";
-            button3.UseVisualStyleBackColor = true;
-            button3.Click += button3_Click;
+            DeleteRow.Name = "DeleteRow";
+            DeleteRow.Size = new Size(171, 24);
+            DeleteRow.Text = "Delete Row(s)";
+            DeleteRow.Click += DeleteRow_Click;
             // 
-            // button2
+            // btn_resume
             // 
-            button2.Location = new Point(22, 91);
-            button2.Name = "button2";
-            button2.Size = new Size(86, 46);
-            button2.TabIndex = 2;
-            button2.Text = "START";
-            button2.UseVisualStyleBackColor = true;
+            btn_resume.Location = new Point(83, 90);
+            btn_resume.Name = "btn_resume";
+            btn_resume.Size = new Size(78, 66);
+            btn_resume.TabIndex = 15;
+            btn_resume.Text = "RESUME";
+            btn_resume.UseVisualStyleBackColor = true;
+            btn_resume.Click += btn_resume_Click;
             // 
-            // label13
-            // 
-            label13.AutoSize = true;
-            label13.Location = new Point(1113, 23);
-            label13.Name = "label13";
-            label13.Size = new Size(88, 20);
-            label13.TabIndex = 1;
-            label13.Text = "Current Line";
-            // 
-            // textBox1
-            // 
-            textBox1.Location = new Point(1207, 20);
-            textBox1.Name = "textBox1";
-            textBox1.Size = new Size(83, 27);
-            textBox1.TabIndex = 0;
-            // 
-            // groupBox8
-            // 
-            groupBox8.Controls.Add(btn_export);
-            groupBox8.Controls.Add(btn_Open);
-            groupBox8.Controls.Add(btn_Save);
-            groupBox8.Controls.Add(btn_new_prg);
-            groupBox8.Controls.Add(label13);
-            groupBox8.Controls.Add(textBox2);
-            groupBox8.Controls.Add(textBox1);
-            groupBox8.Location = new Point(361, 27);
-            groupBox8.Name = "groupBox8";
-            groupBox8.Size = new Size(1343, 138);
-            groupBox8.TabIndex = 11;
-            groupBox8.TabStop = false;
-            groupBox8.Text = "Control";
-            // 
-            // btn_export
-            // 
-            btn_export.Location = new Point(315, 58);
-            btn_export.Name = "btn_export";
-            btn_export.Size = new Size(77, 59);
-            btn_export.TabIndex = 5;
-            btn_export.Text = "Export";
-            btn_export.UseVisualStyleBackColor = true;
-            btn_export.Click += btn_export_Click;
-            // 
-            // btn_Open
-            // 
-            btn_Open.Location = new Point(196, 58);
-            btn_Open.Name = "btn_Open";
-            btn_Open.Size = new Size(99, 59);
-            btn_Open.TabIndex = 4;
-            btn_Open.Text = "Open";
-            btn_Open.UseVisualStyleBackColor = true;
-            btn_Open.Click += btn_Open_Click;
-            // 
-            // btn_Save
-            // 
-            btn_Save.Location = new Point(103, 58);
-            btn_Save.Name = "btn_Save";
-            btn_Save.Size = new Size(87, 59);
-            btn_Save.TabIndex = 3;
-            btn_Save.Text = "Save";
-            btn_Save.UseVisualStyleBackColor = true;
-            btn_Save.Click += btn_Save_Click;
-            // 
-            // btn_new_prg
-            // 
-            btn_new_prg.Location = new Point(18, 58);
-            btn_new_prg.Name = "btn_new_prg";
-            btn_new_prg.Size = new Size(79, 59);
-            btn_new_prg.TabIndex = 2;
-            btn_new_prg.Text = "New";
-            btn_new_prg.UseVisualStyleBackColor = true;
-            btn_new_prg.Click += btn_new_prg_Click;
-            // 
-            // textBox2
-            // 
-            textBox2.Location = new Point(1207, 58);
-            textBox2.Name = "textBox2";
-            textBox2.Size = new Size(83, 27);
-            textBox2.TabIndex = 0;
-            // 
-            // menuStrip1
-            // 
-            menuStrip1.ImageScalingSize = new Size(20, 20);
-            menuStrip1.Items.AddRange(new ToolStripItem[] { toolStripMenuItem1, openToolStripMenuItem, communicationToolStripMenuItem });
-            menuStrip1.Location = new Point(0, 0);
-            menuStrip1.Name = "menuStrip1";
-            menuStrip1.Size = new Size(1882, 28);
-            menuStrip1.TabIndex = 12;
-            menuStrip1.Text = "menuStrip1";
-            // 
-            // toolStripMenuItem1
-            // 
-            toolStripMenuItem1.DropDownItems.AddRange(new ToolStripItem[] { fileToolStripMenuItem });
-            toolStripMenuItem1.Name = "toolStripMenuItem1";
-            toolStripMenuItem1.Size = new Size(156, 24);
-            toolStripMenuItem1.Text = "toolStripMenuItem1";
-            // 
-            // fileToolStripMenuItem
-            // 
-            fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            fileToolStripMenuItem.Size = new Size(224, 26);
-            fileToolStripMenuItem.Text = "File";
-            // 
-            // openToolStripMenuItem
-            // 
-            openToolStripMenuItem.Name = "openToolStripMenuItem";
-            openToolStripMenuItem.Size = new Size(59, 24);
-            openToolStripMenuItem.Text = "Open";
-            // 
-            // communicationToolStripMenuItem
-            // 
-            communicationToolStripMenuItem.Name = "communicationToolStripMenuItem";
-            communicationToolStripMenuItem.Size = new Size(128, 24);
-            communicationToolStripMenuItem.Text = "Communication";
-            // 
-            // Form1
+            // frm_main
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.Teal;
-            ClientSize = new Size(1882, 953);
-            Controls.Add(groupBox8);
+            ClientSize = new Size(1482, 679);
+            Controls.Add(statusStrip);
+            Controls.Add(dg_prg);
             Controls.Add(groupBox7);
-            Controls.Add(groupBox5);
-            Controls.Add(groupBox3);
-            Controls.Add(label6);
-            Controls.Add(groupBox2);
-            Controls.Add(groupBox1);
-            Controls.Add(txt_Status);
             Controls.Add(menuStrip1);
             MainMenuStrip = menuStrip1;
-            Name = "Form1";
-            Text = "Form1";
-            WindowState = FormWindowState.Maximized;
+            MaximizeBox = false;
+            Name = "frm_main";
+            StartPosition = FormStartPosition.CenterScreen;
+            Text = "Robot Subsystem Test Interface V1.0";
             FormClosing += Form1_FormClosing;
             Load += Form1_Load;
-            groupBox1.ResumeLayout(false);
-            groupBox2.ResumeLayout(false);
-            groupBox2.PerformLayout();
-            groupBox3.ResumeLayout(false);
-            groupBox3.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)pb_connect).EndInit();
-            groupBox5.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)dg_prg).EndInit();
             groupBox7.ResumeLayout(false);
-            groupBox8.ResumeLayout(false);
-            groupBox8.PerformLayout();
+            groupBox7.PerformLayout();
+            groupBox1.ResumeLayout(false);
+            groupBox1.PerformLayout();
             menuStrip1.ResumeLayout(false);
             menuStrip1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)dg_prg).EndInit();
+            statusStrip.ResumeLayout(false);
+            statusStrip.PerformLayout();
+            contextMenuStrip1.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -548,30 +555,16 @@
         #endregion
 
         private TextBox textBoxReceive;
-        private TextBox txt_Status;
-        private GroupBox groupBox1;
-        private ListBox lst_History;
-        private TextBox txt_cmd;
-        private GroupBox groupBox2;
-        private GroupBox groupBox3;
-        private Button btn_Disconnect;
-        private Button btn_Connect;
-        private Label label2;
-        private Label label1;
-        private Label label6;
-        private GroupBox groupBox5;
-        private DataGridView dg_prg;
-        private ComboBox cbo_Baudrate;
-        private ComboBox cbo_port;
-        private PictureBox pb_connect;
-        private Label label7;
         private GroupBox groupBox7;
-        private Button button5;
-        private Button button3;
-        private Button button2;
-        private Label label13;
-        private TextBox textBox1;
+        private Button btn_Stop;
+        private Button btn_pause;
         private Button btn_run;
+        private Button btn_prg_send;
+        private MenuStrip menuStrip1;
+        private ToolStripMenuItem toolStripMenuItem1;
+        private ToolStripMenuItem fileToolStripMenuItem;
+        private ToolStripMenuItem communicationToolStripMenuItem;
+        private DataGridView dg_prg;
         private DataGridViewTextBoxColumn col_line_no;
         private DataGridViewCheckBoxColumn col_enable;
         private DataGridViewComboBoxColumn col_pic_type;
@@ -581,18 +574,40 @@
         private DataGridViewTextBoxColumn col_LSB;
         private DataGridViewTextBoxColumn col_delay;
         private DataGridViewTextBoxColumn col_loop;
-        private Button button7;
-        private GroupBox groupBox8;
-        private TextBox textBox2;
-        private Button btn_new_prg;
-        private Button btn_Save;
-        private Button btn_Open;
-        private Button btn_export;
-        private Button btn_prg_send;
-        private MenuStrip menuStrip1;
-        private ToolStripMenuItem toolStripMenuItem1;
-        private ToolStripMenuItem fileToolStripMenuItem;
-        private ToolStripMenuItem openToolStripMenuItem;
-        private ToolStripMenuItem communicationToolStripMenuItem;
+        private GroupBox groupBox1;
+        private RadioButton rbtn_real_hardware;
+        private RadioButton rbtn_InbuiltSim;
+        private ToolStripMenuItem openToolStripMenuItem1;
+        private ToolStripMenuItem saveToolStripMenuItem;
+        private ToolStripMenuItem saveAsToolStripMenuItem;
+        private ToolStripMenuItem exportToolStripMenuItem;
+        private ToolStripMenuItem exutToolStripMenuItem;
+        private ToolStripMenuItem helpToolStripMenuItem;
+        private ToolStripMenuItem serialToolStripMenuItem;
+        private ToolStripMenuItem tCPToolStripMenuItem;
+        private ToolStripMenuItem uDPToolStripMenuItem;
+        private ToolStripMenuItem disconnectToolStripMenuItem;
+        private ToolStripMenuItem communicationBusToolStripMenuItem;
+        private ToolStripMenuItem cANToolStripMenuItem;
+        private ToolStripMenuItem modBusToolStripMenuItem;
+        private ToolStripMenuItem aboutToolStripMenuItem;
+        private ToolStripMenuItem programToolStripMenuItem;
+        private ToolStripMenuItem rUNToolStripMenuItem;
+        private ToolStripMenuItem sTOPToolStripMenuItem;
+        private ToolStripMenuItem pAUSEToolStripMenuItem;
+        private ToolStripMenuItem toolsToolStripMenuItem;
+        private ToolStripMenuItem settingsToolStripMenuItem;
+        private ToolStripMenuItem packetMonitorToolStripMenuItem;
+        private StatusStrip statusStrip;
+        private ToolStripStatusLabel toolStripStatusLabel1;
+        private ToolStripMenuItem resetToolStripMenuItem;
+        private ToolStripStatusLabel lbl_message;
+        private RadioButton rbtn_externalSim;
+        private ToolStripMenuItem recentFilesToolStripMenuItem;
+        private ContextMenuStrip contextMenuStrip1;
+        private ToolStripMenuItem InsertRow;
+        private ToolStripMenuItem DeleteRow;
+        private CheckBox chk_loop;
+        private Button btn_resume;
     }
 }

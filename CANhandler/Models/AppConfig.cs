@@ -9,5 +9,7 @@ namespace CANhandler.Models
         public CommunicationConfig Communication { get; set; } = new();
         public ProgramConfig Program { get; set; } = new();
         public UIConfig UI { get; set; } = new();
+
+        public List<string> RecentFiles { get; set; } = new List<string>();
     }
 }

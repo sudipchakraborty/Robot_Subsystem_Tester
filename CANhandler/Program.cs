@@ -14,7 +14,7 @@ namespace CANhandler
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
             ConfigManager.Load();
-            Application.Run(new Form1());
+            Application.Run(new frm_main());
         }
     }
 }

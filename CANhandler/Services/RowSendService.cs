@@ -9,6 +9,7 @@ namespace CANhandler.Services
 {
     public static class RowSendService
     {
+        
         public static void SendRow(DataGridViewRow row, KBusComm kbus)
         {
             if (row == null || row.IsNewRow)
@@ -29,7 +30,9 @@ namespace CANhandler.Services
 
             byte[] buffer = KBusBuilder.BuildPacket(pkt);
 
-            kbus.SendOnly(buffer);
+            //ConfigManager.Load();
+            UIConfig  config = ConfigManager.Config.UI;  // then assign
+            if(config.SelectedInterface == InterfaceType.RealHardware) kbus.SendOnly(buffer);
         }
     }
 }
