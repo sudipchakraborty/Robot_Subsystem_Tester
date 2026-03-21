@@ -28,6 +28,8 @@ namespace CANhandler
         private List<object[]> copiedRows = new List<object[]>();
         private ProgramExecutor executor;
 
+        ITransport _transport = null;
+
         public frm_main()
         {
             InitializeComponent();
@@ -56,6 +58,8 @@ namespace CANhandler
 
                 case InterfaceType.RealHardware:
                     rbtn_real_hardware.Checked = true;
+                    tssl_comport.Text = "Port: " + ConfigManager.Config.Communication.CommPort;
+                    tssl_baudrate.Text = "Speed: " + ConfigManager.Config.Communication.BaudRate.ToString();
                     break;
             }
             ///////////////////////////
@@ -65,13 +69,6 @@ namespace CANhandler
             }
             else chk_loop.Checked = false;
             ////////////////////////////
-
-
-            //comboComPort.Text = ConfigManager.Config.Communication.CommPort;
-            //comboBaud.Text = ConfigManager.Config.Communication.BaudRate.ToString();
-
-
-
             //pb_connect.BackColor = Color.Gray;
             GridConfigurator.ConfigureProgramGrid(dg_prg);
             dg_prg.RowPostPaint += dg_prg_RowPostPaint;
@@ -447,7 +444,47 @@ namespace CANhandler
             if (dg_prg.SelectedRows.Count == 0)
                 return;
 
-            RowSendService.SendRow(dg_prg.SelectedRows[0], _kbus);
+            //ITransport _transport = new SerialTransport("COM3", 38400);
+
+            //_kbus = new KBusComm(_transport);
+
+            //_transport.Connect();
+
+
+            try
+            {
+                // ✅ Create only once
+                if (_transport == null)
+                {
+                    _transport = new SerialTransport("COM8", 38400);
+                    _transport.Connect();
+
+                    _kbus = new KBusComm(_transport);
+                }
+                else if (!_transport.IsConnected)
+                {
+                    // 🔥 Reconnect if needed
+                    _transport.Connect();
+                }
+
+                // ✅ Send data
+                RowSendService.SendRow(dg_prg.SelectedRows[0], _kbus);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
+            //ITransport transport = new SerialTransport("COM3", 38400);
+
+            //_kbus = new KBusComm(transport);
+
+            //transport.Connect();
+
+            //_kbus.SendOnly(new byte[] { 0x01, 0x02, 0x03 });
+
+            ////_kbus = new KBusComm(_serialPort);
+            ////RowSendService.SendRow(dg_prg.SelectedRows[0], _kbus);
         }
 
         private void rUNToolStripMenuItem_Click(object sender, EventArgs e)

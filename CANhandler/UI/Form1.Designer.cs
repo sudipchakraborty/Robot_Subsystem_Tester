@@ -30,6 +30,7 @@
         {
             components = new System.ComponentModel.Container();
             groupBox7 = new GroupBox();
+            btn_resume = new Button();
             chk_loop = new CheckBox();
             btn_prg_send = new Button();
             btn_Stop = new Button();
@@ -82,7 +83,8 @@
             contextMenuStrip1 = new ContextMenuStrip(components);
             InsertRow = new ToolStripMenuItem();
             DeleteRow = new ToolStripMenuItem();
-            btn_resume = new Button();
+            tssl_comport = new ToolStripStatusLabel();
+            tssl_baudrate = new ToolStripStatusLabel();
             groupBox7.SuspendLayout();
             groupBox1.SuspendLayout();
             menuStrip1.SuspendLayout();
@@ -106,6 +108,16 @@
             groupBox7.TabIndex = 10;
             groupBox7.TabStop = false;
             groupBox7.Text = "Control Panel";
+            // 
+            // btn_resume
+            // 
+            btn_resume.Location = new Point(83, 90);
+            btn_resume.Name = "btn_resume";
+            btn_resume.Size = new Size(78, 66);
+            btn_resume.TabIndex = 15;
+            btn_resume.Text = "RESUME";
+            btn_resume.UseVisualStyleBackColor = true;
+            btn_resume.Click += btn_resume_Click;
             // 
             // chk_loop
             // 
@@ -471,7 +483,7 @@
             // 
             statusStrip.BackColor = Color.FromArgb(0, 192, 192);
             statusStrip.ImageScalingSize = new Size(20, 20);
-            statusStrip.Items.AddRange(new ToolStripItem[] { toolStripStatusLabel1, lbl_message });
+            statusStrip.Items.AddRange(new ToolStripItem[] { toolStripStatusLabel1, lbl_message, tssl_comport, tssl_baudrate });
             statusStrip.Location = new Point(0, 653);
             statusStrip.Name = "statusStrip";
             statusStrip.Size = new Size(1482, 26);
@@ -511,15 +523,17 @@
             DeleteRow.Text = "Delete Row(s)";
             DeleteRow.Click += DeleteRow_Click;
             // 
-            // btn_resume
+            // tssl_comport
             // 
-            btn_resume.Location = new Point(83, 90);
-            btn_resume.Name = "btn_resume";
-            btn_resume.Size = new Size(78, 66);
-            btn_resume.TabIndex = 15;
-            btn_resume.Text = "RESUME";
-            btn_resume.UseVisualStyleBackColor = true;
-            btn_resume.Click += btn_resume_Click;
+            tssl_comport.Name = "tssl_comport";
+            tssl_comport.Size = new Size(50, 20);
+            tssl_comport.Text = "COM1";
+            // 
+            // tssl_baudrate
+            // 
+            tssl_baudrate.Name = "tssl_baudrate";
+            tssl_baudrate.Size = new Size(41, 20);
+            tssl_baudrate.Text = "9600";
             // 
             // frm_main
             // 
@@ -609,5 +623,7 @@
         private ToolStripMenuItem DeleteRow;
         private CheckBox chk_loop;
         private Button btn_resume;
+        private ToolStripStatusLabel tssl_comport;
+        private ToolStripStatusLabel tssl_baudrate;
     }
 }
