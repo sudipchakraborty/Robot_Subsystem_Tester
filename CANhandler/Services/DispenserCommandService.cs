@@ -32,7 +32,7 @@ namespace CANhandler.Services
             // Data generation
             switch (cmd)
             {
-                case Command.Dispense:
+                case Command.Dispense_Timer_Based:
                     pkt.Data = new byte[]
                     {
                         (byte)( Convert.ToByte(request.MSB) / 100),
@@ -40,8 +40,8 @@ namespace CANhandler.Services
                     };
                     break;
 
-                case Command.PB6_LED:
-                case Command.PB5_LED:
+                //case Command.PB6_LED:
+                //case Command.PB5_LED:
                     pkt.Data = new byte[]
                     {
                         0,

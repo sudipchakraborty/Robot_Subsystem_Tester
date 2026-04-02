@@ -1,18 +1,19 @@
 using CANhandler.CANhandler;
+using CANhandler.Communication;
+using CANhandler.Constants;
+using CANhandler.Helpers;
+using CANhandler.Models;
+using CANhandler.Protocol;
+using CANhandler.Services;
+using CANhandler.UI;
 using System.Data.Common;
 using System.IO.Ports;
 using System.Reflection;
 using System.Text;
 using System.Xml;
-using static CANhandler.Enums.Address;
 using static CANhandler.Constants.ProtocolConstants;
-
-using CANhandler.Models;
-using CANhandler.Services;
-using CANhandler.UI;
-using CANhandler.Protocol;
-using CANhandler.Constants;
-using CANhandler.Communication;
+using static CANhandler.Enums.Address;
+using static System.ComponentModel.Design.ObjectSelectorEditor;
 
 namespace CANhandler
 {
@@ -22,8 +23,8 @@ namespace CANhandler
         private List<byte> rxBuffer = new List<byte>();
         private int expectedLength = -1;
         KBusComm _kbus;
-        private UIConfig config;   // 👈 THIS WAS MISSING
-        private string? currentFilePath = null;   // allow null
+        private UIConfig config;
+        private string? currentFilePath = null;
         private ContextMenuStrip ctxGridMenu;
         private List<object[]> copiedRows = new List<object[]>();
         private ProgramExecutor executor;
@@ -41,6 +42,22 @@ namespace CANhandler
             dg_prg.CellMouseDown += dg_prg_CellMouseDown;
             dg_prg.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dg_prg.MultiSelect = true;
+
+            commToolStripMenuItem.Click += communicationToolStripMenuItem_Click;
+            uSBToolStripMenuItem.Click += communicationToolStripMenuItem_Click;
+            aPIToolStripMenuItem.Click += communicationToolStripMenuItem_Click;
+            websocketToolStripMenuItem.Click += communicationToolStripMenuItem_Click;
+            tcpToolStripMenuItem.Click += communicationToolStripMenuItem_Click;
+            udpToolStripMenuItem.Click += communicationToolStripMenuItem_Click;
+            iPCToolStripMenuItem.Click += communicationToolStripMenuItem_Click;
+
+            commToolStripMenuItem.MouseDown += MenuItem_MouseDown;
+            uSBToolStripMenuItem.MouseDown += MenuItem_MouseDown;
+            aPIToolStripMenuItem.MouseDown += MenuItem_MouseDown;
+            websocketToolStripMenuItem.MouseDown += MenuItem_MouseDown;
+            tcpToolStripMenuItem.MouseDown += MenuItem_MouseDown;
+            udpToolStripMenuItem.MouseDown += MenuItem_MouseDown;
+            iPCToolStripMenuItem.MouseDown += MenuItem_MouseDown;
         }
         //________________________________________________________________________
         private void Form1_Load(object sender, EventArgs e)
@@ -58,8 +75,8 @@ namespace CANhandler
 
                 case InterfaceType.RealHardware:
                     rbtn_real_hardware.Checked = true;
-                    tssl_comport.Text = "Port: " + ConfigManager.Config.Communication.CommPort;
-                    tssl_baudrate.Text = "Speed: " + ConfigManager.Config.Communication.BaudRate.ToString();
+                    //tssl_comport.Text = "Port: " + ConfigManager.Config.Communication.CommPort;
+                    //tssl_baudrate.Text = "Speed: " + ConfigManager.Config.Communication.BaudRate.ToString();
                     break;
             }
             ///////////////////////////
@@ -72,6 +89,19 @@ namespace CANhandler
             //pb_connect.BackColor = Color.Gray;
             GridConfigurator.ConfigureProgramGrid(dg_prg);
             dg_prg.RowPostPaint += dg_prg_RowPostPaint;
+
+            chk_auto_connect.Checked = ConfigManager.Config.Communication.AutoConnect;
+            chk_loop.Checked = ConfigManager.Config.UI.LoopEnable;
+
+            /////////////////////
+            string selected = ConfigManager.Config.Communication.Selected;
+
+            foreach (ToolStripMenuItem item in commToolStripMenuItem.DropDownItems)
+            {
+                item.Checked = item.Text.Equals(selected, StringComparison.OrdinalIgnoreCase);
+            }
+
+
 
             //var steps = AutoSaveService.Load();
             //GridProgramConverter.Write(dg_prg, steps);
@@ -93,175 +123,16 @@ namespace CANhandler
                     e.RowBounds.Location.Y + 6);
             }
         }
-
-
-        //private void SerialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
-        //{
-        //    try
-        //    {
-        //        int bytesToRead = _serialPort.BytesToRead;
-        //        byte[] buffer = new byte[bytesToRead];
-        //        _serialPort.Read(buffer, 0, bytesToRead);
-
-        //        foreach (byte b in buffer)
-        //        {
-        //            rxBuffer.Add(b);
-
-        //            // Step 1: Check header
-        //            if (rxBuffer.Count >= 2)
-        //            {
-        //                if (rxBuffer[0] != 0x66 || rxBuffer[1] != 0x55)
-        //                {
-        //                    rxBuffer.RemoveAt(0); // shift until valid header
-        //                    continue;
-        //                }
-        //            }
-
-        //            // Step 2: Get expected length from 3rd byte
-        //            if (rxBuffer.Count == 3)
-        //            {
-        //                expectedLength = rxBuffer[2];
-        //            }
-
-        //            // Step 3: Check if full packet received
-        //            if (expectedLength > 0 && rxBuffer.Count >= expectedLength)
-        //            {
-        //                byte[] fullPacket = rxBuffer.GetRange(0, expectedLength).ToArray();
-
-        //                rxBuffer.RemoveRange(0, expectedLength);
-        //                expectedLength = -1;
-
-        //                ProcessPacket(fullPacket);
-        //            }
-        //        }
-        //    }
-        //    catch
-        //    {
-        //    }
-        //}
-
-        //private void ProcessPacket(byte[] packet)
-        //{
-        //    string hex = BitConverter.ToString(packet).Replace("-", " ");
-
-        //    this.Invoke(new MethodInvoker(delegate
-        //    {
-        //        textBoxReceive.AppendText("RX: " + hex + Environment.NewLine);
-
-        //        KBusPacket pkt = KBusParser.Parse(packet);
-
-        //        if (pkt != null)
-        //        {
-        //            textBoxReceive.AppendText(
-        //                $"Addr: {pkt.Address:X4}  RW:{pkt.RWFlag}  DataLen:{pkt.Data.Length}\r\n");
-        //        }
-        //    }));
-        //}
-
-
-        //private void ProcessCANFrame(string frame)
-        //{
-        //    try
-        //    {
-        //        string id = "";
-        //        string dlc = "";
-        //        string dataBytes = "";
-
-        //        string[] parts = frame.Split(' ');
-
-        //        foreach (string part in parts)
-        //        {
-        //            if (part.StartsWith("ID:"))
-        //                id = part.Replace("ID:", "");
-
-        //            if (part.StartsWith("DLC:"))
-        //                dlc = part.Replace("DLC:", "");
-
-        //            if (part.StartsWith("DATA:"))
-        //                dataBytes = frame.Substring(frame.IndexOf("DATA:") + 5);
-        //        }
-
-        //        // Display in textbox or DataGridView
-        //        textBoxReceive.AppendText(
-        //            $"ID: {id}  DLC: {dlc}  DATA: {dataBytes}" + Environment.NewLine
-        //        );
-        //    }
-        //    catch
-        //    {
-        //        textBoxReceive.AppendText("Invalid Frame" + Environment.NewLine);
-        //    }
-        //}
-
+        //_________________________________________________________________________________________________________
         private void button1_Click(object sender, EventArgs e)
         {
-            //KBusPacket pkt = new KBusPacket();
-
-            //pkt.Multicast = ProtocolConstants.Multicast;
-            ////////////
-            //string selected = cbo_disp_pic_type.SelectedItem.ToString();
-            //var field = typeof(Dispenser).GetField(selected);
-            //int value = (int)field.GetValue(null);
-            //pkt.Address = (byte)value;
-            /////////////
-            //pkt.RWFlag = ProtocolConstants.Execute;
-            ////pkt.CmdParameter = Command.LED_TOGGLING_2;
-            //pkt.Data = new byte[] { 0x01 };
-
-            //byte[] sendBuffer = KBusBuilder.BuildPacket(pkt);
-            //byte[] response = _kbus.SendAndReceive(sendBuffer);
-
-            //if (response != null)
-            //{
-            //    string hex = BitConverter.ToString(response);
-            //    MessageBox.Show("Response: " + hex);
-            //}
-            //else
-            //{
-            //    MessageBox.Show("No response (timeout)");
-            //}
         }
-
-
-
-        //private void SendCANFrame(string id, byte[] data)
-        //{
-        //    if (_serialPort == null || !_serialPort.IsOpen)
-        //    {
-        //        MessageBox.Show("Serial Port Not Open");
-        //        return;
-        //    }
-
-        //    try
-        //    {
-        //        int dlc = data.Length;
-
-        //        // Convert data bytes to HEX string
-        //        StringBuilder sb = new StringBuilder();
-        //        foreach (byte b in data)
-        //        {
-        //            sb.Append(b.ToString("X2") + " ");
-        //        }
-
-        //        string frame = $"ID:{id} DLC:{dlc} DATA:{sb.ToString().Trim()}";
-
-        //        _serialPort.WriteLine(frame);
-
-        //        // Optional: show in UI as TX
-        //        textBoxReceive.AppendText(
-        //            $"TX -> {frame}" + Environment.NewLine
-        //        );
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        MessageBox.Show("Send Error: " + ex.Message);
-        //    }
-        //}
-
+        //_________________________________________________________________________________________________________
         private void textBoxReceive_TextChanged(object sender, EventArgs e)
         {
 
         }
-
+        //_________________________________________________________________________________________________________
         private void btn_Connect_Click(object sender, EventArgs e)
         {
             _serialPort = new SerialPort();
@@ -285,109 +156,10 @@ namespace CANhandler
                 MessageBox.Show("Error: " + ex.Message);
             }
         }
-
+        //_________________________________________________________________________________________________________
         private void btn_Disp_send_Click(object sender, EventArgs e)
         {
-            //DispenseRequest req = new DispenseRequest
-            //{
-            //    DispenserType = cbo_disp_pic_type.Text,
-            //    Action = cbo_disp_action.Text,
-            //    Command = cbo_disp_cmd.Text,
-            //    MSB = txt_disp_MSB.Text,
-            //    LSB = txt_disp_LSB.Text
-            //};
 
-            //KBusPacket pkt = DispenserCommandService.CreatePacket(req);
-
-            //byte[] sendBuffer = KBusBuilder.BuildPacket(pkt);
-            //byte[] response = _kbus.SendAndReceive(sendBuffer);
-
-            //if (response != null)
-            //{
-            //    string hex = BitConverter.ToString(response);
-            //    MessageBox.Show("Response: " + hex);
-            //}
-            //else
-            //{
-            //    MessageBox.Show("No response (timeout)");
-            //}
-
-
-
-
-
-            //[
-            //  0x66, 0x55,
-            //        0x0f,
-            //        0x00,
-            //        0x01,
-            //  0x00, 0x65,
-            //        0x02,
-            //        0x00,
-            //  0x00, 0x64,
-            //  0xe0, 0x53,
-            //  0x77, 0x88
-            //]
-
-            // 0x66, 0x55, preamble auto set by builder
-            //       0x0f, byte count (15 bytes total) auto set by builder
-            //       0x00, transmit type: defult static value
-            //       0x01, multicast
-            // 0x00, 0x65, address
-            //       0x02, RWFlag: execute
-            //       0x00, command:  
-            //       0x00, 0x64, Data:  
-            //       0xe0, 0x53, crc auto calculated by builder
-            // 0x77, 0x88 postamble auto set by builder
-
-
-            //KBusPacket pkt = new KBusPacket();
-
-            //pkt.Multicast = ProtocolConstants.Multicast;
-            ////////////
-            //string selected = cbo_disp_pic_type.SelectedItem.ToString();
-            //var field = typeof(Dispenser).GetField(selected);
-            //int value = (int)field.GetValue(null);
-            //pkt.Address = (byte)value;
-            /////////////
-            //string action = cbo_disp_action.SelectedItem.ToString();
-            //field = typeof(ProtocolConstants).GetField(action);
-            //value = (byte)field.GetValue(null);
-            //pkt.RWFlag = (byte)value;
-            ////////////
-            //Command cmd = (Command)Enum.Parse(typeof(Command), cbo_disp_cmd.Text);
-            //value = (byte)cmd;
-            //pkt.CmdParameter = (byte)value;
-            ////////////
-            //byte msb=Convert.ToByte(txt_disp_MSB.Text);
-            //byte lsb = Convert.ToByte(txt_disp_LSB.Text);
-
-            //switch (cmd)
-            //{
-            //    case Command.Dispense:
-            //        pkt.Data = new byte[] {(byte)(msb / 100), lsb};  // Example: 150 pills -> MSB=1, LSB=
-            //        break;
-            //    case Command.PB6_LED:
-            //    case Command.PB5_LED:
-            //        pkt.Data = new byte[]{0,lsb};
-            //        break;
-            //    default:
-            //        pkt.Data = new byte[] { 0, 0 };
-            //        break;
-            //}
-            ////////////////////////////
-            //byte[] sendBuffer = KBusBuilder.BuildPacket(pkt);
-            //byte[] response = _kbus.SendAndReceive(sendBuffer);
-
-            //if (response != null)
-            //{
-            //    string hex = BitConverter.ToString(response);
-            //    MessageBox.Show("Response: " + hex);
-            //}
-            //else
-            //{
-            //    MessageBox.Show("No response (timeout)");
-            //}
         }
 
         private void label9_Click(object sender, EventArgs e)
@@ -456,7 +228,7 @@ namespace CANhandler
                 // ✅ Create only once
                 if (_transport == null)
                 {
-                    _transport = new SerialTransport("COM8", 38400);
+                    _transport = new SerialTransport("COM11", 38400);
                     _transport.Connect();
 
                     _kbus = new KBusComm(_transport);
@@ -475,16 +247,7 @@ namespace CANhandler
                 MessageBox.Show(ex.Message);
             }
 
-            //ITransport transport = new SerialTransport("COM3", 38400);
 
-            //_kbus = new KBusComm(transport);
-
-            //transport.Connect();
-
-            //_kbus.SendOnly(new byte[] { 0x01, 0x02, 0x03 });
-
-            ////_kbus = new KBusComm(_serialPort);
-            ////RowSendService.SendRow(dg_prg.SelectedRows[0], _kbus);
         }
 
         private void rUNToolStripMenuItem_Click(object sender, EventArgs e)
@@ -642,21 +405,11 @@ namespace CANhandler
             }
         }
 
-
-
         private void InitializeContextMenu()
         {
             ctxGridMenu = new ContextMenuStrip();
-
-            var insertItem = new ToolStripMenuItem("Insert Row");
-            var deleteItem = new ToolStripMenuItem("Delete Row(s)");
-
-            insertItem.Click += InsertRow_Click;
-            deleteItem.Click += DeleteRow_Click;
-
-            ctxGridMenu.Items.Add(insertItem);
-            ctxGridMenu.Items.Add(deleteItem);
-
+            ctxGridMenu.Items.Add("Send", null, SendToDevice_Click);
+            ctxGridMenu.Items.Add("Show Packet", null, ShowPacket_Click);
             ctxGridMenu.Items.Add("Insert Above", null, InsertAbove_Click);
             ctxGridMenu.Items.Add("Insert Below", null, InsertBelow_Click);
             ctxGridMenu.Items.Add(new ToolStripSeparator());
@@ -683,6 +436,21 @@ namespace CANhandler
                 dg_prg.CurrentCell = dg_prg.Rows[e.RowIndex].Cells[0];
             }
         }
+
+        private void SendToDevice_Click(object sender, EventArgs e)
+        {
+            int rowIndex = dg_prg.CurrentCell?.RowIndex ?? dg_prg.Rows.Count;
+            //dg_prg.Rows.Insert(rowIndex, 1);
+        }
+        private void ShowPacket_Click(object sender, EventArgs e)
+        {
+            int rowIndex = dg_prg.CurrentCell?.RowIndex ?? dg_prg.Rows.Count;
+            //dg_prg.Rows.Insert(rowIndex, 1);
+        }
+
+
+
+
 
         private void InsertRow_Click(object sender, EventArgs e)
         {
@@ -833,6 +601,232 @@ namespace CANhandler
         private void btn_resume_Click(object sender, EventArgs e)
         {
             executor?.Resume();
+        }
+
+        private void dg_prg_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
+            var v = dg_prg.Columns[e.ColumnIndex].Name;
+
+            if (dg_prg.Columns[e.ColumnIndex].Name == "col_pic_type")
+            {
+                var selectedPIC = dg_prg.Rows[e.RowIndex].Cells["col_pic_type"].Value?.ToString();
+
+                var commandCell = (DataGridViewComboBoxCell)
+                    dg_prg.Rows[e.RowIndex].Cells["col_Command"];
+
+                commandCell.DataSource = null;
+                commandCell.Value = null;
+
+                if (selectedPIC != null)
+                {
+                    var commands = CommandHelper.GetCommands(selectedPIC);
+
+                    // Convert enum → string for display
+                    commandCell.DataSource = commands
+                        .Select(c => c.ToString())
+                        .ToList();
+                }
+            }
+        }
+
+        private void ToolStripMenuItem_Seria_Click(object sender, EventArgs e)
+        {
+            UncheckAllInterfaces();
+
+            commToolStripMenuItem.Checked = true;
+
+            using (frm_settings_serial serial = new frm_settings_serial())
+            {
+                serial.ShowDialog();
+            }
+
+
+        }
+
+        private void UncheckAllInterfaces()
+        {
+            commToolStripMenuItem.Checked = false;
+            tcpToolStripMenuItem.Checked = false;
+            udpToolStripMenuItem.Checked = false;
+
+
+
+
+
+        }
+
+        private void ToolStripMenuItem_TCP_Click(object sender, EventArgs e)
+        {
+            UncheckAllInterfaces();
+            tcpToolStripMenuItem.Checked = true;
+
+        }
+
+        private void ToolStripMenuItem_UDP_Click(object sender, EventArgs e)
+        {
+            UncheckAllInterfaces();
+            udpToolStripMenuItem.Checked = true;
+        }
+
+        private void communicationToolStripMenuItem_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+
+
+            }
+        }
+
+        private void communicationToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //var clickedItem = sender as ToolStripMenuItem;
+            //if (clickedItem == null) return;
+
+            //var parent = clickedItem.GetCurrentParent();
+
+            //// 🔥 Uncheck all siblings
+            //foreach (ToolStripItem item in parent.Items)
+            //{
+            //    if (item is ToolStripMenuItem menuItem)
+            //    {
+            //        menuItem.Checked = false;
+            //    }
+            //}
+
+            //// ✔ Check selected
+            //clickedItem.Checked = true;
+
+            //int selected = 0;
+
+            //switch (clickedItem.Name)
+            //{
+            //    case "uSBToolStripMenuItem":
+            //        selected = 1;
+
+            //        using (frm_settings_serial frm = new frm_settings_serial())
+            //        {
+            //            frm.ShowDialog();
+            //        }
+            //        break;
+
+            //    case "aPIToolStripMenuItem":
+            //        selected = 2;
+            //        break;
+
+            //    case "websocketToolStripMenuItem":
+            //        selected = 3;
+            //        break;
+
+            //    case "tcpToolStripMenuItem":
+            //        selected = 4;
+            //        break;
+
+            //    case "udpToolStripMenuItem":
+            //        selected = 5;
+            //        break;
+
+            //    case "iPCToolStripMenuItem":
+            //        selected = 6;
+            //        break;
+            //}
+
+            //ConfigManager.Config.UI.SelectedInterface = selected;
+            //ConfigManager.Save();
+
+        }
+
+        private void MenuItem_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button != MouseButtons.Right) return;
+
+            var clickedItem = sender as ToolStripMenuItem;
+            if (clickedItem == null) return;
+
+            var parent = clickedItem.GetCurrentParent();
+
+            // 🔥 Uncheck all
+            foreach (ToolStripItem item in parent.Items)
+            {
+                if (item is ToolStripMenuItem menuItem)
+                {
+                    menuItem.Checked = false;
+                }
+            }
+
+            // ✔ Check selected
+            clickedItem.Checked = true;
+
+            // =========================
+            // 🔥 SAVE TO CONFIG
+            // =========================
+            string selected = "";
+
+            switch (clickedItem.Name)
+            {
+                case "uSBToolStripMenuItem":
+                    selected = "USB";
+                    break;
+
+                case "aPIToolStripMenuItem":
+                    selected = "API";
+                    break;
+
+                case "websocketToolStripMenuItem":
+                    selected = "Websocket";
+                    break;
+
+                case "tcpToolStripMenuItem":
+                    selected = "TCP";
+                    break;
+
+                case "udpToolStripMenuItem":
+                    selected = "UDP";
+                    break;
+
+                case "iPCToolStripMenuItem":
+                    selected = "IPC";
+                    break;
+            }
+
+            // Save
+            ConfigManager.Config.Communication.Selected = selected;
+            ConfigManager.Save();
+
+        }
+
+        private void chk_auto_connect_CheckedChanged(object sender, EventArgs e)
+        {
+            ConfigManager.Config.Communication.AutoConnect = chk_auto_connect.Checked;
+            ConfigManager.Save();
+        }
+
+        private void commToolStripMenuItem_DropDownOpening(object sender, EventArgs e)
+        {
+
+        }
+
+        private void communicationToolStripMenuItem_DropDownOpening(object sender, EventArgs e)
+        {
+            string selected = ConfigManager.Config.Communication.Selected;
+
+            foreach (ToolStripItem item in communicationToolStripMenuItem.DropDownItems)
+            {
+                if (item is ToolStripMenuItem menuItem)
+                {
+                    menuItem.Checked = false;
+
+                    if (!string.IsNullOrEmpty(selected) &&
+                        menuItem.Text.Equals(selected, StringComparison.OrdinalIgnoreCase))
+                    {
+                        menuItem.Checked = true;
+                    }
+                }
+            }
+        }
+
+        private void btn_connect_Click_1(object sender, EventArgs e)
+        {
+
         }
     }
 }

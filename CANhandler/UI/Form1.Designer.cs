@@ -30,6 +30,9 @@
         {
             components = new System.ComponentModel.Container();
             groupBox7 = new GroupBox();
+            chk_auto_connect = new CheckBox();
+            btn_disconnect = new Button();
+            btn_connect = new Button();
             btn_resume = new Button();
             chk_loop = new CheckBox();
             btn_prg_send = new Button();
@@ -50,13 +53,18 @@
             exportToolStripMenuItem = new ToolStripMenuItem();
             exutToolStripMenuItem = new ToolStripMenuItem();
             communicationToolStripMenuItem = new ToolStripMenuItem();
-            serialToolStripMenuItem = new ToolStripMenuItem();
-            tCPToolStripMenuItem = new ToolStripMenuItem();
-            uDPToolStripMenuItem = new ToolStripMenuItem();
-            disconnectToolStripMenuItem = new ToolStripMenuItem();
+            commToolStripMenuItem = new ToolStripMenuItem();
+            uSBToolStripMenuItem = new ToolStripMenuItem();
+            aPIToolStripMenuItem = new ToolStripMenuItem();
+            websocketToolStripMenuItem = new ToolStripMenuItem();
+            tcpToolStripMenuItem = new ToolStripMenuItem();
+            udpToolStripMenuItem = new ToolStripMenuItem();
+            iPCToolStripMenuItem = new ToolStripMenuItem();
             communicationBusToolStripMenuItem = new ToolStripMenuItem();
+            kbusToolStripMenuItem = new ToolStripMenuItem();
             cANToolStripMenuItem = new ToolStripMenuItem();
             modBusToolStripMenuItem = new ToolStripMenuItem();
+            customToolStripMenuItem = new ToolStripMenuItem();
             programToolStripMenuItem = new ToolStripMenuItem();
             rUNToolStripMenuItem = new ToolStripMenuItem();
             sTOPToolStripMenuItem = new ToolStripMenuItem();
@@ -65,26 +73,30 @@
             toolsToolStripMenuItem = new ToolStripMenuItem();
             settingsToolStripMenuItem = new ToolStripMenuItem();
             packetMonitorToolStripMenuItem = new ToolStripMenuItem();
+            terminalToolStripMenuItem = new ToolStripMenuItem();
+            debugInterfaceToolStripMenuItem = new ToolStripMenuItem();
             helpToolStripMenuItem = new ToolStripMenuItem();
             aboutToolStripMenuItem = new ToolStripMenuItem();
+            fAQToolStripMenuItem = new ToolStripMenuItem();
+            sendMailToDeveloperToolStripMenuItem = new ToolStripMenuItem();
+            relatedDOcumentsToolStripMenuItem = new ToolStripMenuItem();
             dg_prg = new DataGridView();
             col_line_no = new DataGridViewTextBoxColumn();
             col_enable = new DataGridViewCheckBoxColumn();
             col_pic_type = new DataGridViewComboBoxColumn();
             col_Action = new DataGridViewComboBoxColumn();
             col_Command = new DataGridViewComboBoxColumn();
-            col_MSB = new DataGridViewTextBoxColumn();
-            col_LSB = new DataGridViewTextBoxColumn();
+            col_data = new DataGridViewTextBoxColumn();
             col_delay = new DataGridViewTextBoxColumn();
             col_loop = new DataGridViewTextBoxColumn();
             statusStrip = new StatusStrip();
             toolStripStatusLabel1 = new ToolStripStatusLabel();
             lbl_message = new ToolStripStatusLabel();
+            tssl_comport = new ToolStripStatusLabel();
+            tssl_baudrate = new ToolStripStatusLabel();
             contextMenuStrip1 = new ContextMenuStrip(components);
             InsertRow = new ToolStripMenuItem();
             DeleteRow = new ToolStripMenuItem();
-            tssl_comport = new ToolStripStatusLabel();
-            tssl_baudrate = new ToolStripStatusLabel();
             groupBox7.SuspendLayout();
             groupBox1.SuspendLayout();
             menuStrip1.SuspendLayout();
@@ -95,6 +107,9 @@
             // 
             // groupBox7
             // 
+            groupBox7.Controls.Add(chk_auto_connect);
+            groupBox7.Controls.Add(btn_disconnect);
+            groupBox7.Controls.Add(btn_connect);
             groupBox7.Controls.Add(btn_resume);
             groupBox7.Controls.Add(chk_loop);
             groupBox7.Controls.Add(btn_prg_send);
@@ -109,6 +124,37 @@
             groupBox7.TabStop = false;
             groupBox7.Text = "Control Panel";
             // 
+            // chk_auto_connect
+            // 
+            chk_auto_connect.AutoSize = true;
+            chk_auto_connect.ForeColor = Color.Cyan;
+            chk_auto_connect.Location = new Point(10, 411);
+            chk_auto_connect.Name = "chk_auto_connect";
+            chk_auto_connect.Size = new Size(121, 24);
+            chk_auto_connect.TabIndex = 18;
+            chk_auto_connect.Text = "Auto Connect";
+            chk_auto_connect.UseVisualStyleBackColor = true;
+            chk_auto_connect.CheckedChanged += chk_auto_connect_CheckedChanged;
+            // 
+            // btn_disconnect
+            // 
+            btn_disconnect.Location = new Point(28, 361);
+            btn_disconnect.Name = "btn_disconnect";
+            btn_disconnect.Size = new Size(105, 35);
+            btn_disconnect.TabIndex = 17;
+            btn_disconnect.Text = "DIsconnect";
+            btn_disconnect.UseVisualStyleBackColor = true;
+            // 
+            // btn_connect
+            // 
+            btn_connect.Location = new Point(28, 322);
+            btn_connect.Name = "btn_connect";
+            btn_connect.Size = new Size(105, 33);
+            btn_connect.TabIndex = 16;
+            btn_connect.Text = "Connect";
+            btn_connect.UseVisualStyleBackColor = true;
+            btn_connect.Click += btn_connect_Click_1;
+            // 
             // btn_resume
             // 
             btn_resume.Location = new Point(83, 90);
@@ -122,8 +168,8 @@
             // chk_loop
             // 
             chk_loop.AutoSize = true;
-            chk_loop.ForeColor = Color.White;
-            chk_loop.Location = new Point(10, 430);
+            chk_loop.ForeColor = Color.FromArgb(128, 255, 255);
+            chk_loop.Location = new Point(10, 441);
             chk_loop.Name = "chk_loop";
             chk_loop.Size = new Size(67, 24);
             chk_loop.TabIndex = 14;
@@ -135,7 +181,7 @@
             // 
             btn_prg_send.Location = new Point(6, 227);
             btn_prg_send.Name = "btn_prg_send";
-            btn_prg_send.Size = new Size(143, 152);
+            btn_prg_send.Size = new Size(155, 63);
             btn_prg_send.TabIndex = 3;
             btn_prg_send.Text = "SEND";
             btn_prg_send.UseVisualStyleBackColor = true;
@@ -285,41 +331,71 @@
             // 
             // communicationToolStripMenuItem
             // 
-            communicationToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { serialToolStripMenuItem, tCPToolStripMenuItem, uDPToolStripMenuItem, disconnectToolStripMenuItem });
+            communicationToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { commToolStripMenuItem, uSBToolStripMenuItem, aPIToolStripMenuItem, websocketToolStripMenuItem, tcpToolStripMenuItem, udpToolStripMenuItem, iPCToolStripMenuItem });
             communicationToolStripMenuItem.Name = "communicationToolStripMenuItem";
-            communicationToolStripMenuItem.Size = new Size(114, 24);
-            communicationToolStripMenuItem.Text = "Physical Layer";
+            communicationToolStripMenuItem.Size = new Size(128, 24);
+            communicationToolStripMenuItem.Text = "Communication";
+            communicationToolStripMenuItem.DropDownOpening += communicationToolStripMenuItem_DropDownOpening;
+            communicationToolStripMenuItem.Click += communicationToolStripMenuItem_Click;
+            communicationToolStripMenuItem.MouseDown += communicationToolStripMenuItem_MouseDown;
             // 
-            // serialToolStripMenuItem
+            // commToolStripMenuItem
             // 
-            serialToolStripMenuItem.Name = "serialToolStripMenuItem";
-            serialToolStripMenuItem.Size = new Size(165, 26);
-            serialToolStripMenuItem.Text = "Serial";
+            commToolStripMenuItem.Name = "commToolStripMenuItem";
+            commToolStripMenuItem.Size = new Size(169, 26);
+            commToolStripMenuItem.Text = "Comm. Port";
+            commToolStripMenuItem.Click += ToolStripMenuItem_Seria_Click;
             // 
-            // tCPToolStripMenuItem
+            // uSBToolStripMenuItem
             // 
-            tCPToolStripMenuItem.Name = "tCPToolStripMenuItem";
-            tCPToolStripMenuItem.Size = new Size(165, 26);
-            tCPToolStripMenuItem.Text = "TCP";
+            uSBToolStripMenuItem.Name = "uSBToolStripMenuItem";
+            uSBToolStripMenuItem.Size = new Size(169, 26);
+            uSBToolStripMenuItem.Text = "USB";
             // 
-            // uDPToolStripMenuItem
+            // aPIToolStripMenuItem
             // 
-            uDPToolStripMenuItem.Name = "uDPToolStripMenuItem";
-            uDPToolStripMenuItem.Size = new Size(165, 26);
-            uDPToolStripMenuItem.Text = "UDP";
+            aPIToolStripMenuItem.Name = "aPIToolStripMenuItem";
+            aPIToolStripMenuItem.Size = new Size(169, 26);
+            aPIToolStripMenuItem.Text = "API";
             // 
-            // disconnectToolStripMenuItem
+            // websocketToolStripMenuItem
             // 
-            disconnectToolStripMenuItem.Name = "disconnectToolStripMenuItem";
-            disconnectToolStripMenuItem.Size = new Size(165, 26);
-            disconnectToolStripMenuItem.Text = "Disconnect";
+            websocketToolStripMenuItem.Name = "websocketToolStripMenuItem";
+            websocketToolStripMenuItem.Size = new Size(169, 26);
+            websocketToolStripMenuItem.Text = "Websocket";
+            // 
+            // tcpToolStripMenuItem
+            // 
+            tcpToolStripMenuItem.Name = "tcpToolStripMenuItem";
+            tcpToolStripMenuItem.Size = new Size(169, 26);
+            tcpToolStripMenuItem.Text = "TCP";
+            tcpToolStripMenuItem.Click += ToolStripMenuItem_TCP_Click;
+            // 
+            // udpToolStripMenuItem
+            // 
+            udpToolStripMenuItem.Name = "udpToolStripMenuItem";
+            udpToolStripMenuItem.Size = new Size(169, 26);
+            udpToolStripMenuItem.Text = "UDP";
+            udpToolStripMenuItem.Click += ToolStripMenuItem_UDP_Click;
+            // 
+            // iPCToolStripMenuItem
+            // 
+            iPCToolStripMenuItem.Name = "iPCToolStripMenuItem";
+            iPCToolStripMenuItem.Size = new Size(169, 26);
+            iPCToolStripMenuItem.Text = "IPC";
             // 
             // communicationBusToolStripMenuItem
             // 
-            communicationBusToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { cANToolStripMenuItem, modBusToolStripMenuItem });
+            communicationBusToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { kbusToolStripMenuItem, cANToolStripMenuItem, modBusToolStripMenuItem, customToolStripMenuItem });
             communicationBusToolStripMenuItem.Name = "communicationBusToolStripMenuItem";
-            communicationBusToolStripMenuItem.Size = new Size(155, 24);
-            communicationBusToolStripMenuItem.Text = "Communication Bus";
+            communicationBusToolStripMenuItem.Size = new Size(79, 24);
+            communicationBusToolStripMenuItem.Text = "Protocol";
+            // 
+            // kbusToolStripMenuItem
+            // 
+            kbusToolStripMenuItem.Name = "kbusToolStripMenuItem";
+            kbusToolStripMenuItem.Size = new Size(146, 26);
+            kbusToolStripMenuItem.Text = "Kbus";
             // 
             // cANToolStripMenuItem
             // 
@@ -332,6 +408,12 @@
             modBusToolStripMenuItem.Name = "modBusToolStripMenuItem";
             modBusToolStripMenuItem.Size = new Size(146, 26);
             modBusToolStripMenuItem.Text = "ModBus";
+            // 
+            // customToolStripMenuItem
+            // 
+            customToolStripMenuItem.Name = "customToolStripMenuItem";
+            customToolStripMenuItem.Size = new Size(146, 26);
+            customToolStripMenuItem.Text = "Custom";
             // 
             // programToolStripMenuItem
             // 
@@ -367,7 +449,7 @@
             // 
             // toolsToolStripMenuItem
             // 
-            toolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { settingsToolStripMenuItem, packetMonitorToolStripMenuItem });
+            toolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { settingsToolStripMenuItem, packetMonitorToolStripMenuItem, terminalToolStripMenuItem, debugInterfaceToolStripMenuItem });
             toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             toolsToolStripMenuItem.Size = new Size(58, 24);
             toolsToolStripMenuItem.Text = "Tools";
@@ -375,18 +457,30 @@
             // settingsToolStripMenuItem
             // 
             settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            settingsToolStripMenuItem.Size = new Size(191, 26);
+            settingsToolStripMenuItem.Size = new Size(199, 26);
             settingsToolStripMenuItem.Text = "Settings";
             // 
             // packetMonitorToolStripMenuItem
             // 
             packetMonitorToolStripMenuItem.Name = "packetMonitorToolStripMenuItem";
-            packetMonitorToolStripMenuItem.Size = new Size(191, 26);
+            packetMonitorToolStripMenuItem.Size = new Size(199, 26);
             packetMonitorToolStripMenuItem.Text = "Packet Monitor";
+            // 
+            // terminalToolStripMenuItem
+            // 
+            terminalToolStripMenuItem.Name = "terminalToolStripMenuItem";
+            terminalToolStripMenuItem.Size = new Size(199, 26);
+            terminalToolStripMenuItem.Text = "Terminal";
+            // 
+            // debugInterfaceToolStripMenuItem
+            // 
+            debugInterfaceToolStripMenuItem.Name = "debugInterfaceToolStripMenuItem";
+            debugInterfaceToolStripMenuItem.Size = new Size(199, 26);
+            debugInterfaceToolStripMenuItem.Text = "Debug Interface";
             // 
             // helpToolStripMenuItem
             // 
-            helpToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { aboutToolStripMenuItem });
+            helpToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { aboutToolStripMenuItem, fAQToolStripMenuItem, sendMailToDeveloperToolStripMenuItem, relatedDOcumentsToolStripMenuItem });
             helpToolStripMenuItem.Name = "helpToolStripMenuItem";
             helpToolStripMenuItem.Size = new Size(55, 24);
             helpToolStripMenuItem.Text = "Help";
@@ -394,19 +488,38 @@
             // aboutToolStripMenuItem
             // 
             aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            aboutToolStripMenuItem.Size = new Size(133, 26);
+            aboutToolStripMenuItem.Size = new Size(224, 26);
             aboutToolStripMenuItem.Text = "About";
+            // 
+            // fAQToolStripMenuItem
+            // 
+            fAQToolStripMenuItem.Name = "fAQToolStripMenuItem";
+            fAQToolStripMenuItem.Size = new Size(224, 26);
+            fAQToolStripMenuItem.Text = "FAQ";
+            // 
+            // sendMailToDeveloperToolStripMenuItem
+            // 
+            sendMailToDeveloperToolStripMenuItem.Name = "sendMailToDeveloperToolStripMenuItem";
+            sendMailToDeveloperToolStripMenuItem.Size = new Size(224, 26);
+            sendMailToDeveloperToolStripMenuItem.Text = "Send Email";
+            // 
+            // relatedDOcumentsToolStripMenuItem
+            // 
+            relatedDOcumentsToolStripMenuItem.Name = "relatedDOcumentsToolStripMenuItem";
+            relatedDOcumentsToolStripMenuItem.Size = new Size(224, 26);
+            relatedDOcumentsToolStripMenuItem.Text = "Related DOcuments";
             // 
             // dg_prg
             // 
             dg_prg.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dg_prg.Columns.AddRange(new DataGridViewColumn[] { col_line_no, col_enable, col_pic_type, col_Action, col_Command, col_MSB, col_LSB, col_delay, col_loop });
+            dg_prg.Columns.AddRange(new DataGridViewColumn[] { col_line_no, col_enable, col_pic_type, col_Action, col_Command, col_data, col_delay, col_loop });
             dg_prg.Location = new Point(0, 31);
             dg_prg.Name = "dg_prg";
             dg_prg.RowHeadersWidth = 51;
             dg_prg.Size = new Size(1297, 618);
             dg_prg.TabIndex = 0;
             dg_prg.CellMouseDown += dg_prg_CellMouseDown;
+            dg_prg.CellValueChanged += dg_prg_CellValueChanged;
             dg_prg.KeyDown += dg_prg_KeyDown;
             // 
             // col_line_no
@@ -449,35 +562,28 @@
             col_Command.Items.AddRange(new object[] { "Dispense", "PB6_LED", "PB5_LED", "Erase_Log", "Who_Are_You", "Read_Log_Count", "Read_Logs" });
             col_Command.MinimumWidth = 6;
             col_Command.Name = "col_Command";
-            col_Command.Width = 125;
+            col_Command.Width = 250;
             // 
-            // col_MSB
+            // col_data
             // 
-            col_MSB.HeaderText = "MSB";
-            col_MSB.MinimumWidth = 6;
-            col_MSB.Name = "col_MSB";
-            col_MSB.Width = 125;
-            // 
-            // col_LSB
-            // 
-            col_LSB.HeaderText = "LSB";
-            col_LSB.MinimumWidth = 6;
-            col_LSB.Name = "col_LSB";
-            col_LSB.Width = 125;
+            col_data.HeaderText = "DATA";
+            col_data.MinimumWidth = 6;
+            col_data.Name = "col_data";
+            col_data.Width = 200;
             // 
             // col_delay
             // 
             col_delay.HeaderText = "Delay";
             col_delay.MinimumWidth = 6;
             col_delay.Name = "col_delay";
-            col_delay.Width = 125;
+            col_delay.Width = 75;
             // 
             // col_loop
             // 
             col_loop.HeaderText = "Loop";
             col_loop.MinimumWidth = 6;
             col_loop.Name = "col_loop";
-            col_loop.Width = 125;
+            col_loop.Width = 75;
             // 
             // statusStrip
             // 
@@ -502,6 +608,18 @@
             lbl_message.Size = new Size(148, 20);
             lbl_message.Text = "Message: Data saved";
             // 
+            // tssl_comport
+            // 
+            tssl_comport.Name = "tssl_comport";
+            tssl_comport.Size = new Size(50, 20);
+            tssl_comport.Text = "COM1";
+            // 
+            // tssl_baudrate
+            // 
+            tssl_baudrate.Name = "tssl_baudrate";
+            tssl_baudrate.Size = new Size(41, 20);
+            tssl_baudrate.Text = "9600";
+            // 
             // contextMenuStrip1
             // 
             contextMenuStrip1.ImageScalingSize = new Size(20, 20);
@@ -522,18 +640,6 @@
             DeleteRow.Size = new Size(171, 24);
             DeleteRow.Text = "Delete Row(s)";
             DeleteRow.Click += DeleteRow_Click;
-            // 
-            // tssl_comport
-            // 
-            tssl_comport.Name = "tssl_comport";
-            tssl_comport.Size = new Size(50, 20);
-            tssl_comport.Text = "COM1";
-            // 
-            // tssl_baudrate
-            // 
-            tssl_baudrate.Name = "tssl_baudrate";
-            tssl_baudrate.Size = new Size(41, 20);
-            tssl_baudrate.Text = "9600";
             // 
             // frm_main
             // 
@@ -579,15 +685,6 @@
         private ToolStripMenuItem fileToolStripMenuItem;
         private ToolStripMenuItem communicationToolStripMenuItem;
         private DataGridView dg_prg;
-        private DataGridViewTextBoxColumn col_line_no;
-        private DataGridViewCheckBoxColumn col_enable;
-        private DataGridViewComboBoxColumn col_pic_type;
-        private DataGridViewComboBoxColumn col_Action;
-        private DataGridViewComboBoxColumn col_Command;
-        private DataGridViewTextBoxColumn col_MSB;
-        private DataGridViewTextBoxColumn col_LSB;
-        private DataGridViewTextBoxColumn col_delay;
-        private DataGridViewTextBoxColumn col_loop;
         private GroupBox groupBox1;
         private RadioButton rbtn_real_hardware;
         private RadioButton rbtn_InbuiltSim;
@@ -597,10 +694,9 @@
         private ToolStripMenuItem exportToolStripMenuItem;
         private ToolStripMenuItem exutToolStripMenuItem;
         private ToolStripMenuItem helpToolStripMenuItem;
-        private ToolStripMenuItem serialToolStripMenuItem;
-        private ToolStripMenuItem tCPToolStripMenuItem;
-        private ToolStripMenuItem uDPToolStripMenuItem;
-        private ToolStripMenuItem disconnectToolStripMenuItem;
+        private ToolStripMenuItem commToolStripMenuItem;
+        private ToolStripMenuItem tcpToolStripMenuItem;
+        private ToolStripMenuItem udpToolStripMenuItem;
         private ToolStripMenuItem communicationBusToolStripMenuItem;
         private ToolStripMenuItem cANToolStripMenuItem;
         private ToolStripMenuItem modBusToolStripMenuItem;
@@ -625,5 +721,27 @@
         private Button btn_resume;
         private ToolStripStatusLabel tssl_comport;
         private ToolStripStatusLabel tssl_baudrate;
+        private DataGridViewTextBoxColumn col_line_no;
+        private DataGridViewCheckBoxColumn col_enable;
+        private DataGridViewComboBoxColumn col_pic_type;
+        private DataGridViewComboBoxColumn col_Action;
+        private DataGridViewComboBoxColumn col_Command;
+        private DataGridViewTextBoxColumn col_data;
+        private DataGridViewTextBoxColumn col_delay;
+        private DataGridViewTextBoxColumn col_loop;
+        private CheckBox chk_auto_connect;
+        private Button btn_disconnect;
+        private Button btn_connect;
+        private ToolStripMenuItem kbusToolStripMenuItem;
+        private ToolStripMenuItem uSBToolStripMenuItem;
+        private ToolStripMenuItem aPIToolStripMenuItem;
+        private ToolStripMenuItem websocketToolStripMenuItem;
+        private ToolStripMenuItem iPCToolStripMenuItem;
+        private ToolStripMenuItem customToolStripMenuItem;
+        private ToolStripMenuItem terminalToolStripMenuItem;
+        private ToolStripMenuItem debugInterfaceToolStripMenuItem;
+        private ToolStripMenuItem fAQToolStripMenuItem;
+        private ToolStripMenuItem sendMailToDeveloperToolStripMenuItem;
+        private ToolStripMenuItem relatedDOcumentsToolStripMenuItem;
     }
 }
