@@ -1,0 +1,26 @@
+{
+  "Communication": {
+    "CommPort": "COM12 - USB Serial Port (COM12)",
+    "USB": "",
+    "API": "",
+    "Websocket": "",
+    "TCP": "",
+    "UDP": "",
+    "IPC": "",
+    "AutoConnect": true,
+    "Selected": ""
+  },
+  "Program": {
+    "LastProgram": "autosave_program.json"
+  },
+  "UI": {
+    "WindowWidth": 1200,
+    "WindowHeight": 800,
+    "SelectedInterface": 2,
+    "LoopEnable": true
+  },
+  "RecentFiles": [
+    "D:\\CANhandler\\User_Program\\Dispense_Grain.json",
+    "D:\\CANhandler\\User_Program\\test_2.json"
+  ]
+}
