@@ -112,7 +112,6 @@
             ShowInTaskbar = false;
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Serial Parameter settings";
-            TopMost = true;
             Load += frm_settings_serial_Load;
             ResumeLayout(false);
             PerformLayout();

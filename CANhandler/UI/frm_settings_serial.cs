@@ -32,10 +32,10 @@ namespace CANhandler.UI
             var config = ConfigManager.Config;
 
             // Show saved COM port (even if not connected)
-            cbo_port_list.Text = config.Communication.CommPort;
+            cbo_port_list.Text = config.Communication.CommPort.PortName;
 
             // Show saved baud rate
-            //cbo_baudrate.Text = config.Communication.BaudRate.ToString();
+            cbo_baudrate.Text = config.Communication.CommPort.BaudRate.ToString();
         }
 
         // ================================
@@ -78,7 +78,7 @@ namespace CANhandler.UI
                 LoadPorts();
 
                 // restore selection after binding
-                var savedPort = ConfigManager.Config.Communication.CommPort;
+                var savedPort = ConfigManager.Config.Communication.CommPort.PortName;
                 if (!string.IsNullOrEmpty(savedPort))
                 {
                     cbo_port_list.SelectedValue = savedPort;
@@ -122,13 +122,13 @@ namespace CANhandler.UI
             // COM Port
             if (!string.IsNullOrWhiteSpace(cbo_port_list.Text))
             {
-                config.Communication.CommPort = cbo_port_list.Text;
+                config.Communication.CommPort.PortName = cbo_port_list.Text;
             }
 
             // Baud Rate
             if (int.TryParse(cbo_baudrate.Text, out int baud))
             {
-                //config.Communication.BaudRate = baud;
+                config.Communication.CommPort.BaudRate = baud;
             }
         }
     }

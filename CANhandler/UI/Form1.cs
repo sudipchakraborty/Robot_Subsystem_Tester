@@ -58,8 +58,18 @@ namespace CANhandler
             tcpToolStripMenuItem.MouseDown += MenuItem_MouseDown;
             udpToolStripMenuItem.MouseDown += MenuItem_MouseDown;
             iPCToolStripMenuItem.MouseDown += MenuItem_MouseDown;
+            /////////////////////////////
+            kbusToolStripMenuItem.MouseDown += Protocol_Selection_MenuItem_MouseDown;
+
+
+
+
+            rAWBinaryToolStripMenuItem.MouseDown += Protocol_MenuItem_MouseDown;
+            aSCIIToolStripMenuItem.MouseDown += Protocol_MenuItem_MouseDown;
+
         }
         //________________________________________________________________________
+   
         private void Form1_Load(object sender, EventArgs e)
         {
 
@@ -759,40 +769,48 @@ namespace CANhandler
             // =========================
             // 🔥 SAVE TO CONFIG
             // =========================
-            string selected = "";
-
-            switch (clickedItem.Name)
-            {
-                case "uSBToolStripMenuItem":
-                    selected = "USB";
-                    break;
-
-                case "aPIToolStripMenuItem":
-                    selected = "API";
-                    break;
-
-                case "websocketToolStripMenuItem":
-                    selected = "Websocket";
-                    break;
-
-                case "tcpToolStripMenuItem":
-                    selected = "TCP";
-                    break;
-
-                case "udpToolStripMenuItem":
-                    selected = "UDP";
-                    break;
-
-                case "iPCToolStripMenuItem":
-                    selected = "IPC";
-                    break;
-            }
-
+            string selected = clickedItem.ToString();
             // Save
             ConfigManager.Config.Communication.Selected = selected;
             ConfigManager.Save();
 
         }
+
+        private void Protocol_MenuItem_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button != MouseButtons.Right) return;
+
+            var clickedItem = sender as ToolStripMenuItem;
+            if (clickedItem == null) return;
+
+            var parent = clickedItem.GetCurrentParent();
+
+            // 🔥 Uncheck all
+            foreach (ToolStripItem item in parent.Items)
+            {
+                if (item is ToolStripMenuItem menuItem)
+                {
+                    menuItem.Checked = false;
+                }
+            }
+
+            // ✔ Check selected
+            clickedItem.Checked = true;
+
+            // =========================
+            // 🔥 SAVE TO CONFIG
+            // =========================
+            string selected = clickedItem.ToString();
+            // Save
+            ConfigManager.Config.Communication.CommPort.PacketType = selected;
+            ConfigManager.Save();
+
+        }
+
+
+
+
+        
 
         private void chk_auto_connect_CheckedChanged(object sender, EventArgs e)
         {

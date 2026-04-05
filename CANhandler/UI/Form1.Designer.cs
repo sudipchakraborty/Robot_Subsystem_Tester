@@ -30,6 +30,12 @@
         {
             components = new System.ComponentModel.Container();
             groupBox7 = new GroupBox();
+            label3 = new Label();
+            label2 = new Label();
+            label1 = new Label();
+            pb_tx = new PictureBox();
+            pb_rx = new PictureBox();
+            pb_connection = new PictureBox();
             chk_auto_connect = new CheckBox();
             btn_disconnect = new Button();
             btn_connect = new Button();
@@ -60,8 +66,10 @@
             tcpToolStripMenuItem = new ToolStripMenuItem();
             udpToolStripMenuItem = new ToolStripMenuItem();
             iPCToolStripMenuItem = new ToolStripMenuItem();
-            communicationBusToolStripMenuItem = new ToolStripMenuItem();
+            ProtocolToolStripMenuItem = new ToolStripMenuItem();
             kbusToolStripMenuItem = new ToolStripMenuItem();
+            aSCIIToolStripMenuItem = new ToolStripMenuItem();
+            rAWBinaryToolStripMenuItem = new ToolStripMenuItem();
             cANToolStripMenuItem = new ToolStripMenuItem();
             modBusToolStripMenuItem = new ToolStripMenuItem();
             customToolStripMenuItem = new ToolStripMenuItem();
@@ -98,6 +106,9 @@
             InsertRow = new ToolStripMenuItem();
             DeleteRow = new ToolStripMenuItem();
             groupBox7.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)pb_tx).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pb_rx).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pb_connection).BeginInit();
             groupBox1.SuspendLayout();
             menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dg_prg).BeginInit();
@@ -107,6 +118,12 @@
             // 
             // groupBox7
             // 
+            groupBox7.Controls.Add(label3);
+            groupBox7.Controls.Add(label2);
+            groupBox7.Controls.Add(label1);
+            groupBox7.Controls.Add(pb_tx);
+            groupBox7.Controls.Add(pb_rx);
+            groupBox7.Controls.Add(pb_connection);
             groupBox7.Controls.Add(chk_auto_connect);
             groupBox7.Controls.Add(btn_disconnect);
             groupBox7.Controls.Add(btn_connect);
@@ -124,6 +141,63 @@
             groupBox7.TabStop = false;
             groupBox7.Text = "Control Panel";
             // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.ForeColor = Color.Yellow;
+            label3.Location = new Point(63, 375);
+            label3.Name = "label3";
+            label3.Size = new Size(27, 20);
+            label3.TabIndex = 20;
+            label3.Text = "RX";
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.ForeColor = Color.Yellow;
+            label2.Location = new Point(64, 345);
+            label2.Name = "label2";
+            label2.Size = new Size(26, 20);
+            label2.TabIndex = 20;
+            label2.Text = "TX";
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.ForeColor = Color.Yellow;
+            label1.Location = new Point(6, 311);
+            label1.Name = "label1";
+            label1.Size = new Size(84, 20);
+            label1.TabIndex = 20;
+            label1.Text = "Connection";
+            // 
+            // pb_tx
+            // 
+            pb_tx.BackColor = Color.Silver;
+            pb_tx.Location = new Point(97, 341);
+            pb_tx.Name = "pb_tx";
+            pb_tx.Size = new Size(27, 24);
+            pb_tx.TabIndex = 19;
+            pb_tx.TabStop = false;
+            // 
+            // pb_rx
+            // 
+            pb_rx.BackColor = Color.Silver;
+            pb_rx.Location = new Point(97, 371);
+            pb_rx.Name = "pb_rx";
+            pb_rx.Size = new Size(27, 24);
+            pb_rx.TabIndex = 19;
+            pb_rx.TabStop = false;
+            // 
+            // pb_connection
+            // 
+            pb_connection.BackColor = Color.Maroon;
+            pb_connection.Location = new Point(97, 311);
+            pb_connection.Name = "pb_connection";
+            pb_connection.Size = new Size(27, 24);
+            pb_connection.TabIndex = 19;
+            pb_connection.TabStop = false;
+            // 
             // chk_auto_connect
             // 
             chk_auto_connect.AutoSize = true;
@@ -138,18 +212,18 @@
             // 
             // btn_disconnect
             // 
-            btn_disconnect.Location = new Point(28, 361);
+            btn_disconnect.Location = new Point(10, 253);
             btn_disconnect.Name = "btn_disconnect";
-            btn_disconnect.Size = new Size(105, 35);
+            btn_disconnect.Size = new Size(103, 35);
             btn_disconnect.TabIndex = 17;
             btn_disconnect.Text = "DIsconnect";
             btn_disconnect.UseVisualStyleBackColor = true;
             // 
             // btn_connect
             // 
-            btn_connect.Location = new Point(28, 322);
+            btn_connect.Location = new Point(10, 214);
             btn_connect.Name = "btn_connect";
-            btn_connect.Size = new Size(105, 33);
+            btn_connect.Size = new Size(103, 33);
             btn_connect.TabIndex = 16;
             btn_connect.Text = "Connect";
             btn_connect.UseVisualStyleBackColor = true;
@@ -159,7 +233,7 @@
             // 
             btn_resume.Location = new Point(83, 90);
             btn_resume.Name = "btn_resume";
-            btn_resume.Size = new Size(78, 66);
+            btn_resume.Size = new Size(78, 48);
             btn_resume.TabIndex = 15;
             btn_resume.Text = "RESUME";
             btn_resume.UseVisualStyleBackColor = true;
@@ -179,9 +253,9 @@
             // 
             // btn_prg_send
             // 
-            btn_prg_send.Location = new Point(6, 227);
+            btn_prg_send.Location = new Point(6, 144);
             btn_prg_send.Name = "btn_prg_send";
-            btn_prg_send.Size = new Size(155, 63);
+            btn_prg_send.Size = new Size(155, 45);
             btn_prg_send.TabIndex = 3;
             btn_prg_send.Text = "SEND";
             btn_prg_send.UseVisualStyleBackColor = true;
@@ -189,9 +263,9 @@
             // 
             // btn_Stop
             // 
-            btn_Stop.Location = new Point(6, 162);
+            btn_Stop.Location = new Point(83, 25);
             btn_Stop.Name = "btn_Stop";
-            btn_Stop.Size = new Size(155, 59);
+            btn_Stop.Size = new Size(78, 59);
             btn_Stop.TabIndex = 2;
             btn_Stop.Text = "STOP";
             btn_Stop.UseVisualStyleBackColor = true;
@@ -250,7 +324,7 @@
             // 
             btn_run.Location = new Point(4, 26);
             btn_run.Name = "btn_run";
-            btn_run.Size = new Size(157, 58);
+            btn_run.Size = new Size(73, 58);
             btn_run.TabIndex = 2;
             btn_run.Text = "RUN";
             btn_run.UseVisualStyleBackColor = true;
@@ -260,7 +334,7 @@
             // 
             btn_pause.Location = new Point(6, 90);
             btn_pause.Name = "btn_pause";
-            btn_pause.Size = new Size(71, 66);
+            btn_pause.Size = new Size(71, 48);
             btn_pause.TabIndex = 2;
             btn_pause.Text = "PAUSE";
             btn_pause.UseVisualStyleBackColor = true;
@@ -269,7 +343,7 @@
             // menuStrip1
             // 
             menuStrip1.ImageScalingSize = new Size(20, 20);
-            menuStrip1.Items.AddRange(new ToolStripItem[] { toolStripMenuItem1, communicationToolStripMenuItem, communicationBusToolStripMenuItem, programToolStripMenuItem, toolsToolStripMenuItem, helpToolStripMenuItem });
+            menuStrip1.Items.AddRange(new ToolStripItem[] { toolStripMenuItem1, communicationToolStripMenuItem, ProtocolToolStripMenuItem, programToolStripMenuItem, toolsToolStripMenuItem, helpToolStripMenuItem });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
             menuStrip1.Size = new Size(1482, 28);
@@ -342,77 +416,90 @@
             // commToolStripMenuItem
             // 
             commToolStripMenuItem.Name = "commToolStripMenuItem";
-            commToolStripMenuItem.Size = new Size(169, 26);
+            commToolStripMenuItem.Size = new Size(224, 26);
             commToolStripMenuItem.Text = "Comm. Port";
             commToolStripMenuItem.Click += ToolStripMenuItem_Seria_Click;
             // 
             // uSBToolStripMenuItem
             // 
             uSBToolStripMenuItem.Name = "uSBToolStripMenuItem";
-            uSBToolStripMenuItem.Size = new Size(169, 26);
+            uSBToolStripMenuItem.Size = new Size(224, 26);
             uSBToolStripMenuItem.Text = "USB";
             // 
             // aPIToolStripMenuItem
             // 
             aPIToolStripMenuItem.Name = "aPIToolStripMenuItem";
-            aPIToolStripMenuItem.Size = new Size(169, 26);
+            aPIToolStripMenuItem.Size = new Size(224, 26);
             aPIToolStripMenuItem.Text = "API";
             // 
             // websocketToolStripMenuItem
             // 
             websocketToolStripMenuItem.Name = "websocketToolStripMenuItem";
-            websocketToolStripMenuItem.Size = new Size(169, 26);
+            websocketToolStripMenuItem.Size = new Size(224, 26);
             websocketToolStripMenuItem.Text = "Websocket";
             // 
             // tcpToolStripMenuItem
             // 
             tcpToolStripMenuItem.Name = "tcpToolStripMenuItem";
-            tcpToolStripMenuItem.Size = new Size(169, 26);
+            tcpToolStripMenuItem.Size = new Size(224, 26);
             tcpToolStripMenuItem.Text = "TCP";
             tcpToolStripMenuItem.Click += ToolStripMenuItem_TCP_Click;
             // 
             // udpToolStripMenuItem
             // 
             udpToolStripMenuItem.Name = "udpToolStripMenuItem";
-            udpToolStripMenuItem.Size = new Size(169, 26);
+            udpToolStripMenuItem.Size = new Size(224, 26);
             udpToolStripMenuItem.Text = "UDP";
             udpToolStripMenuItem.Click += ToolStripMenuItem_UDP_Click;
             // 
             // iPCToolStripMenuItem
             // 
             iPCToolStripMenuItem.Name = "iPCToolStripMenuItem";
-            iPCToolStripMenuItem.Size = new Size(169, 26);
+            iPCToolStripMenuItem.Size = new Size(224, 26);
             iPCToolStripMenuItem.Text = "IPC";
             // 
-            // communicationBusToolStripMenuItem
+            // ProtocolToolStripMenuItem
             // 
-            communicationBusToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { kbusToolStripMenuItem, cANToolStripMenuItem, modBusToolStripMenuItem, customToolStripMenuItem });
-            communicationBusToolStripMenuItem.Name = "communicationBusToolStripMenuItem";
-            communicationBusToolStripMenuItem.Size = new Size(79, 24);
-            communicationBusToolStripMenuItem.Text = "Protocol";
+            ProtocolToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { kbusToolStripMenuItem, cANToolStripMenuItem, modBusToolStripMenuItem, customToolStripMenuItem });
+            ProtocolToolStripMenuItem.Name = "ProtocolToolStripMenuItem";
+            ProtocolToolStripMenuItem.Size = new Size(79, 24);
+            ProtocolToolStripMenuItem.Text = "Protocol";
             // 
             // kbusToolStripMenuItem
             // 
+            kbusToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { rAWBinaryToolStripMenuItem, aSCIIToolStripMenuItem });
             kbusToolStripMenuItem.Name = "kbusToolStripMenuItem";
-            kbusToolStripMenuItem.Size = new Size(146, 26);
+            kbusToolStripMenuItem.Size = new Size(224, 26);
             kbusToolStripMenuItem.Text = "Kbus";
+            // 
+            // aSCIIToolStripMenuItem
+            // 
+            aSCIIToolStripMenuItem.Name = "aSCIIToolStripMenuItem";
+            aSCIIToolStripMenuItem.Size = new Size(224, 26);
+            aSCIIToolStripMenuItem.Text = "ASCII";
+            // 
+            // rAWBinaryToolStripMenuItem
+            // 
+            rAWBinaryToolStripMenuItem.Name = "rAWBinaryToolStripMenuItem";
+            rAWBinaryToolStripMenuItem.Size = new Size(224, 26);
+            rAWBinaryToolStripMenuItem.Text = "RAW(Binary)";
             // 
             // cANToolStripMenuItem
             // 
             cANToolStripMenuItem.Name = "cANToolStripMenuItem";
-            cANToolStripMenuItem.Size = new Size(146, 26);
+            cANToolStripMenuItem.Size = new Size(224, 26);
             cANToolStripMenuItem.Text = "CAN";
             // 
             // modBusToolStripMenuItem
             // 
             modBusToolStripMenuItem.Name = "modBusToolStripMenuItem";
-            modBusToolStripMenuItem.Size = new Size(146, 26);
+            modBusToolStripMenuItem.Size = new Size(224, 26);
             modBusToolStripMenuItem.Text = "ModBus";
             // 
             // customToolStripMenuItem
             // 
             customToolStripMenuItem.Name = "customToolStripMenuItem";
-            customToolStripMenuItem.Size = new Size(146, 26);
+            customToolStripMenuItem.Size = new Size(224, 26);
             customToolStripMenuItem.Text = "Custom";
             // 
             // programToolStripMenuItem
@@ -660,6 +747,9 @@
             Load += Form1_Load;
             groupBox7.ResumeLayout(false);
             groupBox7.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)pb_tx).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pb_rx).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pb_connection).EndInit();
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
             menuStrip1.ResumeLayout(false);
@@ -697,7 +787,7 @@
         private ToolStripMenuItem commToolStripMenuItem;
         private ToolStripMenuItem tcpToolStripMenuItem;
         private ToolStripMenuItem udpToolStripMenuItem;
-        private ToolStripMenuItem communicationBusToolStripMenuItem;
+        private ToolStripMenuItem ProtocolToolStripMenuItem;
         private ToolStripMenuItem cANToolStripMenuItem;
         private ToolStripMenuItem modBusToolStripMenuItem;
         private ToolStripMenuItem aboutToolStripMenuItem;
@@ -743,5 +833,13 @@
         private ToolStripMenuItem fAQToolStripMenuItem;
         private ToolStripMenuItem sendMailToDeveloperToolStripMenuItem;
         private ToolStripMenuItem relatedDOcumentsToolStripMenuItem;
+        private ToolStripMenuItem aSCIIToolStripMenuItem;
+        private ToolStripMenuItem rAWBinaryToolStripMenuItem;
+        private Label label1;
+        private PictureBox pb_tx;
+        private PictureBox pb_rx;
+        private PictureBox pb_connection;
+        private Label label3;
+        private Label label2;
     }
 }
