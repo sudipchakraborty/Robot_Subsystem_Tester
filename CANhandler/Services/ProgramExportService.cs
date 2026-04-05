@@ -15,7 +15,7 @@ namespace CANhandler.Services
 
             foreach (var s in steps)
             {
-                sb.AppendLine($"{s.LineNo},{s.Enable},{s.PicType},{s.Action},{s.Command},{s.MSB},{s.LSB},{s.Delay},{s.Loop}");
+                //sb.AppendLine($"{s.LineNo},{s.Enable},{s.PicType},{s.Action},{s.Command},{s.MSB},{s.LSB},{s.Delay},{s.Loop}");
             }
 
             File.WriteAllText(path, sb.ToString());

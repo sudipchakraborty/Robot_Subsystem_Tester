@@ -20,17 +20,18 @@ namespace CANhandler.Services
                 ProgramStep step = new ProgramStep
                 {
                     LineNo = row.Index + 1,
-                    Enable = Convert.ToBoolean(row.Cells["col_enable"].Value ?? false),
+                     
+                    Enable = Convert.ToBoolean(row.Cells["col_enable"].Value),
 
-                    PicType = row.Cells["col_pic_type"].Value?.ToString() ?? "",
-                    Action = row.Cells["col_Action"].Value?.ToString() ?? "",
-                    Command = row.Cells["col_Command"].Value?.ToString() ?? "",
+                    PicType = row.Cells["col_pic_type"].Value?.ToString(),
+                    Action = row.Cells["col_Action"].Value?.ToString(),
+                    Command = row.Cells["col_Command"].Value?.ToString(),
 
-                    MSB = Convert.ToByte(row.Cells["col_MSB"].Value ?? 0),
-                    LSB = Convert.ToByte(row.Cells["col_LSB"].Value ?? 0),
+                    Data = Helpers.CommandHelper.ParseData(row.Cells["col_data"].Value?.ToString()),
 
-                    Delay = Convert.ToInt32(row.Cells["col_delay"].Value ?? 0),
-                    Loop = Convert.ToInt32(row.Cells["col_loop"].Value ?? 1)
+                    Delay = Convert.ToInt32(row.Cells["col_delay"].Value),
+                    Loop = Convert.ToInt32(row.Cells["col_loop"].Value)
+
                 };
 
                 steps.Add(step);
@@ -51,8 +52,8 @@ namespace CANhandler.Services
                     step.PicType,
                     step.Action,
                     step.Command,
-                    step.MSB,
-                    step.LSB,
+                    //step.MSB,
+                    //step.LSB,
                     step.Delay,
                     step.Loop
                 );
@@ -64,17 +65,16 @@ namespace CANhandler.Services
             return new ProgramStep
             {
                 LineNo = row.Index + 1,
-                Enable = Convert.ToBoolean(row.Cells["col_enable"].Value ?? false),
+                Enable = Convert.ToBoolean(row.Cells["col_enable"].Value),
 
-                PicType = row.Cells["col_pic_type"].Value?.ToString() ?? "",
-                Action = row.Cells["col_Action"].Value?.ToString() ?? "",
-                Command = row.Cells["col_Command"].Value?.ToString() ?? "",
+                PicType = row.Cells["col_pic_type"].Value?.ToString(),
+                Action = row.Cells["col_Action"].Value?.ToString(),
+                Command = row.Cells["col_Command"].Value?.ToString(),
 
-                MSB = Convert.ToByte(row.Cells["col_MSB"].Value ?? 0),
-                LSB = Convert.ToByte(row.Cells["col_LSB"].Value ?? 0),
+                Data = Helpers.CommandHelper.ParseData(row.Cells["col_data"].Value?.ToString()),
 
-                Delay = Convert.ToInt32(row.Cells["col_delay"].Value ?? 0),
-                Loop = Convert.ToInt32(row.Cells["col_loop"].Value ?? 1)
+                Delay = Convert.ToInt32(row.Cells["col_delay"].Value),
+                Loop = Convert.ToInt32(row.Cells["col_loop"].Value)
             };
         }
     }

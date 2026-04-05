@@ -13,8 +13,7 @@ namespace CANhandler.Models
         public string Action { get; set; }
         public string Command { get; set; }
 
-        public byte MSB { get; set; }
-        public byte LSB { get; set; }
+        public byte[] Data { get; set; } = Array.Empty<byte>();
 
         public int Delay { get; set; }
         public int Loop { get; set; }

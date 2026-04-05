@@ -11,6 +11,7 @@
   <ItemGroup>
     <Compile Remove="Communication\KBusComm.cs" />
     <Compile Remove="Communication\SerialPortService.cs" />
+    <Compile Remove="Protocol\KBusComm.cs" />
   </ItemGroup>
 
   <ItemGroup>

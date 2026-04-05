@@ -9,16 +9,16 @@ namespace CANhandler.Services
 {
     public class ProgramExecutor
     {
-        private readonly KBusComm _kbus;
+        //private readonly KBusComm _kbus;
         private readonly DataGridView _grid;
         private bool _isPaused = false;
         private bool _isStopped = false;
 
-        public ProgramExecutor(KBusComm kbus, DataGridView grid)
-        {
-            _kbus = kbus;
-            _grid = grid;
-        }
+        //public ProgramExecutor(KBusComm kbus, DataGridView grid)
+        //{
+        //    _kbus = kbus;
+        //    _grid = grid;
+        //}
 
         public async Task RunProgramAsync(List<ProgramStep> steps)
         {
@@ -58,8 +58,8 @@ namespace CANhandler.Services
                             DispenserType = step.PicType,
                             Action = step.Action,
                             Command = step.Command,
-                            MSB = Convert.ToString(step.MSB),
-                            LSB = Convert.ToString(step.LSB)
+                            //MSB = Convert.ToString(step.MSB),
+                            //LSB = Convert.ToString(step.LSB)
                         };
 
                         KBusPacket pkt = DispenserCommandService.CreatePacket(req);
@@ -67,8 +67,8 @@ namespace CANhandler.Services
 
                         UIConfig config = ConfigManager.Config.UI;
 
-                        if (config.SelectedInterface == InterfaceType.RealHardware)
-                            _kbus?.SendOnly(buffer);
+                        //if (config.SelectedInterface == InterfaceType.RealHardware)
+                        //    _kbus?.SendOnly(buffer);
 
                         await Task.Delay(step.Delay);
                     }

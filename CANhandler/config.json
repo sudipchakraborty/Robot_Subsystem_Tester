@@ -1,6 +1,10 @@
 {
   "Communication": {
-    "CommPort": "COM12 - USB Serial Port (COM12)",
+    "CommPort": {
+      "PortName": "COM12 - USB Serial Port (COM12)",
+      "BaudRate": 38400,
+      "PacketType": "RAW(Binary)"
+    },
     "USB": "",
     "API": "",
     "Websocket": "",
@@ -8,7 +12,7 @@
     "UDP": "",
     "IPC": "",
     "AutoConnect": true,
-    "Selected": ""
+    "Selected": "Comm. Port"
   },
   "Program": {
     "LastProgram": "autosave_program.json"
@@ -16,11 +20,8 @@
   "UI": {
     "WindowWidth": 1200,
     "WindowHeight": 800,
-    "SelectedInterface": 2,
+    "SelectedInterface": "RealHardware",
     "LoopEnable": true
   },
-  "RecentFiles": [
-    "D:\\CANhandler\\User_Program\\Dispense_Grain.json",
-    "D:\\CANhandler\\User_Program\\test_2.json"
-  ]
+  "RecentFiles": []
 }

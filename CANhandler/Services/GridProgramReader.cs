@@ -26,8 +26,7 @@ namespace CANhandler.Services
                     Action = row.Cells["col_Action"].Value?.ToString(),
                     Command = row.Cells["col_Command"].Value?.ToString(),
 
-                    MSB = Convert.ToByte(row.Cells["col_MSB"].Value),
-                    LSB = Convert.ToByte(row.Cells["col_LSB"].Value),
+                    Data = Helpers.CommandHelper.ParseData(row.Cells["col_data"].Value?.ToString()),
 
                     Delay = Convert.ToInt32(row.Cells["col_delay"].Value),
                     Loop = Convert.ToInt32(row.Cells["col_loop"].Value)

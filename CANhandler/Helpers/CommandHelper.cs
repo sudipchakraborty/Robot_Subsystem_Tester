@@ -35,5 +35,26 @@ namespace CANhandler.Helpers
 
             return new List<Command>() { Command.Who_Are_You };
         }
+
+        public static byte[] ParseData(string input)
+        {
+            if (string.IsNullOrWhiteSpace(input))
+                return Array.Empty<byte>();
+
+            return input
+                .Split(',')
+                .Select(x => x.Trim())
+                .Where(x => !string.IsNullOrEmpty(x))
+                .Select(x =>
+                {
+                    // Support hex (0x..) and decimal
+                    if (x.StartsWith("0x", StringComparison.OrdinalIgnoreCase))
+                        return Convert.ToByte(x, 16);
+
+                    return Convert.ToByte(x);
+                })
+                .ToArray();
+        }
+
     }
 }

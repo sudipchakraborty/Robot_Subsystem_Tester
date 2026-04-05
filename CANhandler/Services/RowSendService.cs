@@ -9,11 +9,11 @@ namespace CANhandler.Services
 {
     public static class RowSendService
     {
-        
-        public static void SendRow(DataGridViewRow row, KBusComm kbus)
+
+        public static byte[] Get_Row(DataGridViewRow row)
         {
             if (row == null || row.IsNewRow)
-                return;
+                return Array.Empty<byte>();   // safer than null
 
             var step = GridProgramConverter.ReadRow(row);
 
@@ -22,17 +22,15 @@ namespace CANhandler.Services
                 DispenserType = step.PicType,
                 Action = step.Action,
                 Command = step.Command,
-                MSB =Convert.ToString(step.MSB),
-                LSB = Convert.ToString(step.LSB)
+                //MSB = Convert.ToString(step.MSB),
+                //LSB = Convert.ToString(step.LSB)
             };
 
             KBusPacket pkt = DispenserCommandService.CreatePacket(req);
 
             byte[] buffer = KBusBuilder.BuildPacket(pkt);
 
-            //ConfigManager.Load();
-            UIConfig  config = ConfigManager.Config.UI;  // then assign
-            if(config.SelectedInterface == InterfaceType.RealHardware) kbus.SendOnly(buffer);
+            return buffer;
         }
     }
 }

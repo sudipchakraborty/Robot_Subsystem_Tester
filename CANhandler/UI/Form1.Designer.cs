@@ -68,8 +68,8 @@
             iPCToolStripMenuItem = new ToolStripMenuItem();
             ProtocolToolStripMenuItem = new ToolStripMenuItem();
             kbusToolStripMenuItem = new ToolStripMenuItem();
-            aSCIIToolStripMenuItem = new ToolStripMenuItem();
             rAWBinaryToolStripMenuItem = new ToolStripMenuItem();
+            aSCIIToolStripMenuItem = new ToolStripMenuItem();
             cANToolStripMenuItem = new ToolStripMenuItem();
             modBusToolStripMenuItem = new ToolStripMenuItem();
             customToolStripMenuItem = new ToolStripMenuItem();
@@ -218,6 +218,7 @@
             btn_disconnect.TabIndex = 17;
             btn_disconnect.Text = "DIsconnect";
             btn_disconnect.UseVisualStyleBackColor = true;
+            btn_disconnect.Click += btn_disconnect_Click;
             // 
             // btn_connect
             // 
@@ -227,7 +228,7 @@
             btn_connect.TabIndex = 16;
             btn_connect.Text = "Connect";
             btn_connect.UseVisualStyleBackColor = true;
-            btn_connect.Click += btn_connect_Click_1;
+            btn_connect.Click += btn_connect_Click;
             // 
             // btn_resume
             // 
@@ -416,46 +417,46 @@
             // commToolStripMenuItem
             // 
             commToolStripMenuItem.Name = "commToolStripMenuItem";
-            commToolStripMenuItem.Size = new Size(224, 26);
+            commToolStripMenuItem.Size = new Size(169, 26);
             commToolStripMenuItem.Text = "Comm. Port";
             commToolStripMenuItem.Click += ToolStripMenuItem_Seria_Click;
             // 
             // uSBToolStripMenuItem
             // 
             uSBToolStripMenuItem.Name = "uSBToolStripMenuItem";
-            uSBToolStripMenuItem.Size = new Size(224, 26);
+            uSBToolStripMenuItem.Size = new Size(169, 26);
             uSBToolStripMenuItem.Text = "USB";
             // 
             // aPIToolStripMenuItem
             // 
             aPIToolStripMenuItem.Name = "aPIToolStripMenuItem";
-            aPIToolStripMenuItem.Size = new Size(224, 26);
+            aPIToolStripMenuItem.Size = new Size(169, 26);
             aPIToolStripMenuItem.Text = "API";
             // 
             // websocketToolStripMenuItem
             // 
             websocketToolStripMenuItem.Name = "websocketToolStripMenuItem";
-            websocketToolStripMenuItem.Size = new Size(224, 26);
+            websocketToolStripMenuItem.Size = new Size(169, 26);
             websocketToolStripMenuItem.Text = "Websocket";
             // 
             // tcpToolStripMenuItem
             // 
             tcpToolStripMenuItem.Name = "tcpToolStripMenuItem";
-            tcpToolStripMenuItem.Size = new Size(224, 26);
+            tcpToolStripMenuItem.Size = new Size(169, 26);
             tcpToolStripMenuItem.Text = "TCP";
             tcpToolStripMenuItem.Click += ToolStripMenuItem_TCP_Click;
             // 
             // udpToolStripMenuItem
             // 
             udpToolStripMenuItem.Name = "udpToolStripMenuItem";
-            udpToolStripMenuItem.Size = new Size(224, 26);
+            udpToolStripMenuItem.Size = new Size(169, 26);
             udpToolStripMenuItem.Text = "UDP";
             udpToolStripMenuItem.Click += ToolStripMenuItem_UDP_Click;
             // 
             // iPCToolStripMenuItem
             // 
             iPCToolStripMenuItem.Name = "iPCToolStripMenuItem";
-            iPCToolStripMenuItem.Size = new Size(224, 26);
+            iPCToolStripMenuItem.Size = new Size(169, 26);
             iPCToolStripMenuItem.Text = "IPC";
             // 
             // ProtocolToolStripMenuItem
@@ -469,37 +470,37 @@
             // 
             kbusToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { rAWBinaryToolStripMenuItem, aSCIIToolStripMenuItem });
             kbusToolStripMenuItem.Name = "kbusToolStripMenuItem";
-            kbusToolStripMenuItem.Size = new Size(224, 26);
+            kbusToolStripMenuItem.Size = new Size(146, 26);
             kbusToolStripMenuItem.Text = "Kbus";
-            // 
-            // aSCIIToolStripMenuItem
-            // 
-            aSCIIToolStripMenuItem.Name = "aSCIIToolStripMenuItem";
-            aSCIIToolStripMenuItem.Size = new Size(224, 26);
-            aSCIIToolStripMenuItem.Text = "ASCII";
             // 
             // rAWBinaryToolStripMenuItem
             // 
             rAWBinaryToolStripMenuItem.Name = "rAWBinaryToolStripMenuItem";
-            rAWBinaryToolStripMenuItem.Size = new Size(224, 26);
+            rAWBinaryToolStripMenuItem.Size = new Size(175, 26);
             rAWBinaryToolStripMenuItem.Text = "RAW(Binary)";
+            // 
+            // aSCIIToolStripMenuItem
+            // 
+            aSCIIToolStripMenuItem.Name = "aSCIIToolStripMenuItem";
+            aSCIIToolStripMenuItem.Size = new Size(175, 26);
+            aSCIIToolStripMenuItem.Text = "ASCII";
             // 
             // cANToolStripMenuItem
             // 
             cANToolStripMenuItem.Name = "cANToolStripMenuItem";
-            cANToolStripMenuItem.Size = new Size(224, 26);
+            cANToolStripMenuItem.Size = new Size(146, 26);
             cANToolStripMenuItem.Text = "CAN";
             // 
             // modBusToolStripMenuItem
             // 
             modBusToolStripMenuItem.Name = "modBusToolStripMenuItem";
-            modBusToolStripMenuItem.Size = new Size(224, 26);
+            modBusToolStripMenuItem.Size = new Size(146, 26);
             modBusToolStripMenuItem.Text = "ModBus";
             // 
             // customToolStripMenuItem
             // 
             customToolStripMenuItem.Name = "customToolStripMenuItem";
-            customToolStripMenuItem.Size = new Size(224, 26);
+            customToolStripMenuItem.Size = new Size(146, 26);
             customToolStripMenuItem.Text = "Custom";
             // 
             // programToolStripMenuItem

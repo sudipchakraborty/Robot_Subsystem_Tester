@@ -14,6 +14,7 @@ using System.Xml;
 using static CANhandler.Constants.ProtocolConstants;
 using static CANhandler.Enums.Address;
 using static System.ComponentModel.Design.ObjectSelectorEditor;
+using System.Text.RegularExpressions;
 
 namespace CANhandler
 {
@@ -22,7 +23,7 @@ namespace CANhandler
         private SerialPort _serialPort;
         private List<byte> rxBuffer = new List<byte>();
         private int expectedLength = -1;
-        KBusComm _kbus;
+        //KBusComm _kbus;
         private UIConfig config;
         private string? currentFilePath = null;
         private ContextMenuStrip ctxGridMenu;
@@ -59,7 +60,7 @@ namespace CANhandler
             udpToolStripMenuItem.MouseDown += MenuItem_MouseDown;
             iPCToolStripMenuItem.MouseDown += MenuItem_MouseDown;
             /////////////////////////////
-            kbusToolStripMenuItem.MouseDown += Protocol_Selection_MenuItem_MouseDown;
+            //kbusToolStripMenuItem.MouseDown += Protocol_Selection_MenuItem_MouseDown;
 
 
 
@@ -69,7 +70,7 @@ namespace CANhandler
 
         }
         //________________________________________________________________________
-   
+
         private void Form1_Load(object sender, EventArgs e)
         {
 
@@ -142,32 +143,7 @@ namespace CANhandler
         {
 
         }
-        //_________________________________________________________________________________________________________
-        private void btn_Connect_Click(object sender, EventArgs e)
-        {
-            //_serialPort = new SerialPort();
-            //_serialPort.PortName = "COM11";// txt_Port.Text;// "COM11";   // Change to your port
-            //_serialPort.BaudRate = 38400;// Convert.ToInt16(txt_Port.Text);// 115200;   // Match your MCU baud rate
-            //_serialPort.DataBits = 8;
-            //_serialPort.Parity = Parity.None;
-            //_serialPort.StopBits = StopBits.One;
-            //_serialPort.Handshake = Handshake.None;
-            ////_kbus = new KBusComm(_serialPort);
-
-            ////_serialPort.DataReceived += SerialPort_DataReceived;
-
-            //try
-            //{
-            //    _serialPort.Open();
-            //    //MessageBox.Show("Serial Port Connected");
-            //}
-            //catch (Exception ex)
-            //{
-            //    MessageBox.Show("Error: " + ex.Message);
-            //}
-        }
-        //_________________________________________________________________________________________________________
-        private void btn_Disp_send_Click(object sender, EventArgs e)
+       private void btn_Disp_send_Click(object sender, EventArgs e)
         {
 
         }
@@ -185,7 +161,7 @@ namespace CANhandler
         private async void btn_run_Click(object sender, EventArgs e)
         {
             var steps = GridProgramReader.Read(dg_prg);
-            executor = new ProgramExecutor(_kbus, dg_prg);
+            //executor = new ProgramExecutor(_kbus, dg_prg);
             await executor.RunProgramAsync(steps);
         }
 
@@ -226,31 +202,21 @@ namespace CANhandler
             if (dg_prg.SelectedRows.Count == 0)
                 return;
 
-            ITransport _transport = new SerialTransport("COM3", 38400);
-
-            _kbus = new KBusComm(_transport);
-
-            _transport.Connect();
-
-
+            byte[] b=  RowSendService.Get_Row(dg_prg.SelectedRows[0]);
+             
             try
             {
                 // ✅ Create only once
                 if (_transport == null)
-                {
-                    _transport = new SerialTransport("COM11", 38400);
-                    _transport.Connect();
-
-                    _kbus = new KBusComm(_transport);
+                {      
+                    _transport.Send(b);
                 }
                 else if (!_transport.IsConnected)
                 {
                     // 🔥 Reconnect if needed
                     _transport.Connect();
+                    _transport.Send(b);
                 }
-
-                // ✅ Send data
-                RowSendService.SendRow(dg_prg.SelectedRows[0], _kbus);
             }
             catch (Exception ex)
             {
@@ -449,8 +415,55 @@ namespace CANhandler
 
         private void SendToDevice_Click(object sender, EventArgs e)
         {
-            int rowIndex = dg_prg.CurrentCell?.RowIndex ?? dg_prg.Rows.Count;
-            //dg_prg.Rows.Insert(rowIndex, 1);
+            if (dg_prg.SelectedRows.Count == 0)
+                return;
+
+            var step = GridProgramConverter.ReadRow(dg_prg.SelectedRows[0]); 
+
+            byte[] buffer = KBusBuilder.BuildPacket(pkt);
+
+            
+
+            _transport.Send(buffer);
+
+            //DispenseRequest req = new DispenseRequest
+            //{
+            //    DispenserType = step.PicType,
+            //    Action = step.Action,
+            //    Command = step.Command,
+            //    //MSB = Convert.ToString(step.MSB),
+            //    //LSB = Convert.ToString(step.LSB)
+            //};
+
+            //KBusPacket pkt = DispenserCommandService.CreatePacket(req);
+
+
+
+
+
+
+
+
+            ////byte[] b = RowSendService.Get_Row(dg_prg.SelectedRows[0]);
+
+            //try
+            //{
+            //    // ✅ Create only once
+            //    if (_transport == null)
+            //    {
+            //        _transport.Send(b);
+            //    }
+            //    else if (!_transport.IsConnected)
+            //    {
+            //        // 🔥 Reconnect if needed
+            //        _transport.Connect();
+                   
+            //    }
+            //}
+            //catch (Exception ex)
+            //{
+            //    MessageBox.Show(ex.Message);
+            //}
         }
         private void ShowPacket_Click(object sender, EventArgs e)
         {
@@ -810,7 +823,7 @@ namespace CANhandler
 
 
 
-        
+
 
         private void chk_auto_connect_CheckedChanged(object sender, EventArgs e)
         {
@@ -844,29 +857,32 @@ namespace CANhandler
 
         private void btn_connect_Click_1(object sender, EventArgs e)
         {
+
+
+        }
+
+        private void btn_connect_Click(object sender, EventArgs e)
+        {
             InterfaceType channel = config.SelectedInterface;
 
             if (channel == InterfaceType.RealHardware)
             {
-
-                CommunicationConfig cfg= ConfigManager.Config.Communication;  // then assign
-                string port = cfg.CommPort;
-                int baudarate = int.TryParse(cfg.CommPort, out int br) ? br : 38400;
-
-
-
-                ITransport _transport = new SerialTransport("COM3", 38400);
-                _kbus = new KBusComm(_transport);
+                CommunicationConfig cfg = ConfigManager.Config.Communication;  // then assign
+                string port = cfg.CommPort.PortName;
+                int baudarate = cfg.CommPort.BaudRate;
+                string p = ExtractPortName(port);
+                _transport = new SerialTransport(p, baudarate);
+                //_kbus = new KBusComm(_transport);
                 _transport.Connect();
                 try
                 {
                     // ✅ Create only once
                     if (_transport == null)
                     {
-                        _transport = new SerialTransport("COM11", 38400);
-                        _transport.Connect();
+                        //_transport = new SerialTransport("COM11", 38400);
+                        //_transport.Connect();
 
-                        _kbus = new KBusComm(_transport);
+                        //_kbus = new KBusComm(_transport);
                     }
                     else if (!_transport.IsConnected)
                     {
@@ -874,15 +890,35 @@ namespace CANhandler
                         _transport.Connect();
                     }
 
+                    pb_connection.BackColor = Color.GreenYellow;
+
                     // ✅ Send data
-                    RowSendService.SendRow(dg_prg.SelectedRows[0], _kbus);
+                    //RowSendService.SendRow(dg_prg.SelectedRows[0], _kbus);
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message);
+                    //MessageBox.Show(ex.Message);
+                    pb_connection.BackColor = Color.Red;
                 }
             }
+        }
 
+        public static string ExtractPortName(string fullText)
+        {
+            var match = Regex.Match(fullText, @"COM\d+");
+            return match.Success ? match.Value : fullText;
+        }
+
+        private void btn_disconnect_Click(object sender, EventArgs e)
+        {
+            byte[] b= {
+        0x66, 0x55, 0x15, 0x00, 0x01, 0x00, 0x00, 0x01,
+        0x00, 0x0B, 0x36, 0x32, 0x03, 0x44, 0x03, 0x03,
+        0x1A, 0x8F, 0x70, 0x77, 0x88
+    };
+
+            byte[] bytes = Encoding.UTF8.GetBytes("fdsdsfsdafsa");
+            _transport.Send(b);
         }
     }
 }
