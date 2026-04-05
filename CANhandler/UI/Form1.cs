@@ -135,26 +135,26 @@ namespace CANhandler
         //_________________________________________________________________________________________________________
         private void btn_Connect_Click(object sender, EventArgs e)
         {
-            _serialPort = new SerialPort();
-            _serialPort.PortName = "COM11";// txt_Port.Text;// "COM11";   // Change to your port
-            _serialPort.BaudRate = 38400;// Convert.ToInt16(txt_Port.Text);// 115200;   // Match your MCU baud rate
-            _serialPort.DataBits = 8;
-            _serialPort.Parity = Parity.None;
-            _serialPort.StopBits = StopBits.One;
-            _serialPort.Handshake = Handshake.None;
-            //_kbus = new KBusComm(_serialPort);
+            //_serialPort = new SerialPort();
+            //_serialPort.PortName = "COM11";// txt_Port.Text;// "COM11";   // Change to your port
+            //_serialPort.BaudRate = 38400;// Convert.ToInt16(txt_Port.Text);// 115200;   // Match your MCU baud rate
+            //_serialPort.DataBits = 8;
+            //_serialPort.Parity = Parity.None;
+            //_serialPort.StopBits = StopBits.One;
+            //_serialPort.Handshake = Handshake.None;
+            ////_kbus = new KBusComm(_serialPort);
 
-            //_serialPort.DataReceived += SerialPort_DataReceived;
+            ////_serialPort.DataReceived += SerialPort_DataReceived;
 
-            try
-            {
-                _serialPort.Open();
-                //MessageBox.Show("Serial Port Connected");
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error: " + ex.Message);
-            }
+            //try
+            //{
+            //    _serialPort.Open();
+            //    //MessageBox.Show("Serial Port Connected");
+            //}
+            //catch (Exception ex)
+            //{
+            //    MessageBox.Show("Error: " + ex.Message);
+            //}
         }
         //_________________________________________________________________________________________________________
         private void btn_Disp_send_Click(object sender, EventArgs e)
@@ -216,11 +216,11 @@ namespace CANhandler
             if (dg_prg.SelectedRows.Count == 0)
                 return;
 
-            //ITransport _transport = new SerialTransport("COM3", 38400);
+            ITransport _transport = new SerialTransport("COM3", 38400);
 
-            //_kbus = new KBusComm(_transport);
+            _kbus = new KBusComm(_transport);
 
-            //_transport.Connect();
+            _transport.Connect();
 
 
             try
@@ -826,6 +826,44 @@ namespace CANhandler
 
         private void btn_connect_Click_1(object sender, EventArgs e)
         {
+            InterfaceType channel = config.SelectedInterface;
+
+            if (channel == InterfaceType.RealHardware)
+            {
+
+                CommunicationConfig cfg= ConfigManager.Config.Communication;  // then assign
+                string port = cfg.CommPort;
+                int baudarate = int.TryParse(cfg.CommPort, out int br) ? br : 38400;
+
+
+
+                ITransport _transport = new SerialTransport("COM3", 38400);
+                _kbus = new KBusComm(_transport);
+                _transport.Connect();
+                try
+                {
+                    // ✅ Create only once
+                    if (_transport == null)
+                    {
+                        _transport = new SerialTransport("COM11", 38400);
+                        _transport.Connect();
+
+                        _kbus = new KBusComm(_transport);
+                    }
+                    else if (!_transport.IsConnected)
+                    {
+                        // 🔥 Reconnect if needed
+                        _transport.Connect();
+                    }
+
+                    // ✅ Send data
+                    RowSendService.SendRow(dg_prg.SelectedRows[0], _kbus);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            }
 
         }
     }
