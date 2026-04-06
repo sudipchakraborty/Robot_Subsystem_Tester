@@ -1,4 +1,6 @@
-﻿using System;
+﻿using CANhandler.Constants;
+using CANhandler.Enums;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -9,11 +11,13 @@ namespace CANhandler.Models
         public int LineNo { get; set; }
         public bool Enable { get; set; }
 
-        public string PicType { get; set; }
-        public string Action { get; set; }
-        public string Command { get; set; }
+        public PIC_Address PicType { get; set; }
+        public Cast Cast { get; set; }
+        public Operation Operation { get; set; }
+        public Command Command { get; set; }
 
-        public byte[] Data { get; set; } = Array.Empty<byte>();
+        //public byte[] Data { get; set; } = Array.Empty<byte>();
+        public string Data { get; set; }
 
         public int Delay { get; set; }
         public int Loop { get; set; }

@@ -89,14 +89,6 @@
             sendMailToDeveloperToolStripMenuItem = new ToolStripMenuItem();
             relatedDOcumentsToolStripMenuItem = new ToolStripMenuItem();
             dg_prg = new DataGridView();
-            col_line_no = new DataGridViewTextBoxColumn();
-            col_enable = new DataGridViewCheckBoxColumn();
-            col_pic_type = new DataGridViewComboBoxColumn();
-            col_Action = new DataGridViewComboBoxColumn();
-            col_Command = new DataGridViewComboBoxColumn();
-            col_data = new DataGridViewTextBoxColumn();
-            col_delay = new DataGridViewTextBoxColumn();
-            col_loop = new DataGridViewTextBoxColumn();
             statusStrip = new StatusStrip();
             toolStripStatusLabel1 = new ToolStripStatusLabel();
             lbl_message = new ToolStripStatusLabel();
@@ -105,6 +97,15 @@
             contextMenuStrip1 = new ContextMenuStrip(components);
             InsertRow = new ToolStripMenuItem();
             DeleteRow = new ToolStripMenuItem();
+            col_line_no = new DataGridViewTextBoxColumn();
+            col_enable = new DataGridViewCheckBoxColumn();
+            col_pic_type = new DataGridViewComboBoxColumn();
+            col_cast = new DataGridViewComboBoxColumn();
+            col_Action = new DataGridViewComboBoxColumn();
+            col_Command = new DataGridViewComboBoxColumn();
+            col_data = new DataGridViewTextBoxColumn();
+            col_delay = new DataGridViewTextBoxColumn();
+            col_loop = new DataGridViewTextBoxColumn();
             groupBox7.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pb_tx).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pb_rx).BeginInit();
@@ -600,7 +601,7 @@
             // dg_prg
             // 
             dg_prg.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dg_prg.Columns.AddRange(new DataGridViewColumn[] { col_line_no, col_enable, col_pic_type, col_Action, col_Command, col_data, col_delay, col_loop });
+            dg_prg.Columns.AddRange(new DataGridViewColumn[] { col_line_no, col_enable, col_pic_type, col_cast, col_Action, col_Command, col_data, col_delay, col_loop });
             dg_prg.Location = new Point(0, 31);
             dg_prg.Name = "dg_prg";
             dg_prg.RowHeadersWidth = 51;
@@ -609,69 +610,6 @@
             dg_prg.CellMouseDown += dg_prg_CellMouseDown;
             dg_prg.CellValueChanged += dg_prg_CellValueChanged;
             dg_prg.KeyDown += dg_prg_KeyDown;
-            // 
-            // col_line_no
-            // 
-            col_line_no.HeaderText = "Line No.";
-            col_line_no.MinimumWidth = 6;
-            col_line_no.Name = "col_line_no";
-            col_line_no.ReadOnly = true;
-            col_line_no.Width = 125;
-            // 
-            // col_enable
-            // 
-            col_enable.HeaderText = "Enable";
-            col_enable.MinimumWidth = 6;
-            col_enable.Name = "col_enable";
-            col_enable.Width = 125;
-            // 
-            // col_pic_type
-            // 
-            col_pic_type.DisplayStyle = DataGridViewComboBoxDisplayStyle.ComboBox;
-            col_pic_type.HeaderText = "PIC Type";
-            col_pic_type.Items.AddRange(new object[] { "PIC_DISP_3X3_GRAINS", "PIC_DISP_3X3_LIQUID", "PIC_DISP_3X3_PUREE", "PIC_DISP_6X6_GRAINS", "PIC_DISP_6X6_LIQUID", "PIC_DISP_6X6_PUREE", "PIC_IP", "PIC_CHIMNEY", "PIC_DISHWASHER", "PIC_WTS", "PIC_MOTOR_DRIVER1", "SM_PIC_MOTOR_DRIVER_X", "SM_PIC_MOTOR_DRIVER_Y", "SM_PIC_MOTOR_DRIVER_R1", "SM_PIC_MOTOR_DRIVER_R2", "SM_PIC_MOTOR_DRIVER_R3", "SM_PIC_MOTOR_DRIVER_R4", "SM_PIC_MOTOR_DRIVER_R5", "SM_PIC_MOTOR_DRIVER_L1", "SM_PIC_MOTOR_DRIVER_L2", "SM_PIC_MOTOR_DRIVER_L3", "SM_PIC_MOTOR_DRIVER_L4" });
-            col_pic_type.MinimumWidth = 6;
-            col_pic_type.Name = "col_pic_type";
-            col_pic_type.Width = 250;
-            // 
-            // col_Action
-            // 
-            col_Action.DisplayStyle = DataGridViewComboBoxDisplayStyle.ComboBox;
-            col_Action.HeaderText = "Action";
-            col_Action.Items.AddRange(new object[] { "Read", "Write", "Execute" });
-            col_Action.MinimumWidth = 6;
-            col_Action.Name = "col_Action";
-            col_Action.Width = 125;
-            // 
-            // col_Command
-            // 
-            col_Command.DisplayStyle = DataGridViewComboBoxDisplayStyle.ComboBox;
-            col_Command.HeaderText = "Command";
-            col_Command.Items.AddRange(new object[] { "Dispense", "PB6_LED", "PB5_LED", "Erase_Log", "Who_Are_You", "Read_Log_Count", "Read_Logs" });
-            col_Command.MinimumWidth = 6;
-            col_Command.Name = "col_Command";
-            col_Command.Width = 250;
-            // 
-            // col_data
-            // 
-            col_data.HeaderText = "DATA";
-            col_data.MinimumWidth = 6;
-            col_data.Name = "col_data";
-            col_data.Width = 200;
-            // 
-            // col_delay
-            // 
-            col_delay.HeaderText = "Delay";
-            col_delay.MinimumWidth = 6;
-            col_delay.Name = "col_delay";
-            col_delay.Width = 75;
-            // 
-            // col_loop
-            // 
-            col_loop.HeaderText = "Loop";
-            col_loop.MinimumWidth = 6;
-            col_loop.Name = "col_loop";
-            col_loop.Width = 75;
             // 
             // statusStrip
             // 
@@ -728,6 +666,75 @@
             DeleteRow.Size = new Size(171, 24);
             DeleteRow.Text = "Delete Row(s)";
             DeleteRow.Click += DeleteRow_Click;
+            // 
+            // col_line_no
+            // 
+            col_line_no.HeaderText = "Line No.";
+            col_line_no.MinimumWidth = 6;
+            col_line_no.Name = "col_line_no";
+            col_line_no.ReadOnly = true;
+            col_line_no.Width = 125;
+            // 
+            // col_enable
+            // 
+            col_enable.HeaderText = "Enable";
+            col_enable.MinimumWidth = 6;
+            col_enable.Name = "col_enable";
+            col_enable.Width = 125;
+            // 
+            // col_pic_type
+            // 
+            col_pic_type.DisplayStyle = DataGridViewComboBoxDisplayStyle.ComboBox;
+            col_pic_type.HeaderText = "PIC Type";
+            col_pic_type.MinimumWidth = 6;
+            col_pic_type.Name = "col_pic_type";
+            col_pic_type.Width = 250;
+            // 
+            // col_cast
+            // 
+            col_cast.HeaderText = "Cast";
+            col_cast.MinimumWidth = 6;
+            col_cast.Name = "col_cast";
+            col_cast.Width = 125;
+            // 
+            // col_Action
+            // 
+            col_Action.DisplayStyle = DataGridViewComboBoxDisplayStyle.ComboBox;
+            col_Action.HeaderText = "Action";
+            col_Action.Items.AddRange(new object[] { "Read", "Write", "Execute" });
+            col_Action.MinimumWidth = 6;
+            col_Action.Name = "col_Action";
+            col_Action.Width = 125;
+            // 
+            // col_Command
+            // 
+            col_Command.DisplayStyle = DataGridViewComboBoxDisplayStyle.ComboBox;
+            col_Command.HeaderText = "Command";
+            col_Command.Items.AddRange(new object[] { "Dispense", "PB6_LED", "PB5_LED", "Erase_Log", "Who_Are_You", "Read_Log_Count", "Read_Logs" });
+            col_Command.MinimumWidth = 6;
+            col_Command.Name = "col_Command";
+            col_Command.Width = 250;
+            // 
+            // col_data
+            // 
+            col_data.HeaderText = "DATA";
+            col_data.MinimumWidth = 6;
+            col_data.Name = "col_data";
+            col_data.Width = 200;
+            // 
+            // col_delay
+            // 
+            col_delay.HeaderText = "Delay";
+            col_delay.MinimumWidth = 6;
+            col_delay.Name = "col_delay";
+            col_delay.Width = 75;
+            // 
+            // col_loop
+            // 
+            col_loop.HeaderText = "Loop";
+            col_loop.MinimumWidth = 6;
+            col_loop.Name = "col_loop";
+            col_loop.Width = 75;
             // 
             // frm_main
             // 
@@ -812,14 +819,6 @@
         private Button btn_resume;
         private ToolStripStatusLabel tssl_comport;
         private ToolStripStatusLabel tssl_baudrate;
-        private DataGridViewTextBoxColumn col_line_no;
-        private DataGridViewCheckBoxColumn col_enable;
-        private DataGridViewComboBoxColumn col_pic_type;
-        private DataGridViewComboBoxColumn col_Action;
-        private DataGridViewComboBoxColumn col_Command;
-        private DataGridViewTextBoxColumn col_data;
-        private DataGridViewTextBoxColumn col_delay;
-        private DataGridViewTextBoxColumn col_loop;
         private CheckBox chk_auto_connect;
         private Button btn_disconnect;
         private Button btn_connect;
@@ -842,5 +841,14 @@
         private PictureBox pb_connection;
         private Label label3;
         private Label label2;
+        private DataGridViewTextBoxColumn col_line_no;
+        private DataGridViewCheckBoxColumn col_enable;
+        private DataGridViewComboBoxColumn col_pic_type;
+        private DataGridViewComboBoxColumn col_cast;
+        private DataGridViewComboBoxColumn col_Action;
+        private DataGridViewComboBoxColumn col_Command;
+        private DataGridViewTextBoxColumn col_data;
+        private DataGridViewTextBoxColumn col_delay;
+        private DataGridViewTextBoxColumn col_loop;
     }
 }

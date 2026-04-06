@@ -1,8 +1,8 @@
-﻿using System;
+﻿using CANhandler.Enums;
+using CANhandler.Models;
+using System;
 using System.Collections.Generic;
 using System.Text;
-
-using CANhandler.Models;
 
 namespace CANhandler.Services
 {
@@ -22,11 +22,11 @@ namespace CANhandler.Services
                     LineNo = Convert.ToInt32(row.Cells["col_line_no"].Value),
                     Enable = Convert.ToBoolean(row.Cells["col_enable"].Value),
 
-                    PicType = row.Cells["col_pic_type"].Value?.ToString(),
-                    Action = row.Cells["col_Action"].Value?.ToString(),
-                    Command = row.Cells["col_Command"].Value?.ToString(),
+                    PicType = (PIC_Address)row.Cells["col_pic_type"].Value,
+                    Operation =(Constants.Operation)row.Cells["col_Action"].Value,
+                    Command = (Command)row.Cells["col_Command"].Value,
 
-                    Data = Helpers.CommandHelper.ParseData(row.Cells["col_data"].Value?.ToString()),
+                    Data = row.Cells["col_data"].Value?.ToString(),
 
                     Delay = Convert.ToInt32(row.Cells["col_delay"].Value),
                     Loop = Convert.ToInt32(row.Cells["col_loop"].Value)

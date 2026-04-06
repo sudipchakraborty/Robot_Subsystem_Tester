@@ -55,15 +55,15 @@ namespace CANhandler.Services
 
                         DispenseRequest req = new DispenseRequest
                         {
-                            DispenserType = step.PicType,
-                            Action = step.Action,
-                            Command = step.Command,
+                            //DispenserType = step.PicType,
+                            //Action = step.Operation,
+                            //Command = step.Command,
                             //MSB = Convert.ToString(step.MSB),
                             //LSB = Convert.ToString(step.LSB)
                         };
 
                         KBusPacket pkt = DispenserCommandService.CreatePacket(req);
-                        byte[] buffer = KBusBuilder.BuildPacket(pkt);
+                        //byte[] buffer = KBusBuilder.BuildPacket(pkt);
 
                         UIConfig config = ConfigManager.Config.UI;
 

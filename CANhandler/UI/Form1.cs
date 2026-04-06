@@ -1,6 +1,7 @@
 using CANhandler.CANhandler;
 using CANhandler.Communication;
 using CANhandler.Constants;
+using CANhandler.Enums;
 using CANhandler.Helpers;
 using CANhandler.Models;
 using CANhandler.Protocol;
@@ -10,11 +11,14 @@ using System.Data.Common;
 using System.IO.Ports;
 using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Xml;
 using static CANhandler.Constants.ProtocolConstants;
-using static CANhandler.Enums.Address;
+using static CANhandler.Helpers.CommandHelper;
+using CANhandler.Helpers;
+
+//using static CANhandler.Enums.Address;
 using static System.ComponentModel.Design.ObjectSelectorEditor;
-using System.Text.RegularExpressions;
 
 namespace CANhandler
 {
@@ -73,6 +77,11 @@ namespace CANhandler
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            /////////////////////////////////
+            dg_prg.DataSource = null;
+            dg_prg.Rows.Clear();
+
+            SetupCastColumn();
 
             switch (config.SelectedInterface)
             {
@@ -120,19 +129,19 @@ namespace CANhandler
 
         private void dg_prg_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
         {
-            DataGridView grid = sender as DataGridView;
+            //DataGridView grid = sender as DataGridView;
 
-            string rowNumber = (e.RowIndex + 1).ToString();
+            //string rowNumber = (e.RowIndex + 1).ToString();
 
-            using (SolidBrush brush = new SolidBrush(grid.RowHeadersDefaultCellStyle.ForeColor))
-            {
-                e.Graphics.DrawString(
-                    rowNumber,
-                    grid.DefaultCellStyle.Font,
-                    brush,
-                    e.RowBounds.Location.X + 15,
-                    e.RowBounds.Location.Y + 6);
-            }
+            //using (SolidBrush brush = new SolidBrush(grid.RowHeadersDefaultCellStyle.ForeColor))
+            //{
+            //    e.Graphics.DrawString(
+            //        rowNumber,
+            //        grid.DefaultCellStyle.Font,
+            //        brush,
+            //        e.RowBounds.Location.X + 15,
+            //        e.RowBounds.Location.Y + 6);
+            //}
         }
         //_________________________________________________________________________________________________________
         private void button1_Click(object sender, EventArgs e)
@@ -402,15 +411,15 @@ namespace CANhandler
 
         private void dg_prg_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e)
         {
-            if (e.RowIndex >= 0 && e.Button == MouseButtons.Right)
-            {
-                if (!dg_prg.Rows[e.RowIndex].Selected)
-                {
-                    dg_prg.ClearSelection();
-                    dg_prg.Rows[e.RowIndex].Selected = true;
-                }
-                dg_prg.CurrentCell = dg_prg.Rows[e.RowIndex].Cells[0];
-            }
+            //if (e.RowIndex >= 0 && e.Button == MouseButtons.Right)
+            //{
+            //    if (!dg_prg.Rows[e.RowIndex].Selected)
+            //    {
+            //        dg_prg.ClearSelection();
+            //        dg_prg.Rows[e.RowIndex].Selected = true;
+            //    }
+            //    dg_prg.CurrentCell = dg_prg.Rows[e.RowIndex].Cells[0];
+            //}
         }
 
         private void SendToDevice_Click(object sender, EventArgs e)
@@ -420,7 +429,7 @@ namespace CANhandler
 
             var step = GridProgramConverter.ReadRow(dg_prg.SelectedRows[0]); 
 
-            byte[] buffer = KBusBuilder.BuildPacket(pkt);
+            byte[] buffer = KBusBuilder.BuildPacket_From_GridRow(step);
 
             
 
@@ -467,13 +476,13 @@ namespace CANhandler
         }
         private void ShowPacket_Click(object sender, EventArgs e)
         {
-            int rowIndex = dg_prg.CurrentCell?.RowIndex ?? dg_prg.Rows.Count;
-            //dg_prg.Rows.Insert(rowIndex, 1);
+            if (dg_prg.SelectedRows.Count == 0)
+                return;
+            var step = GridProgramConverter.ReadRow(dg_prg.SelectedRows[0]);
+            byte[] buffer = KBusBuilder.BuildPacket_From_GridRow(step);
+            string debug =CommandHelper.ToDetailedString(buffer);
+            MessageBox.Show(debug, "Packet Debug");
         }
-
-
-
-
 
         private void InsertRow_Click(object sender, EventArgs e)
         {
@@ -518,38 +527,38 @@ namespace CANhandler
 
         private void MoveUp_Click(object sender, EventArgs e)
         {
-            if (dg_prg.SelectedRows.Count == 0)
-                return;
+            //if (dg_prg.SelectedRows.Count == 0)
+            //    return;
 
-            foreach (DataGridViewRow row in dg_prg.SelectedRows)
-            {
-                int index = row.Index;
-                if (index > 0)
-                {
-                    dg_prg.Rows.RemoveAt(index);
-                    dg_prg.Rows.Insert(index - 1, row);
-                    row.Selected = true;
-                }
-            }
+            //foreach (DataGridViewRow row in dg_prg.SelectedRows)
+            //{
+            //    int index = row.Index;
+            //    if (index > 0)
+            //    {
+            //        dg_prg.Rows.RemoveAt(index);
+            //        dg_prg.Rows.Insert(index - 1, row);
+            //        row.Selected = true;
+            //    }
+            //}
         }
 
         private void MoveDown_Click(object sender, EventArgs e)
         {
-            if (dg_prg.SelectedRows.Count == 0)
-                return;
+            //if (dg_prg.SelectedRows.Count == 0)
+            //    return;
 
-            for (int i = dg_prg.SelectedRows.Count - 1; i >= 0; i--)
-            {
-                var row = dg_prg.SelectedRows[i];
-                int index = row.Index;
+            //for (int i = dg_prg.SelectedRows.Count - 1; i >= 0; i--)
+            //{
+            //    var row = dg_prg.SelectedRows[i];
+            //    int index = row.Index;
 
-                if (index < dg_prg.Rows.Count - 1)
-                {
-                    dg_prg.Rows.RemoveAt(index);
-                    dg_prg.Rows.Insert(index + 1, row);
-                    row.Selected = true;
-                }
-            }
+            //    if (index < dg_prg.Rows.Count - 1)
+            //    {
+            //        dg_prg.Rows.RemoveAt(index);
+            //        dg_prg.Rows.Insert(index + 1, row);
+            //        row.Selected = true;
+            //    }
+            //}
         }
 
         private void CopyRows_Click(object sender, EventArgs e)
@@ -628,28 +637,28 @@ namespace CANhandler
 
         private void dg_prg_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
-            var v = dg_prg.Columns[e.ColumnIndex].Name;
+            //var v = dg_prg.Columns[e.ColumnIndex].Name;
 
-            if (dg_prg.Columns[e.ColumnIndex].Name == "col_pic_type")
-            {
-                var selectedPIC = dg_prg.Rows[e.RowIndex].Cells["col_pic_type"].Value?.ToString();
+            //if (dg_prg.Columns[e.ColumnIndex].Name == "col_pic_type")
+            //{
+            //    var selectedPIC = dg_prg.Rows[e.RowIndex].Cells["col_pic_type"].Value?.ToString();
 
-                var commandCell = (DataGridViewComboBoxCell)
-                    dg_prg.Rows[e.RowIndex].Cells["col_Command"];
+            //    var commandCell = (DataGridViewComboBoxCell)
+            //        dg_prg.Rows[e.RowIndex].Cells["col_Command"];
 
-                commandCell.DataSource = null;
-                commandCell.Value = null;
+            //    commandCell.DataSource = null;
+            //    commandCell.Value = null;
 
-                if (selectedPIC != null)
-                {
-                    var commands = CommandHelper.GetCommands(selectedPIC);
+            //    if (selectedPIC != null)
+            //    {
+            //        //var commands = CommandHelper.GetCommands(selectedPIC);
 
-                    // Convert enum → string for display
-                    commandCell.DataSource = commands
-                        .Select(c => c.ToString())
-                        .ToList();
-                }
-            }
+            //        // Convert enum → string for display
+            //        //commandCell.DataSource = commands
+            //        //    .Select(c => c.ToString())
+            //        //    .ToList();
+            //    }
+            //}
         }
 
         private void ToolStripMenuItem_Seria_Click(object sender, EventArgs e)
@@ -920,5 +929,47 @@ namespace CANhandler
             byte[] bytes = Encoding.UTF8.GetBytes("fdsdsfsdafsa");
             _transport.Send(b);
         }
+
+        private void SetupCastColumn()
+        {
+
+            var col_Cast = (DataGridViewComboBoxColumn)dg_prg.Columns["col_Cast"];
+            col_Cast.DataSource = Enum.GetValues(typeof(Cast));
+            col_Cast.ValueType = typeof(Cast);
+
+            var col_pic = (DataGridViewComboBoxColumn)dg_prg.Columns["col_pic_type"];
+            col_pic.DataSource = Enum.GetValues(typeof(PIC_Address));
+            col_pic.ValueType = typeof(PIC_Address);
+
+            var col_Action = (DataGridViewComboBoxColumn)dg_prg.Columns["col_Action"];
+            col_Action.DataSource = Enum.GetValues(typeof(Operation));
+            col_Action.ValueType = typeof(Operation);
+
+            var col_Cmd = (DataGridViewComboBoxColumn)dg_prg.Columns["col_Command"];
+            col_Cmd.DataSource = Enum.GetValues(typeof(Command));
+            col_Cmd.ValueType = typeof(Command);
+
+            
+
+            //var col_Cast = (DataGridViewComboBoxColumn)dg_prg.Columns["col_Cast"];
+            //col_Cast.DataSource = Enum.GetValues(typeof(Enums.Cast));
+            ////col_Cast.DataSource = new[]
+            ////{
+            ////    new { Text = "Unicast", Value = CastType.Unicast },
+            ////    new { Text = "Multicast", Value = CastType.Multicast }
+            ////};
+
+            ////col_Cast.DisplayMember = "Text";
+            ////col_Cast.ValueMember = "Value";
+            //////////////////////////////
+            //var pic_type = (DataGridViewComboBoxColumn)dg_prg.Columns["col_pic_type"];
+            //pic_type.DataSource = Enum.GetValues(typeof(Enums.PIC_Address));
+
+        }
+        private void dg_prg_DataError(object sender, DataGridViewDataErrorEventArgs e)
+        {
+            e.ThrowException = false; // suppress error dialog
+        }
+
     }
 }

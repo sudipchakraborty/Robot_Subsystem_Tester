@@ -1,4 +1,6 @@
-﻿using CANhandler.Models;
+﻿using CANhandler.Constants;
+using CANhandler.Enums;
+using CANhandler.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -8,80 +10,40 @@ namespace CANhandler.Protocol
     {
         public static class KBusBuilder
         {
-            public static byte[] BuildPacket(KBusPacket packet)
-            {
-                if (packet == null)
-                    return null;
-
-                packet.Preamble = Preamble;
-                packet.TransType = TransType;
-                packet.Postamble = Postamble;
 
 
-                int dataLength = packet.Data != null ? packet.Data.Length : 0;
+        public static byte[] BuildPacket_From_GridRow(ProgramStep step)
+        {
+            if (step == null) return null;
+            List<byte> packet = new List<byte>();
 
-                packet.Length = (byte)(13 + dataLength);
+            packet.AddRange(Helpers.CommandHelper.GetBytesBE(Preamble));
+            packet.Add(0);
+            packet.Add(TransType);
+            packet.Add((byte)step.Cast);       
+            PIC_Address pic = step.PicType;
+            ushort address = (ushort)pic;
+            packet.AddRange(Helpers.CommandHelper.GetBytesBE(address));
+            packet.Add((byte)step.Operation);
+            packet.Add((byte)step.Command);
 
-                byte[] buffer = new byte[packet.Length];
+            packet.AddRange(Helpers.CommandHelper.ParseUInt16Array(step.Data));
+            packet[2]=(byte)packet.Count;
 
-                int index = 0;
+            byte[] packetArray = packet.ToArray();
+            ushort crc = CRC16_XMODEM(packetArray, packetArray.Length);
 
-                //// Preamble (Little Endian)
-                //buffer[index++] = (byte)(packet.Preamble & 0xFF);
-                //buffer[index++] = (byte)((packet.Preamble >> 8) & 0xFF);
+            packet.Add((byte)(crc & 0xFF));
+            packet.Add((byte)((crc >> 8) & 0xFF));
 
-                // Preamble (Big Endian)
-                buffer[index++] = (byte)((packet.Preamble >> 8) & 0xFF);
-                buffer[index++] = (byte)(packet.Preamble & 0xFF);
+            packet.Add((byte)((ProtocolConstants.Postamble >> 8) & 0xFF));
+            packet.Add((byte)(ProtocolConstants.Postamble & 0xFF));
 
-                // Length
-                buffer[index++] = packet.Length;
+            byte[] buffer = packet.ToArray();
+            return buffer;
+        }
 
-                // TransType
-                buffer[index++] = packet.TransType;
-
-                // Multicast
-                buffer[index++] = packet.Multicast;
-
-                // Address (Little Endian)
-                buffer[index++] = (byte)((packet.Address >> 8) & 0xFF);
-                buffer[index++] = (byte)(packet.Address & 0xFF);           
-
-                // RW
-                buffer[index++] = packet.RWFlag;
-
-                // CmdParameter
-                buffer[index++] =(byte) packet.CmdParameter;
-
-                // Data
-                if (dataLength > 0)
-                {
-                    Array.Copy(packet.Data, 0, buffer, index, dataLength);
-                    index += dataLength;
-                }
-
-                //// CRC (placeholder for now = 0)
-                //ushort crc = 0; // You can replace with real CRC16
-                //buffer[index++] = (byte)(crc & 0xFF);
-                //buffer[index++] = (byte)((crc >> 8) & 0xFF);
-
-                // Calculate CRC
-                ushort crc = CRC16_XMODEM(buffer, index);
-
-                // CRC Low Byte
-                buffer[index++] = (byte)(crc & 0xFF);
-
-                // CRC High Byte
-                buffer[index++] = (byte)((crc >> 8) & 0xFF);
-
-                // Postamble (Little Endian)
-                buffer[index++] = (byte)((packet.Postamble >> 8) & 0xFF);
-                buffer[index++] = (byte)(packet.Postamble & 0xFF);
-                
-                return buffer;
-            }
-
-            public static ushort CRC16_XMODEM(byte[] data, int length)
+        public static ushort CRC16_XMODEM(byte[] data, int length)
             {
                 ushort crc = 0x0000;
 

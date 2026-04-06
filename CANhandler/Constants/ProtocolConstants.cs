@@ -10,14 +10,25 @@ namespace CANhandler.Constants
         public const byte TransType = 0x00;
         public const ushort Postamble = 0x7788;
 
-        public const byte Unicast=0;
-        public const byte Multicast = 1;
+        //public const byte Unicast=0;
+        //public const byte Multicast = 1;
 
-        public const byte Read = 0;
-        public const byte Write = 1;
-        public const byte Execute = 2;
+        
+    }
+
+    //public enum CastType : byte
+    //{
+    //    Unicast = 0,
+    //    Multicast = 1
+    //}
+
+    public enum Operation : byte
+    {
+        Read = 0,
+        Write = 1,
+        Execute = 2
 
     }
 
-    
+
 }
