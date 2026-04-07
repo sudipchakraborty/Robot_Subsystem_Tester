@@ -15,35 +15,30 @@ using System.Text.RegularExpressions;
 using System.Xml;
 using static CANhandler.Constants.ProtocolConstants;
 using static CANhandler.Helpers.CommandHelper;
-using CANhandler.Helpers;
-
-//using static CANhandler.Enums.Address;
 using static System.ComponentModel.Design.ObjectSelectorEditor;
 
 namespace CANhandler
 {
     public partial class frm_main : Form
     {
-        private SerialPort _serialPort;
-        private List<byte> rxBuffer = new List<byte>();
-        private int expectedLength = -1;
-        //KBusComm _kbus;
-        private UIConfig config;
-        private string? currentFilePath = null;
-        private ContextMenuStrip ctxGridMenu;
-        private List<object[]> copiedRows = new List<object[]>();
-        private ProgramExecutor executor;
-
-        ITransport _transport = null;
+        #region Initialization
+            private SerialPort _serialPort;
+            private List<byte> rxBuffer = new List<byte>();
+            private int expectedLength = -1;
+            private UIConfig config;
+            private string? currentFilePath = null;
+            private ContextMenuStrip ctxGridMenu;
+            private List<object[]> copiedRows = new List<object[]>();
+            private ProgramExecutor executor;
+            ITransport _transport = null;
 
         public frm_main()
         {
             InitializeComponent();
             InitializeContextMenu();
-            // Load config (from your ConfigService)
-            ConfigManager.Load();              // load first
-            config = ConfigManager.Config.UI;  // then assign
-            LoadRecentFilesMenu();   // 👈 add this
+            ConfigManager.Load();              
+            config = ConfigManager.Config.UI;  
+            LoadRecentFilesMenu();
             dg_prg.CellMouseDown += dg_prg_CellMouseDown;
             dg_prg.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dg_prg.MultiSelect = true;
@@ -65,16 +60,67 @@ namespace CANhandler
             iPCToolStripMenuItem.MouseDown += MenuItem_MouseDown;
             /////////////////////////////
             //kbusToolStripMenuItem.MouseDown += Protocol_Selection_MenuItem_MouseDown;
-
-
-
-
             rAWBinaryToolStripMenuItem.MouseDown += Protocol_MenuItem_MouseDown;
             aSCIIToolStripMenuItem.MouseDown += Protocol_MenuItem_MouseDown;
 
         }
-        //________________________________________________________________________
+        private void InitializeContextMenu()
+        {
+            ctxGridMenu = new ContextMenuStrip();
+            ctxGridMenu.Items.Add("Send", null, SendToDevice_Click);
+            ctxGridMenu.Items.Add("Show Packet", null, ShowPacket_Click);
+            ctxGridMenu.Items.Add("Insert Above", null, InsertAbove_Click);
+            ctxGridMenu.Items.Add("Insert Below", null, InsertBelow_Click);
+            ctxGridMenu.Items.Add(new ToolStripSeparator());
+            ctxGridMenu.Items.Add("Move Up", null, MoveUp_Click);
+            ctxGridMenu.Items.Add("Move Down", null, MoveDown_Click);
+            ctxGridMenu.Items.Add(new ToolStripSeparator());
+            ctxGridMenu.Items.Add("Copy Row(s)", null, CopyRows_Click);
+            ctxGridMenu.Items.Add("Paste Row(s)", null, PasteRows_Click);
+            ctxGridMenu.Items.Add(new ToolStripSeparator());
+            //ctxGridMenu.Items.Add("Delete Row(s)", null, DeleteRow_Click);
 
+            dg_prg.ContextMenuStrip = ctxGridMenu;
+        }
+        private void SetupCastColumn()
+        {
+
+            var col_Cast = (DataGridViewComboBoxColumn)dg_prg.Columns["col_Cast"];
+            col_Cast.DataSource = Enum.GetValues(typeof(Cast));
+            col_Cast.ValueType = typeof(Cast);
+
+            var col_pic = (DataGridViewComboBoxColumn)dg_prg.Columns["col_pic_type"];
+            col_pic.DataSource = Enum.GetValues(typeof(PIC_Address));
+            col_pic.ValueType = typeof(PIC_Address);
+
+            var col_Action = (DataGridViewComboBoxColumn)dg_prg.Columns["col_Action"];
+            col_Action.DataSource = Enum.GetValues(typeof(Operation));
+            col_Action.ValueType = typeof(Operation);
+
+            var col_Cmd = (DataGridViewComboBoxColumn)dg_prg.Columns["col_Command"];
+            col_Cmd.DataSource = Enum.GetValues(typeof(Command));
+            col_Cmd.ValueType = typeof(Command);
+
+
+
+            //var col_Cast = (DataGridViewComboBoxColumn)dg_prg.Columns["col_Cast"];
+            //col_Cast.DataSource = Enum.GetValues(typeof(Enums.Cast));
+            ////col_Cast.DataSource = new[]
+            ////{
+            ////    new { Text = "Unicast", Value = CastType.Unicast },
+            ////    new { Text = "Multicast", Value = CastType.Multicast }
+            ////};
+
+            ////col_Cast.DisplayMember = "Text";
+            ////col_Cast.ValueMember = "Value";
+            //////////////////////////////
+            //var pic_type = (DataGridViewComboBoxColumn)dg_prg.Columns["col_pic_type"];
+            //pic_type.DataSource = Enum.GetValues(typeof(Enums.PIC_Address));
+
+        }
+        #endregion
+
+        #region FormLoad
         private void Form1_Load(object sender, EventArgs e)
         {
             /////////////////////////////////
@@ -106,67 +152,81 @@ namespace CANhandler
             }
             else chk_loop.Checked = false;
             ////////////////////////////
-            //pb_connect.BackColor = Color.Gray;
             GridConfigurator.ConfigureProgramGrid(dg_prg);
             dg_prg.RowPostPaint += dg_prg_RowPostPaint;
-
             chk_auto_connect.Checked = ConfigManager.Config.Communication.AutoConnect;
             chk_loop.Checked = ConfigManager.Config.UI.LoopEnable;
-
             /////////////////////
             string selected = ConfigManager.Config.Communication.Selected;
-
             foreach (ToolStripMenuItem item in commToolStripMenuItem.DropDownItems)
             {
                 item.Checked = item.Text.Equals(selected, StringComparison.OrdinalIgnoreCase);
             }
-
-
-
             //var steps = AutoSaveService.Load();
             //GridProgramConverter.Write(dg_prg, steps);
         }
+        #endregion
 
+        #region Application Related
         private void dg_prg_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
         {
-            //DataGridView grid = sender as DataGridView;
-
-            //string rowNumber = (e.RowIndex + 1).ToString();
-
-            //using (SolidBrush brush = new SolidBrush(grid.RowHeadersDefaultCellStyle.ForeColor))
-            //{
-            //    e.Graphics.DrawString(
-            //        rowNumber,
-            //        grid.DefaultCellStyle.Font,
-            //        brush,
-            //        e.RowBounds.Location.X + 15,
-            //        e.RowBounds.Location.Y + 6);
-            //}
+            DataGridView grid = sender as DataGridView;
+            string rowNumber = (e.RowIndex + 1).ToString();
+            using (SolidBrush brush = new SolidBrush(grid.RowHeadersDefaultCellStyle.ForeColor))
+            {
+                e.Graphics.DrawString(
+                    rowNumber,
+                    grid.DefaultCellStyle.Font,
+                    brush,
+                    e.RowBounds.Location.X + 15,
+                    e.RowBounds.Location.Y + 6);
+            }
         }
-        //_________________________________________________________________________________________________________
-        private void button1_Click(object sender, EventArgs e)
+        private void LoadRecentFilesMenu()
         {
+            recentFilesToolStripMenuItem.DropDownItems.Clear();
+
+            var files = ConfigManager.Config.RecentFiles;
+
+            if (files.Count == 0)
+            {
+                recentFilesToolStripMenuItem.DropDownItems.Add("No recent files");
+                return;
+            }
+
+            foreach (var file in files)
+            {
+                var item = new ToolStripMenuItem(file);
+
+                item.Click += (s, e) =>
+                {
+                    if (File.Exists(file))
+                    {
+                        var steps = ProgramFileService.Load(file);
+                        GridProgramConverter.Write(dg_prg, steps);
+
+                        currentFilePath = file;
+                        AddToRecentFiles(file); // move to top
+                    }
+                    else
+                    {
+                        MessageBox.Show("File not found!");
+                    }
+                };
+
+                recentFilesToolStripMenuItem.DropDownItems.Add(item);
+            }
         }
-        //_________________________________________________________________________________________________________
-        private void textBoxReceive_TextChanged(object sender, EventArgs e)
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-
+            //var steps = GridProgramConverter.Read(dg_prg);
+            //AutoSaveService.Save(steps);
+            //base.OnFormClosing(e);
         }
-       private void btn_Disp_send_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label9_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void txt_disp_weight_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
+        #endregion
+      
+        #region Program Execution
         private async void btn_run_Click(object sender, EventArgs e)
         {
             var steps = GridProgramReader.Read(dg_prg);
@@ -198,43 +258,9 @@ namespace CANhandler
         {
 
         }
+        #endregion
 
-        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            //var steps = GridProgramConverter.Read(dg_prg);
-            //AutoSaveService.Save(steps);
-            //base.OnFormClosing(e);
-        }
-
-        private void btn_prg_send_Click(object sender, EventArgs e)
-        {
-            if (dg_prg.SelectedRows.Count == 0)
-                return;
-
-            byte[] b=  RowSendService.Get_Row(dg_prg.SelectedRows[0]);
-             
-            try
-            {
-                // ✅ Create only once
-                if (_transport == null)
-                {      
-                    _transport.Send(b);
-                }
-                else if (!_transport.IsConnected)
-                {
-                    // 🔥 Reconnect if needed
-                    _transport.Connect();
-                    _transport.Send(b);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-
-
-        }
-
+        #region Toolbar Menu Events
         private void rUNToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
@@ -334,6 +360,8 @@ namespace CANhandler
             ConfigManager.Save();   // 👈 IMPORTANT
         }
 
+        #endregion
+        #region Recent Files Management
         private void AddToRecentFiles(string filePath)
         {
             var list = ConfigManager.Config.RecentFiles;
@@ -353,135 +381,47 @@ namespace CANhandler
             LoadRecentFilesMenu(); // refresh UI
         }
 
+        #endregion
 
-        private void LoadRecentFilesMenu()
-        {
-            recentFilesToolStripMenuItem.DropDownItems.Clear();
-
-            var files = ConfigManager.Config.RecentFiles;
-
-            if (files.Count == 0)
-            {
-                recentFilesToolStripMenuItem.DropDownItems.Add("No recent files");
-                return;
-            }
-
-            foreach (var file in files)
-            {
-                var item = new ToolStripMenuItem(file);
-
-                item.Click += (s, e) =>
-                {
-                    if (File.Exists(file))
-                    {
-                        var steps = ProgramFileService.Load(file);
-                        GridProgramConverter.Write(dg_prg, steps);
-
-                        currentFilePath = file;
-                        AddToRecentFiles(file); // move to top
-                    }
-                    else
-                    {
-                        MessageBox.Show("File not found!");
-                    }
-                };
-
-                recentFilesToolStripMenuItem.DropDownItems.Add(item);
-            }
-        }
-
-        private void InitializeContextMenu()
-        {
-            ctxGridMenu = new ContextMenuStrip();
-            ctxGridMenu.Items.Add("Send", null, SendToDevice_Click);
-            ctxGridMenu.Items.Add("Show Packet", null, ShowPacket_Click);
-            ctxGridMenu.Items.Add("Insert Above", null, InsertAbove_Click);
-            ctxGridMenu.Items.Add("Insert Below", null, InsertBelow_Click);
-            ctxGridMenu.Items.Add(new ToolStripSeparator());
-            ctxGridMenu.Items.Add("Move Up", null, MoveUp_Click);
-            ctxGridMenu.Items.Add("Move Down", null, MoveDown_Click);
-            ctxGridMenu.Items.Add(new ToolStripSeparator());
-            ctxGridMenu.Items.Add("Copy Row(s)", null, CopyRows_Click);
-            ctxGridMenu.Items.Add("Paste Row(s)", null, PasteRows_Click);
-            ctxGridMenu.Items.Add(new ToolStripSeparator());
-            //ctxGridMenu.Items.Add("Delete Row(s)", null, DeleteRow_Click);
-
-            dg_prg.ContextMenuStrip = ctxGridMenu;
-        }
+        #region Datagrid Related
 
         private void dg_prg_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e)
         {
-            //if (e.RowIndex >= 0 && e.Button == MouseButtons.Right)
-            //{
-            //    if (!dg_prg.Rows[e.RowIndex].Selected)
-            //    {
-            //        dg_prg.ClearSelection();
-            //        dg_prg.Rows[e.RowIndex].Selected = true;
-            //    }
-            //    dg_prg.CurrentCell = dg_prg.Rows[e.RowIndex].Cells[0];
-            //}
+            if (e.RowIndex >= 0 && e.Button == MouseButtons.Right)
+            {
+                if (!dg_prg.Rows[e.RowIndex].Selected)
+                {
+                    dg_prg.ClearSelection();
+                    dg_prg.Rows[e.RowIndex].Selected = true;
+                }
+                dg_prg.CurrentCell = dg_prg.Rows[e.RowIndex].Cells[0];
+            }
         }
 
-        private void SendToDevice_Click(object sender, EventArgs e)
+        private void dg_prg_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
-            if (dg_prg.SelectedRows.Count == 0)
-                return;
+            //var v = dg_prg.Columns[e.ColumnIndex].Name;
 
-            var step = GridProgramConverter.ReadRow(dg_prg.SelectedRows[0]); 
-
-            byte[] buffer = KBusBuilder.BuildPacket_From_GridRow(step);
-
-            
-
-            _transport.Send(buffer);
-
-            //DispenseRequest req = new DispenseRequest
+            //if (dg_prg.Columns[e.ColumnIndex].Name == "col_pic_type")
             //{
-            //    DispenserType = step.PicType,
-            //    Action = step.Action,
-            //    Command = step.Command,
-            //    //MSB = Convert.ToString(step.MSB),
-            //    //LSB = Convert.ToString(step.LSB)
-            //};
+            //    var selectedPIC = dg_prg.Rows[e.RowIndex].Cells["col_pic_type"].Value?.ToString();
 
-            //KBusPacket pkt = DispenserCommandService.CreatePacket(req);
+            //    var commandCell = (DataGridViewComboBoxCell)
+            //        dg_prg.Rows[e.RowIndex].Cells["col_Command"];
 
+            //    commandCell.DataSource = null;
+            //    commandCell.Value = null;
 
-
-
-
-
-
-
-            ////byte[] b = RowSendService.Get_Row(dg_prg.SelectedRows[0]);
-
-            //try
-            //{
-            //    // ✅ Create only once
-            //    if (_transport == null)
+            //    if (selectedPIC != null)
             //    {
-            //        _transport.Send(b);
-            //    }
-            //    else if (!_transport.IsConnected)
-            //    {
-            //        // 🔥 Reconnect if needed
-            //        _transport.Connect();
-                   
+            //        //var commands = CommandHelper.GetCommands(selectedPIC);
+
+            //        // Convert enum → string for display
+            //        //commandCell.DataSource = commands
+            //        //    .Select(c => c.ToString())
+            //        //    .ToList();
             //    }
             //}
-            //catch (Exception ex)
-            //{
-            //    MessageBox.Show(ex.Message);
-            //}
-        }
-        private void ShowPacket_Click(object sender, EventArgs e)
-        {
-            if (dg_prg.SelectedRows.Count == 0)
-                return;
-            var step = GridProgramConverter.ReadRow(dg_prg.SelectedRows[0]);
-            byte[] buffer = KBusBuilder.BuildPacket_From_GridRow(step);
-            string debug =CommandHelper.ToDetailedString(buffer);
-            MessageBox.Show(debug, "Packet Debug");
         }
 
         private void InsertRow_Click(object sender, EventArgs e)
@@ -616,49 +556,41 @@ namespace CANhandler
                 DeleteRow_Click(null, null);
             }
         }
+        #endregion
 
-        private void chk_loop_CheckedChanged(object sender, EventArgs e)
+        #region Menu Item Events
+        private void ShowPacket_Click(object sender, EventArgs e)
         {
-            if (chk_loop.Checked)
-                config.LoopEnable = true;
-            else config.LoopEnable = false;
-            ConfigManager.Save();   // 👈 IMPORTANT
+            if (dg_prg.SelectedRows.Count == 0)
+                return;
+            var step = GridProgramConverter.ReadRow(dg_prg.SelectedRows[0]);
+            byte[] buffer = KBusBuilder.BuildPacket_From_GridRow(step);
+            string debug = CommandHelper.ToDetailedString(buffer);
+            MessageBox.Show(debug, "Packet Debug");
         }
 
-        private void btn_Stop_Click(object sender, EventArgs e)
+        private void commToolStripMenuItem_DropDownOpening(object sender, EventArgs e)
         {
-            executor?.Stop();
+
         }
 
-        private void btn_resume_Click(object sender, EventArgs e)
+        private void communicationToolStripMenuItem_DropDownOpening(object sender, EventArgs e)
         {
-            executor?.Resume();
-        }
+            string selected = ConfigManager.Config.Communication.Selected;
 
-        private void dg_prg_CellValueChanged(object sender, DataGridViewCellEventArgs e)
-        {
-            //var v = dg_prg.Columns[e.ColumnIndex].Name;
+            foreach (ToolStripItem item in communicationToolStripMenuItem.DropDownItems)
+            {
+                if (item is ToolStripMenuItem menuItem)
+                {
+                    menuItem.Checked = false;
 
-            //if (dg_prg.Columns[e.ColumnIndex].Name == "col_pic_type")
-            //{
-            //    var selectedPIC = dg_prg.Rows[e.RowIndex].Cells["col_pic_type"].Value?.ToString();
-
-            //    var commandCell = (DataGridViewComboBoxCell)
-            //        dg_prg.Rows[e.RowIndex].Cells["col_Command"];
-
-            //    commandCell.DataSource = null;
-            //    commandCell.Value = null;
-
-            //    if (selectedPIC != null)
-            //    {
-            //        //var commands = CommandHelper.GetCommands(selectedPIC);
-
-            //        // Convert enum → string for display
-            //        //commandCell.DataSource = commands
-            //        //    .Select(c => c.ToString())
-            //        //    .ToList();
-            //    }
-            //}
+                    if (!string.IsNullOrEmpty(selected) &&
+                        menuItem.Text.Equals(selected, StringComparison.OrdinalIgnoreCase))
+                    {
+                        menuItem.Checked = true;
+                    }
+                }
+            }
         }
 
         private void ToolStripMenuItem_Seria_Click(object sender, EventArgs e)
@@ -680,11 +612,6 @@ namespace CANhandler
             commToolStripMenuItem.Checked = false;
             tcpToolStripMenuItem.Checked = false;
             udpToolStripMenuItem.Checked = false;
-
-
-
-
-
         }
 
         private void ToolStripMenuItem_TCP_Click(object sender, EventArgs e)
@@ -829,10 +756,65 @@ namespace CANhandler
 
         }
 
+        #endregion
 
+        #region UI Events
 
+        private void button1_Click(object sender, EventArgs e)
+        {
+        }
+        private void textBoxReceive_TextChanged(object sender, EventArgs e)
+        {
 
+        }
 
+        private void btn_Disp_send_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label9_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txt_disp_weight_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+        private void SendToDevice_Click(object sender, EventArgs e)
+        {
+            if (dg_prg.SelectedRows.Count == 0) return;
+            var step = GridProgramConverter.ReadRow(dg_prg.SelectedRows[0]);
+            byte[] buffer = KBusBuilder.BuildPacket_From_GridRow(step);
+            _transport.Send(buffer);
+        }
+
+        private void chk_loop_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chk_loop.Checked)
+                config.LoopEnable = true;
+            else config.LoopEnable = false;
+            ConfigManager.Save();   // 👈 IMPORTANT
+        }
+
+        private void btn_Stop_Click(object sender, EventArgs e)
+        {
+            executor?.Stop();
+        }
+
+        private void btn_resume_Click(object sender, EventArgs e)
+        {
+            executor?.Resume();
+        }
+
+        private void btn_prg_send_Click(object sender, EventArgs e)
+        {
+            if (dg_prg.SelectedRows.Count == 0) return;
+            var step = GridProgramConverter.ReadRow(dg_prg.SelectedRows[0]);
+            byte[] buffer = KBusBuilder.BuildPacket_From_GridRow(step);
+            _transport.Send(buffer);
+        }
 
         private void chk_auto_connect_CheckedChanged(object sender, EventArgs e)
         {
@@ -840,30 +822,7 @@ namespace CANhandler
             ConfigManager.Save();
         }
 
-        private void commToolStripMenuItem_DropDownOpening(object sender, EventArgs e)
-        {
-
-        }
-
-        private void communicationToolStripMenuItem_DropDownOpening(object sender, EventArgs e)
-        {
-            string selected = ConfigManager.Config.Communication.Selected;
-
-            foreach (ToolStripItem item in communicationToolStripMenuItem.DropDownItems)
-            {
-                if (item is ToolStripMenuItem menuItem)
-                {
-                    menuItem.Checked = false;
-
-                    if (!string.IsNullOrEmpty(selected) &&
-                        menuItem.Text.Equals(selected, StringComparison.OrdinalIgnoreCase))
-                    {
-                        menuItem.Checked = true;
-                    }
-                }
-            }
-        }
-
+       
         private void btn_connect_Click_1(object sender, EventArgs e)
         {
 
@@ -921,55 +880,34 @@ namespace CANhandler
         private void btn_disconnect_Click(object sender, EventArgs e)
         {
             byte[] b= {
-        0x66, 0x55, 0x15, 0x00, 0x01, 0x00, 0x00, 0x01,
-        0x00, 0x0B, 0x36, 0x32, 0x03, 0x44, 0x03, 0x03,
-        0x1A, 0x8F, 0x70, 0x77, 0x88
-    };
+                    0x66, 0x55, 0x15, 0x00, 0x01, 0x00, 0x00, 0x01,
+                    0x00, 0x0B, 0x36, 0x32, 0x03, 0x44, 0x03, 0x03,
+                    0x1A, 0x8F, 0x70, 0x77, 0x88
+            };
 
-            byte[] bytes = Encoding.UTF8.GetBytes("fdsdsfsdafsa");
-            _transport.Send(b);
+             byte[] b1= {
+                                0x66, 0x55, 0x0F, 0x00, 0x00, 0x00, 0x65, 0x02, 0x02, 0x00, 0x64, 0x0D, 0xF5, 0x77, 0x88
+                        };
+
+            byte[] b3 = {
+    0x66, 0x55,             // Preamble
+    0x15,                   // Length = 21 bytes
+    0x00,                   // TransType
+    0x01,                   // Cast
+    0x00, 0x00,             // Address
+    0x01,                   // RW
+    0x00,                   // Command
+    0x0B, 0x36, 0x32, 0x03, // Data
+    0x44, 0x03, 0x03, 0x1A, // Data continued
+    0x8F, 0x70,             // CRC ✅ (XMODEM verified)
+    0x77, 0x88              // Postamble
+};
+
+
+            //byte[] bytes = Encoding.UTF8.GetBytes("fdsdsfsdafsa");
+            _transport.Send(b3);
         }
-
-        private void SetupCastColumn()
-        {
-
-            var col_Cast = (DataGridViewComboBoxColumn)dg_prg.Columns["col_Cast"];
-            col_Cast.DataSource = Enum.GetValues(typeof(Cast));
-            col_Cast.ValueType = typeof(Cast);
-
-            var col_pic = (DataGridViewComboBoxColumn)dg_prg.Columns["col_pic_type"];
-            col_pic.DataSource = Enum.GetValues(typeof(PIC_Address));
-            col_pic.ValueType = typeof(PIC_Address);
-
-            var col_Action = (DataGridViewComboBoxColumn)dg_prg.Columns["col_Action"];
-            col_Action.DataSource = Enum.GetValues(typeof(Operation));
-            col_Action.ValueType = typeof(Operation);
-
-            var col_Cmd = (DataGridViewComboBoxColumn)dg_prg.Columns["col_Command"];
-            col_Cmd.DataSource = Enum.GetValues(typeof(Command));
-            col_Cmd.ValueType = typeof(Command);
-
-            
-
-            //var col_Cast = (DataGridViewComboBoxColumn)dg_prg.Columns["col_Cast"];
-            //col_Cast.DataSource = Enum.GetValues(typeof(Enums.Cast));
-            ////col_Cast.DataSource = new[]
-            ////{
-            ////    new { Text = "Unicast", Value = CastType.Unicast },
-            ////    new { Text = "Multicast", Value = CastType.Multicast }
-            ////};
-
-            ////col_Cast.DisplayMember = "Text";
-            ////col_Cast.ValueMember = "Value";
-            //////////////////////////////
-            //var pic_type = (DataGridViewComboBoxColumn)dg_prg.Columns["col_pic_type"];
-            //pic_type.DataSource = Enum.GetValues(typeof(Enums.PIC_Address));
-
-        }
-        private void dg_prg_DataError(object sender, DataGridViewDataErrorEventArgs e)
-        {
-            e.ThrowException = false; // suppress error dialog
-        }
+        #endregion 
 
     }
 }

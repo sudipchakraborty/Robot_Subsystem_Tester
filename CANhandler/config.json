@@ -1,7 +1,7 @@
 {
   "Communication": {
     "CommPort": {
-      "PortName": "COM12 - USB Serial Port (COM12)",
+      "PortName": "COM7 - USB Serial Port (COM7)",
       "BaudRate": 38400,
       "PacketType": "RAW(Binary)"
     },

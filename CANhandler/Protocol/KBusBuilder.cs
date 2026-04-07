@@ -15,32 +15,48 @@ namespace CANhandler.Protocol
         public static byte[] BuildPacket_From_GridRow(ProgramStep step)
         {
             if (step == null) return null;
+
             List<byte> packet = new List<byte>();
 
+            // Preamble
             packet.AddRange(Helpers.CommandHelper.GetBytesBE(Preamble));
+
+            // Length placeholder
             packet.Add(0);
+
+            // Header
             packet.Add(TransType);
-            packet.Add((byte)step.Cast);       
-            PIC_Address pic = step.PicType;
-            ushort address = (ushort)pic;
+            packet.Add((byte)step.Cast);
+
+            ushort address = (ushort)step.PicType;
             packet.AddRange(Helpers.CommandHelper.GetBytesBE(address));
+
             packet.Add((byte)step.Operation);
             packet.Add((byte)step.Command);
 
-            packet.AddRange(Helpers.CommandHelper.ParseUInt16Array(step.Data));
-            packet[2]=(byte)packet.Count;
+            // 🔥 IMPORTANT: ensure BIG-ENDIAN data
+            var dataBytes = Helpers.CommandHelper.ParseUInt16Array(step.Data);
+            packet.AddRange(dataBytes);
 
-            byte[] packetArray = packet.ToArray();
-            ushort crc = CRC16_XMODEM(packetArray, packetArray.Length);
+            packet[2] = (byte)(packet.Count+4);
 
+            // ✅ CRC (correct range)
+            byte[] crcData = packet.ToArray();
+
+            ushort crc = CRC16_XMODEM(crcData, crcData.Length);
+
+            // MSB first
+            packet.Add((byte)(crc >> 8));
             packet.Add((byte)(crc & 0xFF));
-            packet.Add((byte)((crc >> 8) & 0xFF));
 
-            packet.Add((byte)((ProtocolConstants.Postamble >> 8) & 0xFF));
+            // Postamble
+            packet.Add((byte)(ProtocolConstants.Postamble >> 8));
             packet.Add((byte)(ProtocolConstants.Postamble & 0xFF));
 
-            byte[] buffer = packet.ToArray();
-            return buffer;
+            // ✅ Final length
+           
+
+            return packet.ToArray();
         }
 
         public static ushort CRC16_XMODEM(byte[] data, int length)

@@ -89,14 +89,6 @@
             sendMailToDeveloperToolStripMenuItem = new ToolStripMenuItem();
             relatedDOcumentsToolStripMenuItem = new ToolStripMenuItem();
             dg_prg = new DataGridView();
-            statusStrip = new StatusStrip();
-            toolStripStatusLabel1 = new ToolStripStatusLabel();
-            lbl_message = new ToolStripStatusLabel();
-            tssl_comport = new ToolStripStatusLabel();
-            tssl_baudrate = new ToolStripStatusLabel();
-            contextMenuStrip1 = new ContextMenuStrip(components);
-            InsertRow = new ToolStripMenuItem();
-            DeleteRow = new ToolStripMenuItem();
             col_line_no = new DataGridViewTextBoxColumn();
             col_enable = new DataGridViewCheckBoxColumn();
             col_pic_type = new DataGridViewComboBoxColumn();
@@ -106,6 +98,14 @@
             col_data = new DataGridViewTextBoxColumn();
             col_delay = new DataGridViewTextBoxColumn();
             col_loop = new DataGridViewTextBoxColumn();
+            statusStrip = new StatusStrip();
+            toolStripStatusLabel1 = new ToolStripStatusLabel();
+            lbl_message = new ToolStripStatusLabel();
+            tssl_comport = new ToolStripStatusLabel();
+            tssl_baudrate = new ToolStripStatusLabel();
+            contextMenuStrip1 = new ContextMenuStrip(components);
+            InsertRow = new ToolStripMenuItem();
+            DeleteRow = new ToolStripMenuItem();
             groupBox7.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pb_tx).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pb_rx).BeginInit();
@@ -213,9 +213,9 @@
             // 
             // btn_disconnect
             // 
-            btn_disconnect.Location = new Point(10, 253);
+            btn_disconnect.Location = new Point(17, 243);
             btn_disconnect.Name = "btn_disconnect";
-            btn_disconnect.Size = new Size(103, 35);
+            btn_disconnect.Size = new Size(144, 35);
             btn_disconnect.TabIndex = 17;
             btn_disconnect.Text = "DIsconnect";
             btn_disconnect.UseVisualStyleBackColor = true;
@@ -223,9 +223,9 @@
             // 
             // btn_connect
             // 
-            btn_connect.Location = new Point(10, 214);
+            btn_connect.Location = new Point(17, 204);
             btn_connect.Name = "btn_connect";
-            btn_connect.Size = new Size(103, 33);
+            btn_connect.Size = new Size(144, 33);
             btn_connect.TabIndex = 16;
             btn_connect.Text = "Connect";
             btn_connect.UseVisualStyleBackColor = true;
@@ -233,9 +233,9 @@
             // 
             // btn_resume
             // 
-            btn_resume.Location = new Point(83, 90);
+            btn_resume.Location = new Point(17, 150);
             btn_resume.Name = "btn_resume";
-            btn_resume.Size = new Size(78, 48);
+            btn_resume.Size = new Size(73, 39);
             btn_resume.TabIndex = 15;
             btn_resume.Text = "RESUME";
             btn_resume.UseVisualStyleBackColor = true;
@@ -255,9 +255,9 @@
             // 
             // btn_prg_send
             // 
-            btn_prg_send.Location = new Point(6, 144);
+            btn_prg_send.Location = new Point(17, 26);
             btn_prg_send.Name = "btn_prg_send";
-            btn_prg_send.Size = new Size(155, 45);
+            btn_prg_send.Size = new Size(144, 72);
             btn_prg_send.TabIndex = 3;
             btn_prg_send.Text = "SEND";
             btn_prg_send.UseVisualStyleBackColor = true;
@@ -265,9 +265,9 @@
             // 
             // btn_Stop
             // 
-            btn_Stop.Location = new Point(83, 25);
+            btn_Stop.Location = new Point(97, 104);
             btn_Stop.Name = "btn_Stop";
-            btn_Stop.Size = new Size(78, 59);
+            btn_Stop.Size = new Size(64, 40);
             btn_Stop.TabIndex = 2;
             btn_Stop.Text = "STOP";
             btn_Stop.UseVisualStyleBackColor = true;
@@ -324,9 +324,9 @@
             // 
             // btn_run
             // 
-            btn_run.Location = new Point(4, 26);
+            btn_run.Location = new Point(17, 104);
             btn_run.Name = "btn_run";
-            btn_run.Size = new Size(73, 58);
+            btn_run.Size = new Size(73, 40);
             btn_run.TabIndex = 2;
             btn_run.Text = "RUN";
             btn_run.UseVisualStyleBackColor = true;
@@ -334,9 +334,9 @@
             // 
             // btn_pause
             // 
-            btn_pause.Location = new Point(6, 90);
+            btn_pause.Location = new Point(97, 150);
             btn_pause.Name = "btn_pause";
-            btn_pause.Size = new Size(71, 48);
+            btn_pause.Size = new Size(64, 39);
             btn_pause.TabIndex = 2;
             btn_pause.Text = "PAUSE";
             btn_pause.UseVisualStyleBackColor = true;
@@ -611,62 +611,6 @@
             dg_prg.CellValueChanged += dg_prg_CellValueChanged;
             dg_prg.KeyDown += dg_prg_KeyDown;
             // 
-            // statusStrip
-            // 
-            statusStrip.BackColor = Color.FromArgb(0, 192, 192);
-            statusStrip.ImageScalingSize = new Size(20, 20);
-            statusStrip.Items.AddRange(new ToolStripItem[] { toolStripStatusLabel1, lbl_message, tssl_comport, tssl_baudrate });
-            statusStrip.Location = new Point(0, 653);
-            statusStrip.Name = "statusStrip";
-            statusStrip.Size = new Size(1482, 26);
-            statusStrip.TabIndex = 14;
-            statusStrip.Text = "statusStrip1";
-            // 
-            // toolStripStatusLabel1
-            // 
-            toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            toolStripStatusLabel1.Size = new Size(119, 20);
-            toolStripStatusLabel1.Text = "Current Line: 000";
-            // 
-            // lbl_message
-            // 
-            lbl_message.Name = "lbl_message";
-            lbl_message.Size = new Size(148, 20);
-            lbl_message.Text = "Message: Data saved";
-            // 
-            // tssl_comport
-            // 
-            tssl_comport.Name = "tssl_comport";
-            tssl_comport.Size = new Size(50, 20);
-            tssl_comport.Text = "COM1";
-            // 
-            // tssl_baudrate
-            // 
-            tssl_baudrate.Name = "tssl_baudrate";
-            tssl_baudrate.Size = new Size(41, 20);
-            tssl_baudrate.Text = "9600";
-            // 
-            // contextMenuStrip1
-            // 
-            contextMenuStrip1.ImageScalingSize = new Size(20, 20);
-            contextMenuStrip1.Items.AddRange(new ToolStripItem[] { InsertRow, DeleteRow });
-            contextMenuStrip1.Name = "contextMenuStrip1";
-            contextMenuStrip1.Size = new Size(172, 52);
-            // 
-            // InsertRow
-            // 
-            InsertRow.Name = "InsertRow";
-            InsertRow.Size = new Size(171, 24);
-            InsertRow.Text = "Insert Row";
-            InsertRow.Click += InsertRow_Click;
-            // 
-            // DeleteRow
-            // 
-            DeleteRow.Name = "DeleteRow";
-            DeleteRow.Size = new Size(171, 24);
-            DeleteRow.Text = "Delete Row(s)";
-            DeleteRow.Click += DeleteRow_Click;
-            // 
             // col_line_no
             // 
             col_line_no.HeaderText = "Line No.";
@@ -735,6 +679,62 @@
             col_loop.MinimumWidth = 6;
             col_loop.Name = "col_loop";
             col_loop.Width = 75;
+            // 
+            // statusStrip
+            // 
+            statusStrip.BackColor = Color.FromArgb(0, 192, 192);
+            statusStrip.ImageScalingSize = new Size(20, 20);
+            statusStrip.Items.AddRange(new ToolStripItem[] { toolStripStatusLabel1, lbl_message, tssl_comport, tssl_baudrate });
+            statusStrip.Location = new Point(0, 653);
+            statusStrip.Name = "statusStrip";
+            statusStrip.Size = new Size(1482, 26);
+            statusStrip.TabIndex = 14;
+            statusStrip.Text = "statusStrip1";
+            // 
+            // toolStripStatusLabel1
+            // 
+            toolStripStatusLabel1.Name = "toolStripStatusLabel1";
+            toolStripStatusLabel1.Size = new Size(119, 20);
+            toolStripStatusLabel1.Text = "Current Line: 000";
+            // 
+            // lbl_message
+            // 
+            lbl_message.Name = "lbl_message";
+            lbl_message.Size = new Size(148, 20);
+            lbl_message.Text = "Message: Data saved";
+            // 
+            // tssl_comport
+            // 
+            tssl_comport.Name = "tssl_comport";
+            tssl_comport.Size = new Size(50, 20);
+            tssl_comport.Text = "COM1";
+            // 
+            // tssl_baudrate
+            // 
+            tssl_baudrate.Name = "tssl_baudrate";
+            tssl_baudrate.Size = new Size(41, 20);
+            tssl_baudrate.Text = "9600";
+            // 
+            // contextMenuStrip1
+            // 
+            contextMenuStrip1.ImageScalingSize = new Size(20, 20);
+            contextMenuStrip1.Items.AddRange(new ToolStripItem[] { InsertRow, DeleteRow });
+            contextMenuStrip1.Name = "contextMenuStrip1";
+            contextMenuStrip1.Size = new Size(172, 52);
+            // 
+            // InsertRow
+            // 
+            InsertRow.Name = "InsertRow";
+            InsertRow.Size = new Size(171, 24);
+            InsertRow.Text = "Insert Row";
+            InsertRow.Click += InsertRow_Click;
+            // 
+            // DeleteRow
+            // 
+            DeleteRow.Name = "DeleteRow";
+            DeleteRow.Size = new Size(171, 24);
+            DeleteRow.Text = "Delete Row(s)";
+            DeleteRow.Click += DeleteRow_Click;
             // 
             // frm_main
             // 
