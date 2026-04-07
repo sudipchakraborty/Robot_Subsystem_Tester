@@ -72,11 +72,9 @@ namespace CANhandler.Services
 
                 PicType = (PIC_Address)row.Cells["col_pic_type"].Value,
 
-                //Cast = ()row.Cells["col_Cast"].Value,
+                Cast = (Cast)row.Cells["col_Cast"].Value,
 
                 Operation = (Operation)row.Cells["col_Action"].Value,
-
-                //Operation = (Constants.Operation)row.Cells["col_Action"].Value,
 
                 Command = (Command)row.Cells["col_Command"].Value,
 

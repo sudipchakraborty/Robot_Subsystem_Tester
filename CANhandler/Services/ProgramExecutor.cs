@@ -9,16 +9,16 @@ namespace CANhandler.Services
 {
     public class ProgramExecutor
     {
-        //private readonly KBusComm _kbus;
+        private ITransport _transport = null;
         private readonly DataGridView _grid;
         private bool _isPaused = false;
         private bool _isStopped = false;
 
-        //public ProgramExecutor(KBusComm kbus, DataGridView grid)
-        //{
-        //    _kbus = kbus;
-        //    _grid = grid;
-        //}
+        public ProgramExecutor(DataGridView grid, ITransport transport)
+        {
+            _transport = transport;
+            _grid = grid;
+        }
 
         public async Task RunProgramAsync(List<ProgramStep> steps)
         {
@@ -52,20 +52,24 @@ namespace CANhandler.Services
                         {
                             await Task.Delay(100);
                         }
+                    
+                        var st = GridProgramConverter.ReadRow(_grid.SelectedRows[rowIndex]);
+                        byte[] buffer = KBusBuilder.BuildPacket_From_GridRow(st);
+                        _transport.Send(buffer);
 
-                        DispenseRequest req = new DispenseRequest
-                        {
-                            //DispenserType = step.PicType,
-                            //Action = step.Operation,
-                            //Command = step.Command,
-                            //MSB = Convert.ToString(step.MSB),
-                            //LSB = Convert.ToString(step.LSB)
-                        };
+                        //DispenseRequest req = new DispenseRequest
+                        //{
+                        //    //DispenserType = step.PicType,
+                        //    //Action = step.Operation,
+                        //    //Command = step.Command,
+                        //    //MSB = Convert.ToString(step.MSB),
+                        //    //LSB = Convert.ToString(step.LSB)
+                        //};
 
-                        KBusPacket pkt = DispenserCommandService.CreatePacket(req);
+                        //KBusPacket pkt = DispenserCommandService.CreatePacket(req);
                         //byte[] buffer = KBusBuilder.BuildPacket(pkt);
 
-                        UIConfig config = ConfigManager.Config.UI;
+                        //UIConfig config = ConfigManager.Config.UI;
 
                         //if (config.SelectedInterface == InterfaceType.RealHardware)
                         //    _kbus?.SendOnly(buffer);

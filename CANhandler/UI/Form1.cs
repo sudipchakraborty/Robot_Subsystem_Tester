@@ -230,7 +230,7 @@ namespace CANhandler
         private async void btn_run_Click(object sender, EventArgs e)
         {
             var steps = GridProgramReader.Read(dg_prg);
-            //executor = new ProgramExecutor(_kbus, dg_prg);
+            executor = new ProgramExecutor(dg_prg,_transport);
             await executor.RunProgramAsync(steps);
         }
 
