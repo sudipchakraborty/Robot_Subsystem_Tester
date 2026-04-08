@@ -20,7 +20,7 @@
   "UI": {
     "WindowWidth": 1200,
     "WindowHeight": 800,
-    "SelectedInterface": "RealHardware",
+    "SelectedInterface": "InbuiltSim",
     "LoopEnable": true
   },
   "RecentFiles": [

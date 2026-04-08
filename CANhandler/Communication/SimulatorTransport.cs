@@ -53,13 +53,13 @@ namespace CANhandler.Communication
                 await Task.Delay(100);
 
                 // 🔹 Generate response
-                byte[] response = ProcessPacket(data);
+                //byte[] response = ProcessPacket(data);
 
                 // 🔹 Raise DataReceived event (same as Serial)
-                DataReceived?.Invoke(response);
+                DataReceived?.Invoke(data);
 
                 // 🔥 Optional: continuous streaming (like weight feedback)
-                _ = SimulateStreaming();
+                //_ = SimulateStreaming();
             }
             catch (Exception ex)
             {

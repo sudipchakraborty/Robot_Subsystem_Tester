@@ -123,6 +123,7 @@ namespace CANhandler
         #region FormLoad
         private void Form1_Load(object sender, EventArgs e)
         {
+            //System.Diagnostics.Debugger.Break();
             /////////////////////////////////
             dg_prg.DataSource = null;
             dg_prg.Rows.Clear();
@@ -827,44 +828,12 @@ namespace CANhandler
 
         private void btn_connect_Click(object sender, EventArgs e)
         {
-            InterfaceType channel = config.SelectedInterface;
 
-            if (channel == InterfaceType.RealHardware)
-            {
-                CommunicationConfig cfg = ConfigManager.Config.Communication;  // then assign
-                string port = cfg.CommPort.PortName;
-                int baudarate = cfg.CommPort.BaudRate;
-                string p = ExtractPortName(port);
-                _transport = new SerialTransport(p, baudarate);
-                //_kbus = new KBusComm(_transport);
-                _transport.Connect();
-                try
-                {
-                    // ✅ Create only once
-                    if (_transport == null)
-                    {
-                        //_transport = new SerialTransport("COM11", 38400);
-                        //_transport.Connect();
+        }
 
-                        //_kbus = new KBusComm(_transport);
-                    }
-                    else if (!_transport.IsConnected)
-                    {
-                        // 🔥 Reconnect if needed
-                        _transport.Connect();
-                    }
-
-                    pb_connection.BackColor = Color.GreenYellow;
-
-                    // ✅ Send data
-                    //RowSendService.SendRow(dg_prg.SelectedRows[0], _kbus);
-                }
-                catch (Exception ex)
-                {
-                    //MessageBox.Show(ex.Message);
-                    pb_connection.BackColor = Color.Red;
-                }
-            }
+        private void OnDataReceived(byte[] data)
+        {
+            sim?.HandleReceived(data);
         }
 
         public static string ExtractPortName(string fullText)
@@ -941,11 +910,142 @@ namespace CANhandler
 
         #region Inbuilt simulator
 
+        private frm_Inbuilt_Simulator sim;
+        public Action<string> LogToSimulator;
+
         private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            frm_Inbuilt_Simulator sim=new frm_Inbuilt_Simulator();
-            sim.Visible = true;
+            if (sim == null || sim.IsDisposed)
+            {
+                sim = new frm_Inbuilt_Simulator();
+
+                // Connect delegate
+                LogToSimulator = sim.AddLog;
+
+                sim.Show();
+            }
+            else
+            {
+                sim.BringToFront();
+            }
+
         }
         #endregion
+
+        private void btn_connect_Click_2(object sender, EventArgs e)
+        {
+            int i = 0;
+            //InterfaceType channel = config.SelectedInterface;
+
+            if (rbtn_real_hardware.Checked)
+            //if (channel == InterfaceType.RealHardware)
+            {
+                CommunicationConfig cfg = ConfigManager.Config.Communication;  // then assign
+                string port = cfg.CommPort.PortName;
+                int baudarate = cfg.CommPort.BaudRate;
+                string p = ExtractPortName(port);
+                _transport = new SerialTransport(p, baudarate);
+                //_kbus = new KBusComm(_transport);
+                _transport.Connect();
+                try
+                {
+                    // ✅ Create only once
+                    if (_transport == null)
+                    {
+                        //_transport = new SerialTransport("COM11", 38400);
+                        //_transport.Connect();
+
+                        //_kbus = new KBusComm(_transport);
+                    }
+                    else if (!_transport.IsConnected)
+                    {
+                        // 🔥 Reconnect if needed
+                        _transport.Connect();
+                    }
+
+                    pb_connection.BackColor = Color.GreenYellow;
+
+                    // ✅ Send data
+                    //RowSendService.SendRow(dg_prg.SelectedRows[0], _kbus);
+                }
+                catch (Exception ex)
+                {
+                    //MessageBox.Show(ex.Message);
+                    pb_connection.BackColor = Color.Red;
+                }
+            }
+            else if (rbtn_InbuiltSim.Checked)
+            {
+                _transport = new SimulatorTransport();
+                _transport.Connect();
+                _transport.DataReceived += OnDataReceived;
+            }
+            else if (rbtn_externalSim.Checked)
+            {
+
+            }
+            else
+            {
+
+            }
+        }
+
+        private void button1_Click_1(object sender, EventArgs e)
+        {
+            int i = 0;
+            //InterfaceType channel = config.SelectedInterface;
+
+            if (rbtn_real_hardware.Checked)
+            //if (channel == InterfaceType.RealHardware)
+            {
+                CommunicationConfig cfg = ConfigManager.Config.Communication;  // then assign
+                string port = cfg.CommPort.PortName;
+                int baudarate = cfg.CommPort.BaudRate;
+                string p = ExtractPortName(port);
+                _transport = new SerialTransport(p, baudarate);
+                //_kbus = new KBusComm(_transport);
+                _transport.Connect();
+                try
+                {
+                    // ✅ Create only once
+                    if (_transport == null)
+                    {
+                        //_transport = new SerialTransport("COM11", 38400);
+                        //_transport.Connect();
+
+                        //_kbus = new KBusComm(_transport);
+                    }
+                    else if (!_transport.IsConnected)
+                    {
+                        // 🔥 Reconnect if needed
+                        _transport.Connect();
+                    }
+
+                    pb_connection.BackColor = Color.GreenYellow;
+
+                    // ✅ Send data
+                    //RowSendService.SendRow(dg_prg.SelectedRows[0], _kbus);
+                }
+                catch (Exception ex)
+                {
+                    //MessageBox.Show(ex.Message);
+                    pb_connection.BackColor = Color.Red;
+                }
+            }
+            else if (rbtn_InbuiltSim.Checked)
+            {
+                _transport = new SimulatorTransport();
+                _transport.Connect();
+                _transport.DataReceived += OnDataReceived;
+            }
+            else if (rbtn_externalSim.Checked)
+            {
+
+            }
+            else
+            {
+
+            }
+        }
     }
 }

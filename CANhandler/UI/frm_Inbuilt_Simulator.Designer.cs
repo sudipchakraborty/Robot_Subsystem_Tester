@@ -28,24 +28,15 @@
         /// </summary>
         private void InitializeComponent()
         {
-            txt_msg = new TextBox();
             btn_save = new Button();
             btn_export = new Button();
+            btn_clear = new Button();
+            txt_msg = new RichTextBox();
             SuspendLayout();
-            // 
-            // txt_msg
-            // 
-            txt_msg.BackColor = Color.FromArgb(0, 64, 64);
-            txt_msg.ForeColor = Color.White;
-            txt_msg.Location = new Point(12, 12);
-            txt_msg.Multiline = true;
-            txt_msg.Name = "txt_msg";
-            txt_msg.Size = new Size(780, 412);
-            txt_msg.TabIndex = 0;
             // 
             // btn_save
             // 
-            btn_save.Location = new Point(821, 260);
+            btn_save.Location = new Point(821, 52);
             btn_save.Name = "btn_save";
             btn_save.Size = new Size(81, 104);
             btn_save.TabIndex = 1;
@@ -61,25 +52,44 @@
             btn_export.Text = "EXPORT";
             btn_export.UseVisualStyleBackColor = true;
             // 
+            // btn_clear
+            // 
+            btn_clear.Location = new Point(821, 174);
+            btn_clear.Name = "btn_clear";
+            btn_clear.Size = new Size(81, 85);
+            btn_clear.TabIndex = 2;
+            btn_clear.Text = "CLEAR";
+            btn_clear.UseVisualStyleBackColor = true;
+            btn_clear.Click += btn_clear_Click;
+            // 
+            // txt_msg
+            // 
+            txt_msg.Location = new Point(12, 21);
+            txt_msg.Name = "txt_msg";
+            txt_msg.Size = new Size(769, 403);
+            txt_msg.TabIndex = 3;
+            txt_msg.Text = "";
+            // 
             // frm_Inbuilt_Simulator
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.Black;
             ClientSize = new Size(924, 446);
+            Controls.Add(txt_msg);
+            Controls.Add(btn_clear);
             Controls.Add(btn_export);
             Controls.Add(btn_save);
-            Controls.Add(txt_msg);
             Name = "frm_Inbuilt_Simulator";
             Text = "frm_Inbuilt_Simulator";
+            Load += frm_Inbuilt_Simulator_Load;
             ResumeLayout(false);
-            PerformLayout();
         }
 
         #endregion
-
-        private TextBox txt_msg;
         private Button btn_save;
         private Button btn_export;
+        private Button btn_clear;
+        private RichTextBox txt_msg;
     }
 }

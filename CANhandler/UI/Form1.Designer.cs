@@ -106,6 +106,7 @@
             contextMenuStrip1 = new ContextMenuStrip(components);
             InsertRow = new ToolStripMenuItem();
             DeleteRow = new ToolStripMenuItem();
+            button1 = new Button();
             groupBox7.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pb_tx).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pb_rx).BeginInit();
@@ -119,6 +120,7 @@
             // 
             // groupBox7
             // 
+            groupBox7.Controls.Add(button1);
             groupBox7.Controls.Add(label3);
             groupBox7.Controls.Add(label2);
             groupBox7.Controls.Add(label1);
@@ -229,7 +231,7 @@
             btn_connect.TabIndex = 16;
             btn_connect.Text = "Connect";
             btn_connect.UseVisualStyleBackColor = true;
-            btn_connect.Click += btn_connect_Click;
+            btn_connect.Click += btn_connect_Click_2;
             // 
             // btn_resume
             // 
@@ -546,26 +548,26 @@
             // settingsToolStripMenuItem
             // 
             settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            settingsToolStripMenuItem.Size = new Size(224, 26);
+            settingsToolStripMenuItem.Size = new Size(202, 26);
             settingsToolStripMenuItem.Text = "Inbuilt Simulator";
             settingsToolStripMenuItem.Click += settingsToolStripMenuItem_Click;
             // 
             // packetMonitorToolStripMenuItem
             // 
             packetMonitorToolStripMenuItem.Name = "packetMonitorToolStripMenuItem";
-            packetMonitorToolStripMenuItem.Size = new Size(224, 26);
+            packetMonitorToolStripMenuItem.Size = new Size(202, 26);
             packetMonitorToolStripMenuItem.Text = "Packet Monitor";
             // 
             // terminalToolStripMenuItem
             // 
             terminalToolStripMenuItem.Name = "terminalToolStripMenuItem";
-            terminalToolStripMenuItem.Size = new Size(224, 26);
+            terminalToolStripMenuItem.Size = new Size(202, 26);
             terminalToolStripMenuItem.Text = "Terminal";
             // 
             // debugInterfaceToolStripMenuItem
             // 
             debugInterfaceToolStripMenuItem.Name = "debugInterfaceToolStripMenuItem";
-            debugInterfaceToolStripMenuItem.Size = new Size(224, 26);
+            debugInterfaceToolStripMenuItem.Size = new Size(202, 26);
             debugInterfaceToolStripMenuItem.Text = "Debug Interface";
             // 
             // helpToolStripMenuItem
@@ -737,6 +739,16 @@
             DeleteRow.Text = "Delete Row(s)";
             DeleteRow.Click += DeleteRow_Click;
             // 
+            // button1
+            // 
+            button1.Location = new Point(6, 334);
+            button1.Name = "button1";
+            button1.Size = new Size(71, 61);
+            button1.TabIndex = 21;
+            button1.Text = "button1";
+            button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click_1;
+            // 
             // frm_main
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
@@ -851,5 +863,6 @@
         private DataGridViewTextBoxColumn col_data;
         private DataGridViewTextBoxColumn col_delay;
         private DataGridViewTextBoxColumn col_loop;
+        private Button button1;
     }
 }
