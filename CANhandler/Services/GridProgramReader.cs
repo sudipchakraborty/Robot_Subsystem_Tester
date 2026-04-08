@@ -23,7 +23,7 @@ namespace CANhandler.Services
                     Enable = Convert.ToBoolean(row.Cells["col_enable"].Value),
 
                     PicType = (PIC_Address)row.Cells["col_pic_type"].Value,
-                    Operation =(Constants.Operation)row.Cells["col_Action"].Value,
+                    Operation =(Constants.Operation)row.Cells["col_Operation"].Value,
                     Command = (Command)row.Cells["col_Command"].Value,
 
                     Data = row.Cells["col_data"].Value?.ToString(),

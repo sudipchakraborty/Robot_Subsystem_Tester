@@ -10,15 +10,11 @@ namespace CANhandler.Models
     {
         public int LineNo { get; set; }
         public bool Enable { get; set; }
-
         public PIC_Address PicType { get; set; }
         public Cast Cast { get; set; }
         public Operation Operation { get; set; }
         public Command Command { get; set; }
-
-        //public byte[] Data { get; set; } = Array.Empty<byte>();
         public string Data { get; set; }
-
         public int Delay { get; set; }
         public int Loop { get; set; }
     }

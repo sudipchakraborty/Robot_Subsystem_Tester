@@ -22,22 +22,22 @@ namespace CANhandler
     public partial class frm_main : Form
     {
         #region Initialization
-            private SerialPort _serialPort;
-            private List<byte> rxBuffer = new List<byte>();
-            private int expectedLength = -1;
-            private UIConfig config;
-            private string? currentFilePath = null;
-            private ContextMenuStrip ctxGridMenu;
-            private List<object[]> copiedRows = new List<object[]>();
-            private ProgramExecutor executor;
-            ITransport _transport = null;
+        private SerialPort _serialPort;
+        private List<byte> rxBuffer = new List<byte>();
+        private int expectedLength = -1;
+        private UIConfig config;
+        private string? currentFilePath = null;
+        private ContextMenuStrip ctxGridMenu;
+        private List<object[]> copiedRows = new List<object[]>();
+        private ProgramExecutor executor;
+        ITransport _transport = null;
 
         public frm_main()
         {
             InitializeComponent();
             InitializeContextMenu();
-            ConfigManager.Load();              
-            config = ConfigManager.Config.UI;  
+            ConfigManager.Load();
+            config = ConfigManager.Config.UI;
             LoadRecentFilesMenu();
             dg_prg.CellMouseDown += dg_prg_CellMouseDown;
             dg_prg.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
@@ -93,7 +93,7 @@ namespace CANhandler
             col_pic.DataSource = Enum.GetValues(typeof(PIC_Address));
             col_pic.ValueType = typeof(PIC_Address);
 
-            var col_Action = (DataGridViewComboBoxColumn)dg_prg.Columns["col_Action"];
+            var col_Action = (DataGridViewComboBoxColumn)dg_prg.Columns["col_Operation"];
             col_Action.DataSource = Enum.GetValues(typeof(Operation));
             col_Action.ValueType = typeof(Operation);
 
@@ -168,6 +168,59 @@ namespace CANhandler
         #endregion
 
         #region Application Related
+
+        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(currentFilePath))
+            {
+                // First time → Save As
+                SaveFileDialog dlg = new SaveFileDialog();
+                dlg.Filter = "Program Files (*.json)|*.json";
+
+                if (dlg.ShowDialog() != DialogResult.OK)
+                    return;
+
+                currentFilePath = dlg.FileName;
+            }
+
+            var steps = GridProgramConverter.Read(dg_prg);
+
+            ProgramFileService.Save(currentFilePath, steps);
+
+            AddToRecentFiles(currentFilePath);
+            lbl_message.Text = "Program saved: " + Path.GetFileName(currentFilePath);
+
+
+        }
+
+        private void openToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog dlg = new OpenFileDialog();
+            dlg.Filter = "Program Files (*.json)|*.json";
+
+            if (dlg.ShowDialog() == DialogResult.OK)
+            {
+                currentFilePath = dlg.FileName;
+
+                var steps = ProgramFileService.Load(dlg.FileName);
+                GridProgramConverter.Write(dg_prg, steps);
+
+                AddToRecentFiles(dlg.FileName);  // 👈 IMPORTANT
+            }
+        }
+
+        private void exportToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog dlg = new SaveFileDialog();
+            dlg.Filter = "CSV (*.csv)|*.csv";
+
+            if (dlg.ShowDialog() == DialogResult.OK)
+            {
+                var steps = GridProgramConverter.Read(dg_prg);
+
+                ProgramExportService.ExportCSV(dlg.FileName, steps);
+            }
+        }
         private void dg_prg_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
         {
             DataGridView grid = sender as DataGridView;
@@ -225,12 +278,12 @@ namespace CANhandler
             //base.OnFormClosing(e);
         }
         #endregion
-      
+
         #region Program Execution
         private async void btn_run_Click(object sender, EventArgs e)
         {
             var steps = GridProgramReader.Read(dg_prg);
-            executor = new ProgramExecutor(dg_prg,_transport);
+            executor = new ProgramExecutor(dg_prg, _transport);
             await executor.RunProgramAsync(steps);
         }
 
@@ -271,58 +324,7 @@ namespace CANhandler
             dg_prg.Rows.Clear();
         }
 
-        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (string.IsNullOrEmpty(currentFilePath))
-            {
-                // First time → Save As
-                SaveFileDialog dlg = new SaveFileDialog();
-                dlg.Filter = "Program Files (*.json)|*.json";
 
-                if (dlg.ShowDialog() != DialogResult.OK)
-                    return;
-
-                currentFilePath = dlg.FileName;
-            }
-
-            var steps = GridProgramConverter.Read(dg_prg);
-
-            ProgramFileService.Save(currentFilePath, steps);
-
-            AddToRecentFiles(currentFilePath);
-            lbl_message.Text = "Program saved: " + Path.GetFileName(currentFilePath);
-
-
-        }
-
-        private void openToolStripMenuItem1_Click(object sender, EventArgs e)
-        {
-            OpenFileDialog dlg = new OpenFileDialog();
-            dlg.Filter = "Program Files (*.json)|*.json";
-
-            if (dlg.ShowDialog() == DialogResult.OK)
-            {
-                currentFilePath = dlg.FileName;
-
-                var steps = ProgramFileService.Load(dlg.FileName);
-                GridProgramConverter.Write(dg_prg, steps);
-
-                AddToRecentFiles(dlg.FileName);  // 👈 IMPORTANT
-            }
-        }
-
-        private void exportToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            SaveFileDialog dlg = new SaveFileDialog();
-            dlg.Filter = "CSV (*.csv)|*.csv";
-
-            if (dlg.ShowDialog() == DialogResult.OK)
-            {
-                var steps = GridProgramConverter.Read(dg_prg);
-
-                ProgramExportService.ExportCSV(dlg.FileName, steps);
-            }
-        }
 
         private void rbtn_InbuiltSim_CheckedChanged(object sender, EventArgs e)
         {
@@ -784,10 +786,7 @@ namespace CANhandler
         }
         private void SendToDevice_Click(object sender, EventArgs e)
         {
-            if (dg_prg.SelectedRows.Count == 0) return;
-            var step = GridProgramConverter.ReadRow(dg_prg.SelectedRows[0]);
-            byte[] buffer = KBusBuilder.BuildPacket_From_GridRow(step);
-            _transport.Send(buffer);
+            send();
         }
 
         private void chk_loop_CheckedChanged(object sender, EventArgs e)
@@ -810,10 +809,7 @@ namespace CANhandler
 
         private void btn_prg_send_Click(object sender, EventArgs e)
         {
-            if (dg_prg.SelectedRows.Count == 0) return;
-            var step = GridProgramConverter.ReadRow(dg_prg.SelectedRows[0]);
-            byte[] buffer = KBusBuilder.BuildPacket_From_GridRow(step);
-            _transport.Send(buffer);
+            send();
         }
 
         private void chk_auto_connect_CheckedChanged(object sender, EventArgs e)
@@ -822,7 +818,7 @@ namespace CANhandler
             ConfigManager.Save();
         }
 
-       
+
         private void btn_connect_Click_1(object sender, EventArgs e)
         {
 
@@ -879,13 +875,13 @@ namespace CANhandler
 
         private void btn_disconnect_Click(object sender, EventArgs e)
         {
-            byte[] b= {
+            byte[] b = {
                     0x66, 0x55, 0x15, 0x00, 0x01, 0x00, 0x00, 0x01,
                     0x00, 0x0B, 0x36, 0x32, 0x03, 0x44, 0x03, 0x03,
                     0x1A, 0x8F, 0x70, 0x77, 0x88
             };
 
-             byte[] b1= {
+            byte[] b1 = {
                                 0x66, 0x55, 0x0F, 0x00, 0x00, 0x00, 0x65, 0x02, 0x02, 0x00, 0x64, 0x0D, 0xF5, 0x77, 0x88
                         };
 
@@ -907,7 +903,49 @@ namespace CANhandler
             //byte[] bytes = Encoding.UTF8.GetBytes("fdsdsfsdafsa");
             _transport.Send(b3);
         }
-        #endregion 
+        #endregion
 
+
+
+        #region Helpers
+
+
+        private void send()
+        {
+            if (dg_prg.SelectedRows.Count == 0) return;
+            var step = GridProgramConverter.ReadRow(dg_prg.SelectedRows[0]);
+            byte[] buffer = KBusBuilder.BuildPacket_From_GridRow(step);
+            _transport.Send(buffer);
+        }
+
+        //private ProgramStep GetStep(DataGridViewRow row)
+        //{
+        //    ProgramStep ps = new ProgramStep();
+
+        //    ps.LineNo = row.Index + 1;
+        //    ps.Enable = Convert.ToBoolean(row.Cells["col_enable"].Value);
+        //    ps.PicType = (PIC_Address)row.Cells["col_pic_type"].Value;
+        //    ps.Operation = (Operation)row.Cells["col_Operation"].Value;
+        //    ps.Command = (Command)row.Cells["col_Command"].Value;
+        //    ps.Data = row.Cells["col_data"].Value?.ToString();
+        //    ps.Delay = Convert.ToInt32(row.Cells["col_delay"].Value);
+        //    ps.Loop = Convert.ToInt32(row.Cells["col_loop"].Value);
+
+        //    return ps;
+        //}
+
+
+
+
+        #endregion
+
+        #region Inbuilt simulator
+
+        private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            frm_Inbuilt_Simulator sim=new frm_Inbuilt_Simulator();
+            sim.Visible = true;
+        }
+        #endregion
     }
 }

@@ -2,12 +2,34 @@
   {
     "LineNo": 1,
     "Enable": true,
-    "PicType": "PIC_DISP_3X3_LIQUID",
-    "Action": "Read",
-    "Command": "",
-    "MSB": 0,
-    "LSB": 0,
-    "Delay": 0,
+    "PicType": 101,
+    "Cast": 0,
+    "Operation": 2,
+    "Command": 2,
+    "Data": "100",
+    "Delay": 250,
+    "Loop": 0
+  },
+  {
+    "LineNo": 2,
+    "Enable": true,
+    "PicType": 103,
+    "Cast": 0,
+    "Operation": 2,
+    "Command": 3,
+    "Data": null,
+    "Delay": 250,
+    "Loop": 1
+  },
+  {
+    "LineNo": 3,
+    "Enable": true,
+    "PicType": 104,
+    "Cast": 0,
+    "Operation": 1,
+    "Command": 3,
+    "Data": "1",
+    "Delay": 500,
     "Loop": 1
   }
 ]

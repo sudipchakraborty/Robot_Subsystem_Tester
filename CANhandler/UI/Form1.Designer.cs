@@ -93,7 +93,7 @@
             col_enable = new DataGridViewCheckBoxColumn();
             col_pic_type = new DataGridViewComboBoxColumn();
             col_cast = new DataGridViewComboBoxColumn();
-            col_Action = new DataGridViewComboBoxColumn();
+            col_Operation = new DataGridViewComboBoxColumn();
             col_Command = new DataGridViewComboBoxColumn();
             col_data = new DataGridViewTextBoxColumn();
             col_delay = new DataGridViewTextBoxColumn();
@@ -546,25 +546,26 @@
             // settingsToolStripMenuItem
             // 
             settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            settingsToolStripMenuItem.Size = new Size(199, 26);
-            settingsToolStripMenuItem.Text = "Settings";
+            settingsToolStripMenuItem.Size = new Size(224, 26);
+            settingsToolStripMenuItem.Text = "Inbuilt Simulator";
+            settingsToolStripMenuItem.Click += settingsToolStripMenuItem_Click;
             // 
             // packetMonitorToolStripMenuItem
             // 
             packetMonitorToolStripMenuItem.Name = "packetMonitorToolStripMenuItem";
-            packetMonitorToolStripMenuItem.Size = new Size(199, 26);
+            packetMonitorToolStripMenuItem.Size = new Size(224, 26);
             packetMonitorToolStripMenuItem.Text = "Packet Monitor";
             // 
             // terminalToolStripMenuItem
             // 
             terminalToolStripMenuItem.Name = "terminalToolStripMenuItem";
-            terminalToolStripMenuItem.Size = new Size(199, 26);
+            terminalToolStripMenuItem.Size = new Size(224, 26);
             terminalToolStripMenuItem.Text = "Terminal";
             // 
             // debugInterfaceToolStripMenuItem
             // 
             debugInterfaceToolStripMenuItem.Name = "debugInterfaceToolStripMenuItem";
-            debugInterfaceToolStripMenuItem.Size = new Size(199, 26);
+            debugInterfaceToolStripMenuItem.Size = new Size(224, 26);
             debugInterfaceToolStripMenuItem.Text = "Debug Interface";
             // 
             // helpToolStripMenuItem
@@ -601,7 +602,7 @@
             // dg_prg
             // 
             dg_prg.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dg_prg.Columns.AddRange(new DataGridViewColumn[] { col_line_no, col_enable, col_pic_type, col_cast, col_Action, col_Command, col_data, col_delay, col_loop });
+            dg_prg.Columns.AddRange(new DataGridViewColumn[] { col_line_no, col_enable, col_pic_type, col_cast, col_Operation, col_Command, col_data, col_delay, col_loop });
             dg_prg.Location = new Point(0, 31);
             dg_prg.Name = "dg_prg";
             dg_prg.RowHeadersWidth = 51;
@@ -641,14 +642,14 @@
             col_cast.Name = "col_cast";
             col_cast.Width = 125;
             // 
-            // col_Action
+            // col_Operation
             // 
-            col_Action.DisplayStyle = DataGridViewComboBoxDisplayStyle.ComboBox;
-            col_Action.HeaderText = "Action";
-            col_Action.Items.AddRange(new object[] { "Read", "Write", "Execute" });
-            col_Action.MinimumWidth = 6;
-            col_Action.Name = "col_Action";
-            col_Action.Width = 125;
+            col_Operation.DisplayStyle = DataGridViewComboBoxDisplayStyle.ComboBox;
+            col_Operation.HeaderText = "Operation";
+            col_Operation.Items.AddRange(new object[] { "Read", "Write", "Execute" });
+            col_Operation.MinimumWidth = 6;
+            col_Operation.Name = "col_Operation";
+            col_Operation.Width = 125;
             // 
             // col_Command
             // 
@@ -845,7 +846,7 @@
         private DataGridViewCheckBoxColumn col_enable;
         private DataGridViewComboBoxColumn col_pic_type;
         private DataGridViewComboBoxColumn col_cast;
-        private DataGridViewComboBoxColumn col_Action;
+        private DataGridViewComboBoxColumn col_Operation;
         private DataGridViewComboBoxColumn col_Command;
         private DataGridViewTextBoxColumn col_data;
         private DataGridViewTextBoxColumn col_delay;

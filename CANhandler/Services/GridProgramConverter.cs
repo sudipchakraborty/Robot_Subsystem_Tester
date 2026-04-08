@@ -12,34 +12,24 @@ namespace CANhandler.Services
         public static List<ProgramStep> Read(DataGridView grid)
         {
             List<ProgramStep> steps = new List<ProgramStep>();
-
             foreach (DataGridViewRow row in grid.Rows)
             {
                 if (row.IsNewRow)
                     continue;
-
                 ProgramStep step = new ProgramStep
                 {
-                    LineNo = row.Index + 1,
-                     
+                    LineNo = row.Index + 1,           
                     Enable = Convert.ToBoolean(row.Cells["col_enable"].Value),
-
                     PicType = (PIC_Address)row.Cells["col_pic_type"].Value,
-                    Operation = (Constants.Operation)row.Cells["col_Action"].Value,
-                   
-                    
+                    Operation = (Constants.Operation)row.Cells["col_Operation"].Value,   
                     Command = (Command)row.Cells["col_Command"].Value,
-
                     Data = row.Cells["col_data"].Value?.ToString(),
-
                     Delay = Convert.ToInt32(row.Cells["col_delay"].Value),
                     Loop = Convert.ToInt32(row.Cells["col_loop"].Value)
-
                 };
 
                 steps.Add(step);
             }
-
             return steps;
         }
 
@@ -49,40 +39,58 @@ namespace CANhandler.Services
 
             foreach (var step in steps)
             {
-                grid.Rows.Add(
-                    step.LineNo,
-                    step.Enable,
-                    step.PicType,
-                    step.Operation,
-                    step.Command,
-                    //step.MSB,
-                    //step.LSB,
-                    step.Delay,
-                    step.Loop
-                );
+                int rowIndex = grid.Rows.Add();
+                var row = grid.Rows[rowIndex];
+
+                row.Cells["col_line_no"].Value = step.LineNo;
+                row.Cells["col_enable"].Value = step.Enable;
+
+                // 🔴 IMPORTANT: Assign EXACT enum type expected by ComboBox
+                row.Cells["col_pic_type"].Value = (PIC_Address)step.PicType;
+                row.Cells["col_Operation"].Value = (Operation)step.Operation;
+                row.Cells["col_command"].Value = (Command)step.Command;
+
+                row.Cells["col_data"].Value = step.Data;
+                row.Cells["col_delay"].Value = step.Delay;
+                row.Cells["col_loop"].Value = step.Loop;
             }
         }
 
         public static ProgramStep ReadRow(DataGridViewRow row)
         {
-            return new ProgramStep
-            {
-                LineNo = row.Index + 1,
-                Enable = Convert.ToBoolean(row.Cells["col_enable"].Value),
+            ProgramStep ps= new ProgramStep();
 
-                PicType = (PIC_Address)row.Cells["col_pic_type"].Value,
+            ps. LineNo = row.Index + 1;
+            ps.Enable = Convert.ToBoolean(row.Cells["col_enable"].Value);
+            ps.PicType = (PIC_Address)row.Cells["col_pic_type"].Value;
+            ps.Operation = (Operation)row.Cells["col_Operation"].Value;
+            ps.Command = (Command)row.Cells["col_Command"].Value;
+            ps.Data = row.Cells["col_data"].Value?.ToString();
+            ps.Delay = Convert.ToInt32(row.Cells["col_delay"].Value);
+            ps.Loop = Convert.ToInt32(row.Cells["col_loop"].Value);
 
-                Cast = (Cast)row.Cells["col_Cast"].Value,
+            return ps;
 
-                Operation = (Operation)row.Cells["col_Action"].Value,
 
-                Command = (Command)row.Cells["col_Command"].Value,
 
-                Data = row.Cells["col_data"].Value?.ToString(),
+            //return new ProgramStep
+            //{
+            //    LineNo = row.Index + 1,
+            //    Enable = Convert.ToBoolean(row.Cells["col_enable"].Value),
 
-                Delay = Convert.ToInt32(row.Cells["col_delay"].Value),
-                Loop = Convert.ToInt32(row.Cells["col_loop"].Value)
-            };
+            //    PicType = (PIC_Address)row.Cells["col_pic_type"].Value,
+
+            //    Cast = (Cast)row.Cells["col_Cast"].Value,
+
+            //    Operation = (Operation)row.Cells["col_Operation"].Value,
+
+            //    Command = (Command)row.Cells["col_Command"].Value,
+
+            //    Data = row.Cells["col_data"].Value?.ToString(),
+
+            //    Delay = Convert.ToInt32(row.Cells["col_delay"].Value),
+            //    Loop = Convert.ToInt32(row.Cells["col_loop"].Value)
+            //};
         }
     }
 }

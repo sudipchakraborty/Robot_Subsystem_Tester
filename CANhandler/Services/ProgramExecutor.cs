@@ -52,8 +52,8 @@ namespace CANhandler.Services
                         {
                             await Task.Delay(100);
                         }
-                    
-                        var st = GridProgramConverter.ReadRow(_grid.SelectedRows[rowIndex]);
+
+                        var st = GridProgramConverter.ReadRow(_grid.Rows[rowIndex]);
                         byte[] buffer = KBusBuilder.BuildPacket_From_GridRow(st);
                         _transport.Send(buffer);
 
@@ -74,7 +74,7 @@ namespace CANhandler.Services
                         //if (config.SelectedInterface == InterfaceType.RealHardware)
                         //    _kbus?.SendOnly(buffer);
 
-                        await Task.Delay(step.Delay);
+                        await Task.Delay(st.Delay);
                     }
                 }
 
