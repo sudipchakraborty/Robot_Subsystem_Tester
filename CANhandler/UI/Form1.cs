@@ -26,11 +26,13 @@ namespace CANhandler
         private List<byte> rxBuffer = new List<byte>();
         private int expectedLength = -1;
         private UIConfig config;
+        private ProgramConfig prg;
         private string? currentFilePath = null;
         private ContextMenuStrip ctxGridMenu;
         private List<object[]> copiedRows = new List<object[]>();
         private ProgramExecutor executor;
         ITransport _transport = null;
+        private bool isDirty = false;
 
         public frm_main()
         {
@@ -38,6 +40,7 @@ namespace CANhandler
             InitializeContextMenu();
             ConfigManager.Load();
             config = ConfigManager.Config.UI;
+            prg = ConfigManager.Config.Program;
             LoadRecentFilesMenu();
             dg_prg.CellMouseDown += dg_prg_CellMouseDown;
             dg_prg.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
@@ -100,34 +103,14 @@ namespace CANhandler
             var col_Cmd = (DataGridViewComboBoxColumn)dg_prg.Columns["col_Command"];
             col_Cmd.DataSource = Enum.GetValues(typeof(Command));
             col_Cmd.ValueType = typeof(Command);
-
-
-
-            //var col_Cast = (DataGridViewComboBoxColumn)dg_prg.Columns["col_Cast"];
-            //col_Cast.DataSource = Enum.GetValues(typeof(Enums.Cast));
-            ////col_Cast.DataSource = new[]
-            ////{
-            ////    new { Text = "Unicast", Value = CastType.Unicast },
-            ////    new { Text = "Multicast", Value = CastType.Multicast }
-            ////};
-
-            ////col_Cast.DisplayMember = "Text";
-            ////col_Cast.ValueMember = "Value";
-            //////////////////////////////
-            //var pic_type = (DataGridViewComboBoxColumn)dg_prg.Columns["col_pic_type"];
-            //pic_type.DataSource = Enum.GetValues(typeof(Enums.PIC_Address));
-
         }
         #endregion
 
         #region FormLoad
         private void Form1_Load(object sender, EventArgs e)
         {
-            //System.Diagnostics.Debugger.Break();
-            /////////////////////////////////
             dg_prg.DataSource = null;
             dg_prg.Rows.Clear();
-
             SetupCastColumn();
 
             switch (config.SelectedInterface)
@@ -157,85 +140,58 @@ namespace CANhandler
             dg_prg.RowPostPaint += dg_prg_RowPostPaint;
             chk_auto_connect.Checked = ConfigManager.Config.Communication.AutoConnect;
             chk_loop.Checked = ConfigManager.Config.UI.LoopEnable;
-            /////////////////////
+            ///////////////////////////////////////////////
             string selected = ConfigManager.Config.Communication.Selected;
             foreach (ToolStripMenuItem item in commToolStripMenuItem.DropDownItems)
             {
                 item.Checked = item.Text.Equals(selected, StringComparison.OrdinalIgnoreCase);
             }
-            //var steps = AutoSaveService.Load();
-            //GridProgramConverter.Write(dg_prg, steps);
+            dg_prg.Rows.Clear();
+            var steps = AutoSaveService.Load(prg.LastProgram);
+            GridProgramConverter.Write(dg_prg, steps);
+            //prg.LastProgram = currentFilePath;
         }
         #endregion
 
-        #region Application Related
+        #region File Menu
 
-        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
+        private void fileToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrEmpty(currentFilePath))
-            {
-                // First time → Save As
-                SaveFileDialog dlg = new SaveFileDialog();
-                dlg.Filter = "Program Files (*.json)|*.json";
-
-                if (dlg.ShowDialog() != DialogResult.OK)
-                    return;
-
-                currentFilePath = dlg.FileName;
-            }
-
-            var steps = GridProgramConverter.Read(dg_prg);
-
-            ProgramFileService.Save(currentFilePath, steps);
-
-            AddToRecentFiles(currentFilePath);
-            lbl_message.Text = "Program saved: " + Path.GetFileName(currentFilePath);
-
-
+            dg_prg.Rows.Clear();
         }
 
         private void openToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             OpenFileDialog dlg = new OpenFileDialog();
             dlg.Filter = "Program Files (*.json)|*.json";
-
             if (dlg.ShowDialog() == DialogResult.OK)
             {
                 currentFilePath = dlg.FileName;
-
                 var steps = ProgramFileService.Load(dlg.FileName);
                 GridProgramConverter.Write(dg_prg, steps);
-
                 AddToRecentFiles(dlg.FileName);  // 👈 IMPORTANT
             }
         }
 
-        private void exportToolStripMenuItem_Click(object sender, EventArgs e)
+        private void AddToRecentFiles(string filePath)
         {
-            SaveFileDialog dlg = new SaveFileDialog();
-            dlg.Filter = "CSV (*.csv)|*.csv";
+            var list = ConfigManager.Config.RecentFiles;
 
-            if (dlg.ShowDialog() == DialogResult.OK)
-            {
-                var steps = GridProgramConverter.Read(dg_prg);
+            // Remove if already exists
+            list.Remove(filePath);
 
-                ProgramExportService.ExportCSV(dlg.FileName, steps);
-            }
+            // Insert at top
+            list.Insert(0, filePath);
+
+            // Keep only last 5
+            if (list.Count > 5)
+                list.RemoveAt(list.Count - 1);
+
+            ConfigManager.Save();
+
+            LoadRecentFilesMenu(); // refresh UI
         }
-        private void dg_prg_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
-        {
-            DataGridView grid = sender as DataGridView;
-            string rowNumber = (e.RowIndex + 1).ToString();
-            using (SolidBrush brush = new SolidBrush(grid.RowHeadersDefaultCellStyle.ForeColor))
-            {
-                e.Graphics.DrawString(
-                    rowNumber,
-                    grid.DefaultCellStyle.Font,
-                    brush,
-                    e.RowBounds.Location.X + 15,
-                    e.RowBounds.Location.Y + 6);
-            }
-        }
+
         private void LoadRecentFilesMenu()
         {
             recentFilesToolStripMenuItem.DropDownItems.Clear();
@@ -271,6 +227,102 @@ namespace CANhandler
                 recentFilesToolStripMenuItem.DropDownItems.Add(item);
             }
         }
+
+        private void recentFilesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(currentFilePath))
+            {
+                // First time → Save As
+                SaveFileDialog dlg = new SaveFileDialog();
+                dlg.Filter = "Program Files (*.json)|*.json";
+
+                if (dlg.ShowDialog() != DialogResult.OK)
+                    return;
+                currentFilePath = dlg.FileName;
+            }
+            var steps = GridProgramConverter.Read(dg_prg);
+
+            ProgramFileService.Save(currentFilePath, steps);    // save the program
+            AddToRecentFiles(currentFilePath);
+
+            prg.LastProgram= currentFilePath;                   // last program savae to the variable
+            ConfigManager.Save();                               // save to config file
+
+            lbl_message.Text = "Program saved: " + Path.GetFileName(currentFilePath);
+        }
+
+        private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog dlg = new SaveFileDialog();
+            dlg.Filter = "Program Files (*.json)|*.json";
+            dlg.Title = "Save As";
+
+            if (dlg.ShowDialog() != DialogResult.OK)
+                return;
+
+            // Update current file path to new one
+            currentFilePath = dlg.FileName;
+
+            var steps = GridProgramConverter.Read(dg_prg);
+            ProgramFileService.Save(currentFilePath, steps);
+
+            AddToRecentFiles(currentFilePath);
+
+            lbl_message.Text = "Program saved as: " + Path.GetFileName(currentFilePath);
+        }
+
+        private void exportToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog dlg = new SaveFileDialog();
+            dlg.Filter = "CSV (*.csv)|*.csv";
+            if (dlg.ShowDialog() == DialogResult.OK)
+            {
+                var steps = GridProgramConverter.Read(dg_prg);
+                ProgramExportService.ExportCSV(dlg.FileName, steps);
+            }
+        }
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (isDirty)
+            {
+                var result = MessageBox.Show(
+                    "Do you want to save changes before exiting?",
+                    "Exit",
+                    MessageBoxButtons.YesNoCancel,
+                    MessageBoxIcon.Warning);
+
+                if (result == DialogResult.Cancel)
+                    return;
+
+                if (result == DialogResult.Yes)
+                {
+                    saveToolStripMenuItem_Click(null, null);
+                }
+            }
+
+            Application.Exit();
+        }
+
+      private void dg_prg_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
+        {
+            DataGridView grid = sender as DataGridView;
+            string rowNumber = (e.RowIndex + 1).ToString();
+            using (SolidBrush brush = new SolidBrush(grid.RowHeadersDefaultCellStyle.ForeColor))
+            {
+                e.Graphics.DrawString(
+                    rowNumber,
+                    grid.DefaultCellStyle.Font,
+                    brush,
+                    e.RowBounds.Location.X + 15,
+                    e.RowBounds.Location.Y + 6);
+            }
+        }
+
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
@@ -320,13 +372,6 @@ namespace CANhandler
 
         }
 
-        private void fileToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            dg_prg.Rows.Clear();
-        }
-
-
-
         private void rbtn_InbuiltSim_CheckedChanged(object sender, EventArgs e)
         {
             if (rbtn_InbuiltSim.Checked)
@@ -364,27 +409,9 @@ namespace CANhandler
         }
 
         #endregion
-        #region Recent Files Management
-        private void AddToRecentFiles(string filePath)
-        {
-            var list = ConfigManager.Config.RecentFiles;
 
-            // Remove if already exists
-            list.Remove(filePath);
 
-            // Insert at top
-            list.Insert(0, filePath);
 
-            // Keep only last 5
-            if (list.Count > 5)
-                list.RemoveAt(list.Count - 1);
-
-            ConfigManager.Save();
-
-            LoadRecentFilesMenu(); // refresh UI
-        }
-
-        #endregion
 
         #region Datagrid Related
 
@@ -1047,5 +1074,7 @@ namespace CANhandler
 
             }
         }
+
+       
     }
 }

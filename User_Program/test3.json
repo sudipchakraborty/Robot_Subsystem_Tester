@@ -1,0 +1,13 @@
+[
+  {
+    "LineNo": 1,
+    "Enable": false,
+    "PicType": 28,
+    "Cast": 1,
+    "Operation": 1,
+    "Command": 2,
+    "Data": null,
+    "Delay": 0,
+    "Loop": 0
+  }
+]

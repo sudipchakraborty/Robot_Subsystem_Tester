@@ -15,7 +15,7 @@
     "Selected": "Comm. Port"
   },
   "Program": {
-    "LastProgram": "autosave_program.json"
+    "LastProgram": "C:\\Users\\Dr. S Chakraborty\\OneDrive\\Desktop\\Robot_Subsystem_Tester\\User_Program\\test3.json"
   },
   "UI": {
     "WindowWidth": 1200,
@@ -24,6 +24,8 @@
     "LoopEnable": true
   },
   "RecentFiles": [
-    "C:\\Users\\Dr. S Chakraborty\\OneDrive\\Desktop\\Robot_Subsystem_Tester\\User_Program\\test.json"
+    "C:\\Users\\Dr. S Chakraborty\\OneDrive\\Desktop\\Robot_Subsystem_Tester\\User_Program\\test3.json",
+    "C:\\Users\\Dr. S Chakraborty\\OneDrive\\Desktop\\Robot_Subsystem_Tester\\User_Program\\test.json",
+    "C:\\Users\\Dr. S Chakraborty\\OneDrive\\Desktop\\Robot_Subsystem_Tester\\User_Program\\test2.json"
   ]
 }

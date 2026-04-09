@@ -21,6 +21,7 @@ namespace CANhandler.Services
                     LineNo = row.Index + 1,           
                     Enable = Convert.ToBoolean(row.Cells["col_enable"].Value),
                     PicType = (PIC_Address)row.Cells["col_pic_type"].Value,
+                    Cast= (Cast)row.Cells["col_cast"].Value,
                     Operation = (Constants.Operation)row.Cells["col_Operation"].Value,   
                     Command = (Command)row.Cells["col_Command"].Value,
                     Data = row.Cells["col_data"].Value?.ToString(),
@@ -47,6 +48,7 @@ namespace CANhandler.Services
 
                 // 🔴 IMPORTANT: Assign EXACT enum type expected by ComboBox
                 row.Cells["col_pic_type"].Value = (PIC_Address)step.PicType;
+                row.Cells["col_cast"].Value = (Cast)step.Cast;
                 row.Cells["col_Operation"].Value = (Operation)step.Operation;
                 row.Cells["col_command"].Value = (Command)step.Command;
 
@@ -63,6 +65,7 @@ namespace CANhandler.Services
             ps. LineNo = row.Index + 1;
             ps.Enable = Convert.ToBoolean(row.Cells["col_enable"].Value);
             ps.PicType = (PIC_Address)row.Cells["col_pic_type"].Value;
+            ps.Cast = (Cast)row.Cells["col_cast"].Value;
             ps.Operation = (Operation)row.Cells["col_Operation"].Value;
             ps.Command = (Command)row.Cells["col_Command"].Value;
             ps.Data = row.Cells["col_data"].Value?.ToString();
@@ -70,27 +73,6 @@ namespace CANhandler.Services
             ps.Loop = Convert.ToInt32(row.Cells["col_loop"].Value);
 
             return ps;
-
-
-
-            //return new ProgramStep
-            //{
-            //    LineNo = row.Index + 1,
-            //    Enable = Convert.ToBoolean(row.Cells["col_enable"].Value),
-
-            //    PicType = (PIC_Address)row.Cells["col_pic_type"].Value,
-
-            //    Cast = (Cast)row.Cells["col_Cast"].Value,
-
-            //    Operation = (Operation)row.Cells["col_Operation"].Value,
-
-            //    Command = (Command)row.Cells["col_Command"].Value,
-
-            //    Data = row.Cells["col_data"].Value?.ToString(),
-
-            //    Delay = Convert.ToInt32(row.Cells["col_delay"].Value),
-            //    Loop = Convert.ToInt32(row.Cells["col_loop"].Value)
-            //};
         }
     }
 }

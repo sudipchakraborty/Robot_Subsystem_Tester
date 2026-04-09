@@ -30,6 +30,7 @@
         {
             components = new System.ComponentModel.Container();
             groupBox7 = new GroupBox();
+            button1 = new Button();
             label3 = new Label();
             label2 = new Label();
             label1 = new Label();
@@ -106,7 +107,6 @@
             contextMenuStrip1 = new ContextMenuStrip(components);
             InsertRow = new ToolStripMenuItem();
             DeleteRow = new ToolStripMenuItem();
-            button1 = new Button();
             groupBox7.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pb_tx).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pb_rx).BeginInit();
@@ -143,6 +143,16 @@
             groupBox7.TabIndex = 10;
             groupBox7.TabStop = false;
             groupBox7.Text = "Control Panel";
+            // 
+            // button1
+            // 
+            button1.Location = new Point(6, 334);
+            button1.Name = "button1";
+            button1.Size = new Size(71, 61);
+            button1.TabIndex = 21;
+            button1.Text = "button1";
+            button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click_1;
             // 
             // label3
             // 
@@ -364,48 +374,51 @@
             // fileToolStripMenuItem
             // 
             fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            fileToolStripMenuItem.Size = new Size(170, 26);
+            fileToolStripMenuItem.Size = new Size(224, 26);
             fileToolStripMenuItem.Text = "New";
             fileToolStripMenuItem.Click += fileToolStripMenuItem_Click;
             // 
             // openToolStripMenuItem1
             // 
             openToolStripMenuItem1.Name = "openToolStripMenuItem1";
-            openToolStripMenuItem1.Size = new Size(170, 26);
+            openToolStripMenuItem1.Size = new Size(224, 26);
             openToolStripMenuItem1.Text = "Open";
             openToolStripMenuItem1.Click += openToolStripMenuItem1_Click;
             // 
             // recentFilesToolStripMenuItem
             // 
             recentFilesToolStripMenuItem.Name = "recentFilesToolStripMenuItem";
-            recentFilesToolStripMenuItem.Size = new Size(170, 26);
+            recentFilesToolStripMenuItem.Size = new Size(224, 26);
             recentFilesToolStripMenuItem.Text = "Recent Files";
+            recentFilesToolStripMenuItem.Click += recentFilesToolStripMenuItem_Click;
             // 
             // saveToolStripMenuItem
             // 
             saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            saveToolStripMenuItem.Size = new Size(170, 26);
+            saveToolStripMenuItem.Size = new Size(224, 26);
             saveToolStripMenuItem.Text = "Save";
             saveToolStripMenuItem.Click += saveToolStripMenuItem_Click;
             // 
             // saveAsToolStripMenuItem
             // 
             saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
-            saveAsToolStripMenuItem.Size = new Size(170, 26);
+            saveAsToolStripMenuItem.Size = new Size(224, 26);
             saveAsToolStripMenuItem.Text = "Save As";
+            saveAsToolStripMenuItem.Click += saveAsToolStripMenuItem_Click;
             // 
             // exportToolStripMenuItem
             // 
             exportToolStripMenuItem.Name = "exportToolStripMenuItem";
-            exportToolStripMenuItem.Size = new Size(170, 26);
+            exportToolStripMenuItem.Size = new Size(224, 26);
             exportToolStripMenuItem.Text = "Export";
             exportToolStripMenuItem.Click += exportToolStripMenuItem_Click;
             // 
             // exutToolStripMenuItem
             // 
             exutToolStripMenuItem.Name = "exutToolStripMenuItem";
-            exutToolStripMenuItem.Size = new Size(170, 26);
+            exutToolStripMenuItem.Size = new Size(224, 26);
             exutToolStripMenuItem.Text = "Exit";
+            exutToolStripMenuItem.Click += exitToolStripMenuItem_Click;
             // 
             // communicationToolStripMenuItem
             // 
@@ -738,16 +751,6 @@
             DeleteRow.Size = new Size(171, 24);
             DeleteRow.Text = "Delete Row(s)";
             DeleteRow.Click += DeleteRow_Click;
-            // 
-            // button1
-            // 
-            button1.Location = new Point(6, 334);
-            button1.Name = "button1";
-            button1.Size = new Size(71, 61);
-            button1.TabIndex = 21;
-            button1.Text = "button1";
-            button1.UseVisualStyleBackColor = true;
-            button1.Click += button1_Click_1;
             // 
             // frm_main
             // 
