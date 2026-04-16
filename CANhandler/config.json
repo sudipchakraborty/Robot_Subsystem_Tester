@@ -15,15 +15,16 @@
     "Selected": "Comm. Port"
   },
   "Program": {
-    "LastProgram": "C:\\Users\\Dr. S Chakraborty\\OneDrive\\Desktop\\Robot_Subsystem_Tester\\User_Program\\test3.json"
+    "LastProgram": "C:\\Users\\Dr. S Chakraborty\\OneDrive\\Desktop\\Robot_Subsystem_Tester\\User_Program\\WTS_Test.json"
   },
   "UI": {
     "WindowWidth": 1200,
     "WindowHeight": 800,
-    "SelectedInterface": "InbuiltSim",
+    "SelectedInterface": "RealHardware",
     "LoopEnable": true
   },
   "RecentFiles": [
+    "C:\\Users\\Dr. S Chakraborty\\OneDrive\\Desktop\\Robot_Subsystem_Tester\\User_Program\\WTS_Test.json",
     "C:\\Users\\Dr. S Chakraborty\\OneDrive\\Desktop\\Robot_Subsystem_Tester\\User_Program\\test3.json",
     "C:\\Users\\Dr. S Chakraborty\\OneDrive\\Desktop\\Robot_Subsystem_Tester\\User_Program\\test.json",
     "C:\\Users\\Dr. S Chakraborty\\OneDrive\\Desktop\\Robot_Subsystem_Tester\\User_Program\\test2.json"

@@ -34,6 +34,7 @@ namespace CANhandler
         ITransport _transport = null;
         private bool isDirty = false;
 
+
         public frm_main()
         {
             InitializeComponent();
@@ -65,6 +66,9 @@ namespace CANhandler
             //kbusToolStripMenuItem.MouseDown += Protocol_Selection_MenuItem_MouseDown;
             rAWBinaryToolStripMenuItem.MouseDown += Protocol_MenuItem_MouseDown;
             aSCIIToolStripMenuItem.MouseDown += Protocol_MenuItem_MouseDown;
+
+            frm_Inbuilt_Simulator sim = null;
+            Action<string> LogToSimulator;
 
         }
         private void InitializeContextMenu()
@@ -149,7 +153,11 @@ namespace CANhandler
             dg_prg.Rows.Clear();
             var steps = AutoSaveService.Load(prg.LastProgram);
             GridProgramConverter.Write(dg_prg, steps);
-            //prg.LastProgram = currentFilePath;
+            ////////////////////////////////////////////           
+            //connect();
+            log.Start();
+            log.push("Application started");
+
         }
         #endregion
 
@@ -250,7 +258,7 @@ namespace CANhandler
             ProgramFileService.Save(currentFilePath, steps);    // save the program
             AddToRecentFiles(currentFilePath);
 
-            prg.LastProgram= currentFilePath;                   // last program savae to the variable
+            prg.LastProgram = currentFilePath;                   // last program savae to the variable
             ConfigManager.Save();                               // save to config file
 
             lbl_message.Text = "Program saved: " + Path.GetFileName(currentFilePath);
@@ -308,7 +316,7 @@ namespace CANhandler
             Application.Exit();
         }
 
-      private void dg_prg_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
+        private void dg_prg_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
         {
             DataGridView grid = sender as DataGridView;
             string rowNumber = (e.RowIndex + 1).ToString();
@@ -326,6 +334,7 @@ namespace CANhandler
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
+            log.Stop();
             //var steps = GridProgramConverter.Read(dg_prg);
             //AutoSaveService.Save(steps);
             //base.OnFormClosing(e);
@@ -382,6 +391,7 @@ namespace CANhandler
                 config.SelectedInterface = InterfaceType.RealHardware;
 
             ConfigManager.Save();   // 👈 IMPORTANT
+            connect();
         }
 
         private void rbtn_externalSim_CheckedChanged(object sender, EventArgs e)
@@ -394,6 +404,7 @@ namespace CANhandler
                 config.SelectedInterface = InterfaceType.RealHardware;
 
             ConfigManager.Save();   // 👈 IMPORTANT
+            connect();
         }
 
         private void rbtn_real_hardware_CheckedChanged(object sender, EventArgs e)
@@ -406,12 +417,10 @@ namespace CANhandler
                 config.SelectedInterface = InterfaceType.RealHardware;
 
             ConfigManager.Save();   // 👈 IMPORTANT
+            connect();
         }
 
         #endregion
-
-
-
 
         #region Datagrid Related
 
@@ -429,7 +438,35 @@ namespace CANhandler
         }
 
         private void dg_prg_CellValueChanged(object sender, DataGridViewCellEventArgs e)
-        {
+        {       
+            if (e.RowIndex < 0) return;
+
+            if (dg_prg.Columns[e.ColumnIndex].Name == "col_pic_type")
+            {
+                var row = dg_prg.Rows[e.RowIndex];
+
+                if (row.Cells["col_pic_type"].Value == null)
+                    return;
+
+                var pic = (PIC_Address)row.Cells["col_pic_type"].Value;
+
+                // 🔥 Step 1: Get Group
+                var group = PICHelper.GetGroup(pic);
+
+                // 🔥 Step 2: Get Commands
+                var commands = PICHelper.CommandHelper.GetCommands(group);
+
+                var commandCell = (DataGridViewComboBoxCell)row.Cells["col_Command"];
+
+                commandCell.DataSource = null;
+                commandCell.Value = null;
+                commandCell.DataSource = commands;
+            }
+        
+
+
+
+            ///////////////////////////////////////////////////
             //var v = dg_prg.Columns[e.ColumnIndex].Name;
 
             //if (dg_prg.Columns[e.ColumnIndex].Name == "col_pic_type")
@@ -790,28 +827,6 @@ namespace CANhandler
 
         #region UI Events
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-        }
-        private void textBoxReceive_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void btn_Disp_send_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label9_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void txt_disp_weight_TextChanged(object sender, EventArgs e)
-        {
-
-        }
         private void SendToDevice_Click(object sender, EventArgs e)
         {
             send();
@@ -846,18 +861,6 @@ namespace CANhandler
             ConfigManager.Save();
         }
 
-
-        private void btn_connect_Click_1(object sender, EventArgs e)
-        {
-
-
-        }
-
-        private void btn_connect_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void OnDataReceived(byte[] data)
         {
             sim?.HandleReceived(data);
@@ -871,37 +874,10 @@ namespace CANhandler
 
         private void btn_disconnect_Click(object sender, EventArgs e)
         {
-            byte[] b = {
-                    0x66, 0x55, 0x15, 0x00, 0x01, 0x00, 0x00, 0x01,
-                    0x00, 0x0B, 0x36, 0x32, 0x03, 0x44, 0x03, 0x03,
-                    0x1A, 0x8F, 0x70, 0x77, 0x88
-            };
-
-            byte[] b1 = {
-                                0x66, 0x55, 0x0F, 0x00, 0x00, 0x00, 0x65, 0x02, 0x02, 0x00, 0x64, 0x0D, 0xF5, 0x77, 0x88
-                        };
-
-            byte[] b3 = {
-    0x66, 0x55,             // Preamble
-    0x15,                   // Length = 21 bytes
-    0x00,                   // TransType
-    0x01,                   // Cast
-    0x00, 0x00,             // Address
-    0x01,                   // RW
-    0x00,                   // Command
-    0x0B, 0x36, 0x32, 0x03, // Data
-    0x44, 0x03, 0x03, 0x1A, // Data continued
-    0x8F, 0x70,             // CRC ✅ (XMODEM verified)
-    0x77, 0x88              // Postamble
-};
-
-
-            //byte[] bytes = Encoding.UTF8.GetBytes("fdsdsfsdafsa");
-            _transport.Send(b3);
+            _transport?.Disconnect();
+            pb_connection.BackColor = Color.Red;
         }
         #endregion
-
-
 
         #region Helpers
 
@@ -959,105 +935,35 @@ namespace CANhandler
         }
         #endregion
 
+        #region connection
+
         private void btn_connect_Click_2(object sender, EventArgs e)
         {
-            int i = 0;
-            //InterfaceType channel = config.SelectedInterface;
-
-            if (rbtn_real_hardware.Checked)
-            //if (channel == InterfaceType.RealHardware)
-            {
-                CommunicationConfig cfg = ConfigManager.Config.Communication;  // then assign
-                string port = cfg.CommPort.PortName;
-                int baudarate = cfg.CommPort.BaudRate;
-                string p = ExtractPortName(port);
-                _transport = new SerialTransport(p, baudarate);
-                //_kbus = new KBusComm(_transport);
-                _transport.Connect();
-                try
-                {
-                    // ✅ Create only once
-                    if (_transport == null)
-                    {
-                        //_transport = new SerialTransport("COM11", 38400);
-                        //_transport.Connect();
-
-                        //_kbus = new KBusComm(_transport);
-                    }
-                    else if (!_transport.IsConnected)
-                    {
-                        // 🔥 Reconnect if needed
-                        _transport.Connect();
-                    }
-
-                    pb_connection.BackColor = Color.GreenYellow;
-
-                    // ✅ Send data
-                    //RowSendService.SendRow(dg_prg.SelectedRows[0], _kbus);
-                }
-                catch (Exception ex)
-                {
-                    //MessageBox.Show(ex.Message);
-                    pb_connection.BackColor = Color.Red;
-                }
-            }
-            else if (rbtn_InbuiltSim.Checked)
-            {
-                _transport = new SimulatorTransport();
-                _transport.Connect();
-                _transport.DataReceived += OnDataReceived;
-            }
-            else if (rbtn_externalSim.Checked)
-            {
-
-            }
-            else
-            {
-
-            }
+            connect();
         }
 
         private void button1_Click_1(object sender, EventArgs e)
         {
-            int i = 0;
-            //InterfaceType channel = config.SelectedInterface;
+            CommunicationConfig cfg = ConfigManager.Config.Communication;  // then assign
+            
 
             if (rbtn_real_hardware.Checked)
-            //if (channel == InterfaceType.RealHardware)
             {
-                CommunicationConfig cfg = ConfigManager.Config.Communication;  // then assign
-                string port = cfg.CommPort.PortName;
-                int baudarate = cfg.CommPort.BaudRate;
-                string p = ExtractPortName(port);
-                _transport = new SerialTransport(p, baudarate);
-                //_kbus = new KBusComm(_transport);
-                _transport.Connect();
-                try
+               if(cfg.Selected == "Comm. Port")
                 {
-                    // ✅ Create only once
-                    if (_transport == null)
-                    {
-                        //_transport = new SerialTransport("COM11", 38400);
-                        //_transport.Connect();
-
-                        //_kbus = new KBusComm(_transport);
-                    }
-                    else if (!_transport.IsConnected)
-                    {
-                        // 🔥 Reconnect if needed
-                        _transport.Connect();
-                    }
-
-                    pb_connection.BackColor = Color.GreenYellow;
-
-                    // ✅ Send data
-                    //RowSendService.SendRow(dg_prg.SelectedRows[0], _kbus);
+                    string port = cfg.CommPort.PortName;
+                    int baudarate = cfg.CommPort.BaudRate;
+                    SerialPortConnect(port, baudarate);
                 }
-                catch (Exception ex)
+                if (cfg.Selected == "Websocket")
                 {
-                    //MessageBox.Show(ex.Message);
-                    pb_connection.BackColor = Color.Red;
+                    string port = cfg.CommPort.PortName;
+                    int baudarate = cfg.CommPort.BaudRate;
+                    SerialPortConnect(port, baudarate);
                 }
+
+
+
             }
             else if (rbtn_InbuiltSim.Checked)
             {
@@ -1075,6 +981,113 @@ namespace CANhandler
             }
         }
 
-       
+        private void SerialPortConnect(string port, int baudarate)
+        {
+            string p = ExtractPortName(port);
+            _transport = new SerialTransport(p, baudarate);
+            //_kbus = new KBusComm(_transport);
+            _transport.Connect();
+            try
+            {
+                // ✅ Create only once
+                if (_transport == null)
+                {
+                    //_transport = new SerialTransport("COM11", 38400);
+                    //_transport.Connect();
+
+                    //_kbus = new KBusComm(_transport);
+                }
+                else if (!_transport.IsConnected)
+                {
+                    // 🔥 Reconnect if needed
+                    _transport.Connect();
+                }
+
+                pb_connection.BackColor = Color.GreenYellow;
+
+                // ✅ Send data
+                //RowSendService.SendRow(dg_prg.SelectedRows[0], _kbus);
+            }
+            catch (Exception ex)
+            {
+                //MessageBox.Show(ex.Message);
+                pb_connection.BackColor = Color.Red;
+            }
+        }
+
+        private void connect()
+        {
+            if (sim != null && !sim.IsDisposed)
+            {
+                sim.Close();
+                sim.Dispose();
+                sim = null;
+            }
+
+            if (config.SelectedInterface != null)
+            {
+                if (config.SelectedInterface == InterfaceType.InbuiltSim)
+                {
+
+
+                    if (sim == null || sim.IsDisposed)
+                    {
+                        sim = new frm_Inbuilt_Simulator();
+                        LogToSimulator = sim.AddLog;    // Connect delegate
+                        sim.Show();
+                        sim.BringToFront();
+                    }
+                    else
+                    {
+                        sim.BringToFront();
+                    }
+                    _transport = new SimulatorTransport();
+                    _transport.Connect();
+                    _transport.DataReceived += OnDataReceived;
+                    if (_transport.IsConnected)
+                        pb_connection.BackColor = Color.GreenYellow;
+                    else pb_connection.BackColor = Color.Red;
+                }
+                ///////////////////////
+                else if (config.SelectedInterface == InterfaceType.RealHardware)
+                {
+
+                    CommunicationConfig cfg = ConfigManager.Config.Communication;  // then assign
+                    string port = cfg.CommPort.PortName;
+                    int baudarate = cfg.CommPort.BaudRate;
+                    string p = ExtractPortName(port);
+                    _transport = new SerialTransport(p, baudarate);
+                    _transport.Connect();
+                    if (_transport.IsConnected)
+                        pb_connection.BackColor = Color.GreenYellow;
+                    else pb_connection.BackColor = Color.Red;
+                }
+                else if (config.SelectedInterface == InterfaceType.ExternalSim)
+                {
+
+                }
+                ////////////////////////////////////////////////////// 
+            }
+        }
+        #endregion
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            byte[] b = {
+                0x66, 0x55, 0x0E, 0x00, 0x00, 0x00, 0x0A,
+                0x01, 0x00, 0x01, 0x92, 0xE8, 0x77, 0x88
+            };
+            _transport.Send(b);
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            byte[] b = {
+                0x66, 0x55, 0x0E, 0x00, 0x00, 0x00, 0x0A,
+                0x01, 0x00, 0x00, 0x82, 0xC9, 0x77, 0x88
+            };
+
+            _transport.Send(b);
+        }
     }
 }

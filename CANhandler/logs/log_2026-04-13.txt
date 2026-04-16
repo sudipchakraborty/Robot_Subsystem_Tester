@@ -1,0 +1,2 @@
+﻿[15:43:11.770] [LOG:] Application started
+[15:46:47.294] [LOG:] Application started

@@ -38,7 +38,8 @@ namespace CANhandler.Communication
             }
             catch (Exception ex)
             {
-                throw new Exception($"Serial connect failed: {ex.Message}");
+                //throw new Exception($"Serial connect failed: {ex.Message}");
+                connected = false;
             }
         }
 

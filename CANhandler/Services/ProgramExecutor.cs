@@ -1,9 +1,13 @@
 ﻿using CANhandler.Communication;
 using CANhandler.Models;
 using CANhandler.Protocol;
+
 using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using System.Runtime.InteropServices;
+using System.Diagnostics;
 
 namespace CANhandler.Services
 {
@@ -11,8 +15,16 @@ namespace CANhandler.Services
     {
         private ITransport _transport = null;
         private readonly DataGridView _grid;
-        private bool _isPaused = false;
-        private bool _isStopped = false;
+
+        private volatile bool _isPaused = false;
+        private volatile bool _isStopped = false;
+
+        // 🔥 Improve Windows timer resolution (~1ms)
+        [DllImport("winmm.dll")]
+        public static extern uint timeBeginPeriod(uint uMilliseconds);
+
+        [DllImport("winmm.dll")]
+        public static extern uint timeEndPeriod(uint uMilliseconds);
 
         public ProgramExecutor(DataGridView grid, ITransport transport)
         {
@@ -20,68 +32,138 @@ namespace CANhandler.Services
             _grid = grid;
         }
 
+        // =========================
+        // 🚀 MAIN EXECUTION
+        // =========================
         public async Task RunProgramAsync(List<ProgramStep> steps)
         {
+            // ✅ Validate before execution
+            if (!ValidateSteps(steps))
+                return;
+
             _isStopped = false;
 
-            do
+            timeBeginPeriod(1); // improve timing
+
+            try
             {
-                for (int rowIndex = 0; rowIndex < steps.Count; rowIndex++)
+                do
                 {
-                    if (_isStopped)
-                        return;
-
-                    var step = steps[rowIndex];
-
-                    if (!step.Enable)
-                        continue;
-
-                    // Highlight row
-                    _grid.Invoke(() =>
-                    {
-                        GridExecutionService.HighlightExecutingRow(_grid, rowIndex);
-                    });
-
-                    for (int i = 0; i < step.Loop; i++)
+                    for (int rowIndex = 0; rowIndex < steps.Count; rowIndex++)
                     {
                         if (_isStopped)
                             return;
 
-                        // 🔥 Pause handling
-                        while (_isPaused)
+                        var step = steps[rowIndex];
+
+                        if (!step.Enable)
+                            continue;
+
+                        // Highlight row
+                        _grid.Invoke(() =>
                         {
-                            await Task.Delay(100);
+                            GridExecutionService.HighlightExecutingRow(_grid, rowIndex);
+                        });
+
+                        for (int i = 0; i < step.Loop; i++)
+                        {
+                            if (_isStopped)
+                                return;
+
+                            await WaitIfPaused();
+
+                            var st = GridProgramConverter.ReadRow(_grid.Rows[rowIndex]);
+                            byte[] buffer = KBusBuilder.BuildPacket_From_GridRow(st);
+
+                            _transport.Send(buffer);
+
+                            // ✅ Interruptible delay
+                            await InterruptibleDelay(step.Delay);
                         }
-
-                        var st = GridProgramConverter.ReadRow(_grid.Rows[rowIndex]);
-                        byte[] buffer = KBusBuilder.BuildPacket_From_GridRow(st);
-                        _transport.Send(buffer);
-
-                        //DispenseRequest req = new DispenseRequest
-                        //{
-                        //    //DispenserType = step.PicType,
-                        //    //Action = step.Operation,
-                        //    //Command = step.Command,
-                        //    //MSB = Convert.ToString(step.MSB),
-                        //    //LSB = Convert.ToString(step.LSB)
-                        //};
-
-                        //KBusPacket pkt = DispenserCommandService.CreatePacket(req);
-                        //byte[] buffer = KBusBuilder.BuildPacket(pkt);
-
-                        //UIConfig config = ConfigManager.Config.UI;
-
-                        //if (config.SelectedInterface == InterfaceType.RealHardware)
-                        //    _kbus?.SendOnly(buffer);
-
-                        await Task.Delay(st.Delay);
                     }
-                }
 
-            } while (!_isStopped && ConfigManager.Config.UI.LoopEnable);
+                } while (!_isStopped && ConfigManager.Config.UI.LoopEnable);
+            }
+            finally
+            {
+                timeEndPeriod(1); // restore system timer
+            }
         }
 
+        // =========================
+        // 🔍 VALIDATION
+        // =========================
+        private bool ValidateSteps(List<ProgramStep> steps)
+        {
+            for (int i = 0; i < steps.Count; i++)
+            {
+                var step = steps[i];
 
+                if (!step.Enable)
+                    continue;
+
+                if (step.Loop <= 0)
+                {
+                    _grid.Invoke(() =>
+                    {
+                        _grid.Rows[i].DefaultCellStyle.BackColor = System.Drawing.Color.Red;
+                    });
+
+                    MessageBox.Show(
+                        $"Row {i + 1}: Loop must be at least 1.",
+                        "Validation Error",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
+
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        // =========================
+        // ⏸ PAUSE HANDLER
+        // =========================
+        private async Task WaitIfPaused()
+        {
+            while (_isPaused)
+            {
+                await Task.Delay(50);
+
+                if (_isStopped)
+                    return;
+            }
+        }
+
+        // =========================
+        // ⏱ INTERRUPTIBLE DELAY
+        // =========================
+        private async Task InterruptibleDelay(int totalMs)
+        {
+            if (totalMs <= 0)
+                return;
+
+            int chunk = 5; // responsiveness
+            int elapsed = 0;
+
+            while (elapsed < totalMs)
+            {
+                if (_isStopped)
+                    return;
+
+                await WaitIfPaused();
+
+                int delay = Math.Min(chunk, totalMs - elapsed);
+                await Task.Delay(delay);
+
+                elapsed += delay;
+            }
+        }
+
+        // =========================
+        // 🎮 CONTROL METHODS
+        // =========================
         public void Pause()
         {
             _isPaused = true;
@@ -107,7 +189,5 @@ namespace CANhandler.Services
                 GridExecutionService.HighlightExecutingRow(_grid, 0);
             });
         }
-
-
     }
 }

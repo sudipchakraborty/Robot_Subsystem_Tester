@@ -185,8 +185,6 @@ namespace CANhandler.Helpers
             return sb.ToString();
         }
 
-
-
         public static class PacketFormatter
         {
             public static string ToHexString(byte[] data, bool withSpace = true)
@@ -198,6 +196,21 @@ namespace CANhandler.Helpers
                     ? BitConverter.ToString(data).Replace("-", " ")
                     : BitConverter.ToString(data).Replace("-", "");
             }
+        }
+
+
+        public static string GetProjectRoot()
+        {
+            var dir = new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory);
+
+            // Move up until we exit "bin"
+            while (dir != null && dir.Name.ToLower() != "bin")
+            {
+                dir = dir.Parent;
+            }
+
+            // Go one level above "bin"
+            return dir?.Parent?.FullName ?? AppDomain.CurrentDomain.BaseDirectory;
         }
 
 

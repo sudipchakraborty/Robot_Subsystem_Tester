@@ -6,7 +6,9 @@
         Dispense_Timer_Based=1,
         Dispense_Weight_Based=2,
         LED_TOGGLING_1=3,
-        LED_TOGGLING_2=4
+        LED_TOGGLING_2=4,
+        Open_Valve=5,
+        Close_Valve = 6
     }     
 }
 

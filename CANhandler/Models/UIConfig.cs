@@ -10,7 +10,7 @@ namespace CANhandler.Models
         public int WindowHeight { get; set; } = 800;
 
         // Only this is needed for radio button selection
-        public InterfaceType SelectedInterface { get; set; } = InterfaceType.InbuiltSim;
+        public InterfaceType SelectedInterface { get; set; }
 
         public bool LoopEnable { get; set; } = true;
     }
