@@ -17,6 +17,7 @@ namespace CANhandler.Enums
                 {
                     Command.Who_Are_You,
                     Command.Dispense_Timer_Based,
+                    Command.Dispense_Weight_Based,
                     Command.Open_Valve,
                     Command.Close_Valve
                 };

@@ -1,0 +1,49 @@
+Group-done
+Run with highlights---DOne
+Double data receive
+Auto Discovery
+Real object simi
+Auto calibration
+Auto try connecting
+Installer
+AI based dynamic calibration for industry
+Graphics for corn dispenser
+UI auto position
+websocket
+MQTT
+tcpip
+UDP
+sqlite for credentials
+///////////////////////
+Return data field and feed into graph
+Graph Generator windows
+Terminal++ from paper a new free product to download
+send custom raw packet
+websocket page to save settings
+add packet copy
+websocket server for ESP32
+how to know packet is sending.. show the packet show with tx sttus: one scenario can supply off and not able to send data
+one packet sender interrafce. inut raw packet from other and just paste and press button
+command field provision for manual entry and PIC type also..
+think data field as string like onoff
+when real hardware, sim and again real, not able to connect
+when save, opening save as
+ON/on off input enable
+import/export .csv, email
+think to use db for settings or login screen
+relevant menu open as per PIC available command
+Inbuild similator
+Tx/RX led status
+//////////////////
+exception handle
+comments
+installer
+YouTube image
+About
+Help
+////////////////////
+
+
+
+
+
