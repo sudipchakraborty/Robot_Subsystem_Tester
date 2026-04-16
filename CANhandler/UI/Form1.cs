@@ -6,16 +6,20 @@ using CANhandler.Helpers;
 using CANhandler.Models;
 using CANhandler.Protocol;
 using CANhandler.Services;
+using CANhandler.Services.CANhandler.Services;
 using CANhandler.UI;
+
 using System.Data.Common;
 using System.IO.Ports;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml;
+
 using static CANhandler.Constants.ProtocolConstants;
 using static CANhandler.Helpers.CommandHelper;
 using static System.ComponentModel.Design.ObjectSelectorEditor;
+
 
 namespace CANhandler
 {
@@ -33,7 +37,9 @@ namespace CANhandler
         private ProgramExecutor executor;
         ITransport _transport = null;
         private bool isDirty = false;
-
+        private SerialDebugService debugService;
+        private InBuiltSimService InBuiltSim;
+        private DeviceAnimationService deviceAnim;
 
         public frm_main()
         {
@@ -69,6 +75,14 @@ namespace CANhandler
 
             frm_Inbuilt_Simulator sim = null;
             Action<string> LogToSimulator;
+            ///////////////
+            debugService = new SerialDebugService();
+            debugService.OnDataReceived += DebugService_OnDataReceived;
+            //////////////
+            InBuiltSim = new InBuiltSimService(rtb_debug);
+
+            deviceAnim = new DeviceAnimationService(pb_animation);
+            deviceAnim.SetDevice(DeviceType.GRAIN_DISPENSER);
 
         }
         private void InitializeContextMenu()
@@ -438,7 +452,7 @@ namespace CANhandler
         }
 
         private void dg_prg_CellValueChanged(object sender, DataGridViewCellEventArgs e)
-        {       
+        {
             if (e.RowIndex < 0) return;
 
             if (dg_prg.Columns[e.ColumnIndex].Name == "col_pic_type")
@@ -462,7 +476,7 @@ namespace CANhandler
                 commandCell.Value = null;
                 commandCell.DataSource = commands;
             }
-        
+
 
 
 
@@ -863,7 +877,7 @@ namespace CANhandler
 
         private void OnDataReceived(byte[] data)
         {
-            sim?.HandleReceived(data);
+            InBuiltSim?.HandleReceived(data);
         }
 
         public static string ExtractPortName(string fullText)
@@ -945,11 +959,11 @@ namespace CANhandler
         private void button1_Click_1(object sender, EventArgs e)
         {
             CommunicationConfig cfg = ConfigManager.Config.Communication;  // then assign
-            
+
 
             if (rbtn_real_hardware.Checked)
             {
-               if(cfg.Selected == "Comm. Port")
+                if (cfg.Selected == "Comm. Port")
                 {
                     string port = cfg.CommPort.PortName;
                     int baudarate = cfg.CommPort.BaudRate;
@@ -1089,5 +1103,58 @@ namespace CANhandler
 
             _transport.Send(b);
         }
+
+
+        #region Debug message display windows
+        private void DebugService_OnDataReceived(string data)
+        {
+            if (rtb_debug.InvokeRequired)
+            {
+                rtb_debug.Invoke(new Action(() =>
+                {
+                    AppendText(data);
+                }));
+            }
+            else
+            {
+                AppendText(data);
+            }
+        }
+
+        private void AppendText(string data)
+        {
+            rtb_debug.AppendText($"{DateTime.Now:HH:mm:ss} >> {data}\n");
+            rtb_debug.ScrollToCaret();
+        }
+
+
+
+        private void btn_debug_connect_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                debugService.Connect(txt_debug_port.Text,  38400);
+                AppendText("Connected to debug port");
+            }
+            catch (Exception ex)
+            {
+                AppendText("Connection error: " + ex.Message);
+            }
+        }
+
+        private void btn_debug_disconnect_Click(object sender, EventArgs e)
+        {
+            debugService.Disconnect();
+            AppendText("Disconnected");
+        }
+
+
+        private void btn_debug_clear_Click(object sender, EventArgs e)
+        {
+            rtb_debug.Clear();
+        }
+
+        #endregion
+
     }
 }

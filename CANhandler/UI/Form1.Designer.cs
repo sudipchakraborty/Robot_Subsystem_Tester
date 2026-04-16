@@ -91,14 +91,6 @@
             sendMailToDeveloperToolStripMenuItem = new ToolStripMenuItem();
             relatedDOcumentsToolStripMenuItem = new ToolStripMenuItem();
             dg_prg = new DataGridView();
-            statusStrip = new StatusStrip();
-            toolStripStatusLabel1 = new ToolStripStatusLabel();
-            lbl_message = new ToolStripStatusLabel();
-            tssl_comport = new ToolStripStatusLabel();
-            tssl_baudrate = new ToolStripStatusLabel();
-            contextMenuStrip1 = new ContextMenuStrip(components);
-            InsertRow = new ToolStripMenuItem();
-            DeleteRow = new ToolStripMenuItem();
             col_line_no = new DataGridViewTextBoxColumn();
             col_enable = new DataGridViewCheckBoxColumn();
             col_pic_type = new DataGridViewComboBoxColumn();
@@ -108,6 +100,27 @@
             col_data = new DataGridViewTextBoxColumn();
             col_delay = new DataGridViewTextBoxColumn();
             col_loop = new DataGridViewTextBoxColumn();
+            statusStrip = new StatusStrip();
+            toolStripStatusLabel1 = new ToolStripStatusLabel();
+            lbl_message = new ToolStripStatusLabel();
+            tssl_comport = new ToolStripStatusLabel();
+            tssl_baudrate = new ToolStripStatusLabel();
+            contextMenuStrip1 = new ContextMenuStrip(components);
+            InsertRow = new ToolStripMenuItem();
+            DeleteRow = new ToolStripMenuItem();
+            groupBox2 = new GroupBox();
+            btn_debug_clear = new Button();
+            btn_debug_disconnect = new Button();
+            label5 = new Label();
+            label4 = new Label();
+            btn_debug_connect = new Button();
+            txt_debug_baudrate = new TextBox();
+            txt_debug_port = new TextBox();
+            rtb_debug = new RichTextBox();
+            groupBox3 = new GroupBox();
+            rtb_inbuilt_sim = new RichTextBox();
+            groupBox4 = new GroupBox();
+            pb_animation = new PictureBox();
             groupBox7.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pb_tx).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pb_rx).BeginInit();
@@ -117,6 +130,10 @@
             ((System.ComponentModel.ISupportInitialize)dg_prg).BeginInit();
             statusStrip.SuspendLayout();
             contextMenuStrip1.SuspendLayout();
+            groupBox2.SuspendLayout();
+            groupBox3.SuspendLayout();
+            groupBox4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)pb_animation).BeginInit();
             SuspendLayout();
             // 
             // groupBox7
@@ -141,7 +158,7 @@
             groupBox7.Controls.Add(btn_pause);
             groupBox7.Location = new Point(1514, 31);
             groupBox7.Name = "groupBox7";
-            groupBox7.Size = new Size(167, 619);
+            groupBox7.Size = new Size(376, 521);
             groupBox7.TabIndex = 10;
             groupBox7.TabStop = false;
             groupBox7.Text = "Control Panel";
@@ -303,7 +320,7 @@
             groupBox1.Controls.Add(rbtn_InbuiltSim);
             groupBox1.Controls.Add(rbtn_real_hardware);
             groupBox1.ForeColor = Color.White;
-            groupBox1.Location = new Point(4, 471);
+            groupBox1.Location = new Point(199, 311);
             groupBox1.Name = "groupBox1";
             groupBox1.Size = new Size(145, 142);
             groupBox1.TabIndex = 13;
@@ -633,67 +650,11 @@
             dg_prg.Location = new Point(6, 31);
             dg_prg.Name = "dg_prg";
             dg_prg.RowHeadersWidth = 51;
-            dg_prg.Size = new Size(1502, 619);
+            dg_prg.Size = new Size(1502, 521);
             dg_prg.TabIndex = 0;
             dg_prg.CellMouseDown += dg_prg_CellMouseDown;
             dg_prg.CellValueChanged += dg_prg_CellValueChanged;
             dg_prg.KeyDown += dg_prg_KeyDown;
-            // 
-            // statusStrip
-            // 
-            statusStrip.BackColor = Color.FromArgb(0, 192, 192);
-            statusStrip.ImageScalingSize = new Size(20, 20);
-            statusStrip.Items.AddRange(new ToolStripItem[] { toolStripStatusLabel1, lbl_message, tssl_comport, tssl_baudrate });
-            statusStrip.Location = new Point(0, 1007);
-            statusStrip.Name = "statusStrip";
-            statusStrip.Size = new Size(1902, 26);
-            statusStrip.TabIndex = 14;
-            statusStrip.Text = "statusStrip1";
-            // 
-            // toolStripStatusLabel1
-            // 
-            toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            toolStripStatusLabel1.Size = new Size(119, 20);
-            toolStripStatusLabel1.Text = "Current Line: 000";
-            // 
-            // lbl_message
-            // 
-            lbl_message.Name = "lbl_message";
-            lbl_message.Size = new Size(148, 20);
-            lbl_message.Text = "Message: Data saved";
-            // 
-            // tssl_comport
-            // 
-            tssl_comport.Name = "tssl_comport";
-            tssl_comport.Size = new Size(50, 20);
-            tssl_comport.Text = "COM1";
-            // 
-            // tssl_baudrate
-            // 
-            tssl_baudrate.Name = "tssl_baudrate";
-            tssl_baudrate.Size = new Size(41, 20);
-            tssl_baudrate.Text = "9600";
-            // 
-            // contextMenuStrip1
-            // 
-            contextMenuStrip1.ImageScalingSize = new Size(20, 20);
-            contextMenuStrip1.Items.AddRange(new ToolStripItem[] { InsertRow, DeleteRow });
-            contextMenuStrip1.Name = "contextMenuStrip1";
-            contextMenuStrip1.Size = new Size(172, 52);
-            // 
-            // InsertRow
-            // 
-            InsertRow.Name = "InsertRow";
-            InsertRow.Size = new Size(171, 24);
-            InsertRow.Text = "Insert Row";
-            InsertRow.Click += InsertRow_Click;
-            // 
-            // DeleteRow
-            // 
-            DeleteRow.Name = "DeleteRow";
-            DeleteRow.Size = new Size(171, 24);
-            DeleteRow.Text = "Delete Row(s)";
-            DeleteRow.Click += DeleteRow_Click;
             // 
             // col_line_no
             // 
@@ -764,12 +725,202 @@
             col_loop.Name = "col_loop";
             col_loop.Width = 75;
             // 
+            // statusStrip
+            // 
+            statusStrip.BackColor = Color.FromArgb(0, 192, 192);
+            statusStrip.ImageScalingSize = new Size(20, 20);
+            statusStrip.Items.AddRange(new ToolStripItem[] { toolStripStatusLabel1, lbl_message, tssl_comport, tssl_baudrate });
+            statusStrip.Location = new Point(0, 927);
+            statusStrip.Name = "statusStrip";
+            statusStrip.Size = new Size(1902, 26);
+            statusStrip.TabIndex = 14;
+            statusStrip.Text = "statusStrip1";
+            // 
+            // toolStripStatusLabel1
+            // 
+            toolStripStatusLabel1.Name = "toolStripStatusLabel1";
+            toolStripStatusLabel1.Size = new Size(119, 20);
+            toolStripStatusLabel1.Text = "Current Line: 000";
+            // 
+            // lbl_message
+            // 
+            lbl_message.Name = "lbl_message";
+            lbl_message.Size = new Size(148, 20);
+            lbl_message.Text = "Message: Data saved";
+            // 
+            // tssl_comport
+            // 
+            tssl_comport.Name = "tssl_comport";
+            tssl_comport.Size = new Size(50, 20);
+            tssl_comport.Text = "COM1";
+            // 
+            // tssl_baudrate
+            // 
+            tssl_baudrate.Name = "tssl_baudrate";
+            tssl_baudrate.Size = new Size(41, 20);
+            tssl_baudrate.Text = "9600";
+            // 
+            // contextMenuStrip1
+            // 
+            contextMenuStrip1.ImageScalingSize = new Size(20, 20);
+            contextMenuStrip1.Items.AddRange(new ToolStripItem[] { InsertRow, DeleteRow });
+            contextMenuStrip1.Name = "contextMenuStrip1";
+            contextMenuStrip1.Size = new Size(172, 52);
+            // 
+            // InsertRow
+            // 
+            InsertRow.Name = "InsertRow";
+            InsertRow.Size = new Size(171, 24);
+            InsertRow.Text = "Insert Row";
+            InsertRow.Click += InsertRow_Click;
+            // 
+            // DeleteRow
+            // 
+            DeleteRow.Name = "DeleteRow";
+            DeleteRow.Size = new Size(171, 24);
+            DeleteRow.Text = "Delete Row(s)";
+            DeleteRow.Click += DeleteRow_Click;
+            // 
+            // groupBox2
+            // 
+            groupBox2.Controls.Add(btn_debug_clear);
+            groupBox2.Controls.Add(btn_debug_disconnect);
+            groupBox2.Controls.Add(label5);
+            groupBox2.Controls.Add(label4);
+            groupBox2.Controls.Add(btn_debug_connect);
+            groupBox2.Controls.Add(txt_debug_baudrate);
+            groupBox2.Controls.Add(txt_debug_port);
+            groupBox2.Controls.Add(rtb_debug);
+            groupBox2.Location = new Point(12, 558);
+            groupBox2.Name = "groupBox2";
+            groupBox2.Size = new Size(625, 355);
+            groupBox2.TabIndex = 15;
+            groupBox2.TabStop = false;
+            groupBox2.Text = "DEBUG DISPLAY";
+            // 
+            // btn_debug_clear
+            // 
+            btn_debug_clear.Location = new Point(547, 295);
+            btn_debug_clear.Name = "btn_debug_clear";
+            btn_debug_clear.Size = new Size(72, 43);
+            btn_debug_clear.TabIndex = 7;
+            btn_debug_clear.Text = "CLEAR";
+            btn_debug_clear.UseVisualStyleBackColor = true;
+            btn_debug_clear.Click += btn_debug_clear_Click;
+            // 
+            // btn_debug_disconnect
+            // 
+            btn_debug_disconnect.Location = new Point(401, 295);
+            btn_debug_disconnect.Name = "btn_debug_disconnect";
+            btn_debug_disconnect.Size = new Size(140, 43);
+            btn_debug_disconnect.TabIndex = 6;
+            btn_debug_disconnect.Text = "DISCONNECT";
+            btn_debug_disconnect.UseVisualStyleBackColor = true;
+            btn_debug_disconnect.Click += btn_debug_disconnect_Click;
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Location = new Point(142, 280);
+            label5.Name = "label5";
+            label5.Size = new Size(83, 20);
+            label5.TabIndex = 5;
+            label5.Text = "BAUDRATE";
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Location = new Point(25, 279);
+            label4.Name = "label4";
+            label4.Size = new Size(44, 20);
+            label4.TabIndex = 5;
+            label4.Text = "PORT";
+            // 
+            // btn_debug_connect
+            // 
+            btn_debug_connect.Location = new Point(283, 295);
+            btn_debug_connect.Name = "btn_debug_connect";
+            btn_debug_connect.Size = new Size(112, 43);
+            btn_debug_connect.TabIndex = 4;
+            btn_debug_connect.Text = "CONNECT";
+            btn_debug_connect.UseVisualStyleBackColor = true;
+            btn_debug_connect.Click += btn_debug_connect_Click;
+            // 
+            // txt_debug_baudrate
+            // 
+            txt_debug_baudrate.Location = new Point(142, 303);
+            txt_debug_baudrate.Name = "txt_debug_baudrate";
+            txt_debug_baudrate.Size = new Size(125, 27);
+            txt_debug_baudrate.TabIndex = 3;
+            txt_debug_baudrate.Text = "38400";
+            // 
+            // txt_debug_port
+            // 
+            txt_debug_port.Location = new Point(26, 303);
+            txt_debug_port.Name = "txt_debug_port";
+            txt_debug_port.Size = new Size(110, 27);
+            txt_debug_port.TabIndex = 2;
+            txt_debug_port.Text = "COM5";
+            // 
+            // rtb_debug
+            // 
+            rtb_debug.BackColor = Color.Black;
+            rtb_debug.BorderStyle = BorderStyle.None;
+            rtb_debug.ForeColor = Color.White;
+            rtb_debug.Location = new Point(6, 26);
+            rtb_debug.Name = "rtb_debug";
+            rtb_debug.Size = new Size(602, 247);
+            rtb_debug.TabIndex = 0;
+            rtb_debug.Text = "";
+            // 
+            // groupBox3
+            // 
+            groupBox3.Controls.Add(rtb_inbuilt_sim);
+            groupBox3.Location = new Point(643, 558);
+            groupBox3.Name = "groupBox3";
+            groupBox3.Size = new Size(562, 355);
+            groupBox3.TabIndex = 16;
+            groupBox3.TabStop = false;
+            groupBox3.Text = "groupBox3";
+            // 
+            // rtb_inbuilt_sim
+            // 
+            rtb_inbuilt_sim.BackColor = Color.Black;
+            rtb_inbuilt_sim.BorderStyle = BorderStyle.None;
+            rtb_inbuilt_sim.ForeColor = Color.White;
+            rtb_inbuilt_sim.Location = new Point(12, 24);
+            rtb_inbuilt_sim.Name = "rtb_inbuilt_sim";
+            rtb_inbuilt_sim.Size = new Size(537, 323);
+            rtb_inbuilt_sim.TabIndex = 0;
+            rtb_inbuilt_sim.Text = "";
+            // 
+            // groupBox4
+            // 
+            groupBox4.Controls.Add(pb_animation);
+            groupBox4.Location = new Point(1211, 558);
+            groupBox4.Name = "groupBox4";
+            groupBox4.Size = new Size(679, 355);
+            groupBox4.TabIndex = 17;
+            groupBox4.TabStop = false;
+            groupBox4.Text = "Animtion";
+            // 
+            // pb_animation
+            // 
+            pb_animation.Location = new Point(6, 26);
+            pb_animation.Name = "pb_animation";
+            pb_animation.Size = new Size(667, 312);
+            pb_animation.TabIndex = 0;
+            pb_animation.TabStop = false;
+            // 
             // frm_main
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.Teal;
-            ClientSize = new Size(1902, 1033);
+            ClientSize = new Size(1902, 953);
+            Controls.Add(groupBox4);
+            Controls.Add(groupBox3);
+            Controls.Add(groupBox2);
             Controls.Add(statusStrip);
             Controls.Add(dg_prg);
             Controls.Add(groupBox7);
@@ -793,6 +944,11 @@
             statusStrip.ResumeLayout(false);
             statusStrip.PerformLayout();
             contextMenuStrip1.ResumeLayout(false);
+            groupBox2.ResumeLayout(false);
+            groupBox2.PerformLayout();
+            groupBox3.ResumeLayout(false);
+            groupBox4.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)pb_animation).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -879,5 +1035,18 @@
         private DataGridViewTextBoxColumn col_data;
         private DataGridViewTextBoxColumn col_delay;
         private DataGridViewTextBoxColumn col_loop;
+        private GroupBox groupBox2;
+        private RichTextBox rtb_debug;
+        private Label label5;
+        private Label label4;
+        private Button btn_debug_connect;
+        private TextBox txt_debug_baudrate;
+        private TextBox txt_debug_port;
+        private Button btn_debug_disconnect;
+        private Button btn_debug_clear;
+        private GroupBox groupBox3;
+        private RichTextBox rtb_inbuilt_sim;
+        private GroupBox groupBox4;
+        private PictureBox pb_animation;
     }
 }

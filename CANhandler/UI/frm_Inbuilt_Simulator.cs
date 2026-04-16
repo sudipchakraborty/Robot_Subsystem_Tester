@@ -131,7 +131,7 @@ namespace CANhandler.UI
         }
 
         public void LogError(string msg)
-        {
+        {   
             AddLog("ERROR !! " + msg, Color.Red);
         }
 

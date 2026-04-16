@@ -1,0 +1,24 @@
+[
+  {
+    "LineNo": 1,
+    "Enable": true,
+    "PicType": 101,
+    "Cast": 0,
+    "Operation": 2,
+    "Command": 5,
+    "Data": null,
+    "Delay": 1000,
+    "Loop": 0
+  },
+  {
+    "LineNo": 2,
+    "Enable": false,
+    "PicType": 101,
+    "Cast": 0,
+    "Operation": 2,
+    "Command": 6,
+    "Data": null,
+    "Delay": 0,
+    "Loop": 0
+  }
+]
