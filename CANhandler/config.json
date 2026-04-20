@@ -20,8 +20,8 @@
   "UI": {
     "WindowWidth": 1200,
     "WindowHeight": 800,
-    "SelectedInterface": "InbuiltSim",
-    "LoopEnable": true
+    "SelectedInterface": "RealHardware",
+    "LoopEnable": false
   },
   "RecentFiles": [
     "C:\\Users\\Dr. S Chakraborty\\OneDrive\\Desktop\\Robot_Subsystem_Tester\\User_Program\\Weight_Based_Corn_Dispense.json",

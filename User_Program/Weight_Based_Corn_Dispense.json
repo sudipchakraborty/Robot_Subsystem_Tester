@@ -6,19 +6,19 @@
     "Cast": 0,
     "Operation": 2,
     "Command": 5,
-    "Data": null,
+    "Data": "90,100,150,200,300",
     "Delay": 1000,
-    "Loop": 0
+    "Loop": 1
   },
   {
     "LineNo": 2,
-    "Enable": false,
+    "Enable": true,
     "PicType": 101,
     "Cast": 0,
     "Operation": 2,
     "Command": 6,
-    "Data": null,
-    "Delay": 0,
-    "Loop": 0
+    "Data": "0",
+    "Delay": 5000,
+    "Loop": 1
   }
 ]
