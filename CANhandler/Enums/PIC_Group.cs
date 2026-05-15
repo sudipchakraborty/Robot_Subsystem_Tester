@@ -54,6 +54,13 @@ namespace CANhandler.Enums
                 // ===== Grains =====
                 case PIC_Address.PIC_DISP_3X3_GRAINS:
                 case PIC_Address.PIC_DISP_6X6_GRAINS:
+                case PIC_Address.PIC_DISP_3X3_GRAINS_RICE:
+                case PIC_Address.PIC_DISP_3X3_GRAINS_DAL:
+                case PIC_Address.PIC_DISP_3X3_GRAINS_SALT:
+                case PIC_Address.PIC_DISP_3X3_GRAINS_TARKA:
+                case PIC_Address.PIC_DISP_3X3_GRAINS_GREENCHILLI:
+                case PIC_Address.PIC_DISP_3X3_GRAINS_OIL:
+
                     return PIC_Group.DISPENSER;
 
                 // ===== Liquid =====

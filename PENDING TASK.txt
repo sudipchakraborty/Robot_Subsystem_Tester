@@ -1,5 +1,29 @@
+26.04.2026
+================
+> In the Hardware:
+	my status LED-done
+	read and display rtc.-Done
+
+	simulated clock for high speed alarm checking
+
+	RTC update time update from internet
+	data save and load from memory
+	mqtt
+	SELF COMPARE
+	STATE MACHINE ALGORITHM
+
+> VPS mqtt setup
+> hostinger sukalyan website setup
+> MK 3D freecad teach plus 
+
+> code with Arohi
+> interview
+///////////////////////////////////
+
+
 Group-done
 Run with highlights---DOne
+c# UDP debug message display
 
 Grid based form windows
 grain animation inside the picture box

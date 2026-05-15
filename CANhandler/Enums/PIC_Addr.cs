@@ -6,14 +6,19 @@
         PIC_DISP_3X3_GRAINS = 101,
         PIC_DISP_3X3_LIQUID = 102,
         PIC_DISP_3X3_PUREE = 103,
-
         // ===== Dispenser 6x6 =====
         PIC_DISP_6X6_GRAINS = 104,
         PIC_DISP_6X6_LIQUID = 105,
         PIC_DISP_6X6_PUREE = 106,
-
+        //=====Custom Dispenser 3x3 =====
+        PIC_DISP_3X3_GRAINS_RICE = 107,
+        PIC_DISP_3X3_GRAINS_DAL = 108,
+        PIC_DISP_3X3_GRAINS_SALT = 109,
+        PIC_DISP_3X3_GRAINS_TARKA = 110,
+        PIC_DISP_3X3_GRAINS_GREENCHILLI= 111,
+        PIC_DISP_3X3_GRAINS_OIL = 112,
         // ===== Other Devices =====
-        PIC_REFRIGERATOR= 24,
+        PIC_REFRIGERATOR = 24,
         PIC_GRINDER = 25,
         PIC_IP = 26,
         PIC_CHIMNEY = 27,
