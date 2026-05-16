@@ -15,19 +15,19 @@
     "Selected": "Comm. Port"
   },
   "Program": {
-    "LastProgram": "C:\\Users\\Dr. S Chakraborty\\OneDrive\\Desktop\\Robot_Subsystem_Tester\\User_Program\\Weight_Based_Corn_Dispense.json"
+    "LastProgram": "D:\\CANhandler\\User_Program\\Various Grains Test.json"
   },
   "UI": {
     "WindowWidth": 1200,
     "WindowHeight": 800,
-    "SelectedInterface": "RealHardware",
-    "LoopEnable": false
+    "SelectedInterface": "InbuiltSim",
+    "LoopEnable": true
   },
   "RecentFiles": [
+    "D:\\CANhandler\\User_Program\\Various Grains Test.json",
+    "D:\\CANhandler\\User_Program\\Weight_Based_Corn_Dispense.json",
+    "D:\\CANhandler\\User_Program\\test.json",
     "C:\\Users\\Dr. S Chakraborty\\OneDrive\\Desktop\\Robot_Subsystem_Tester\\User_Program\\Weight_Based_Corn_Dispense.json",
-    "C:\\Users\\Dr. S Chakraborty\\OneDrive\\Desktop\\Robot_Subsystem_Tester\\User_Program\\WTS_Test.json",
-    "C:\\Users\\Dr. S Chakraborty\\OneDrive\\Desktop\\Robot_Subsystem_Tester\\User_Program\\test3.json",
-    "C:\\Users\\Dr. S Chakraborty\\OneDrive\\Desktop\\Robot_Subsystem_Tester\\User_Program\\test.json",
-    "C:\\Users\\Dr. S Chakraborty\\OneDrive\\Desktop\\Robot_Subsystem_Tester\\User_Program\\test2.json"
+    "C:\\Users\\Dr. S Chakraborty\\OneDrive\\Desktop\\Robot_Subsystem_Tester\\User_Program\\WTS_Test.json"
   ]
 }

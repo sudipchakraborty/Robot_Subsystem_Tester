@@ -212,6 +212,38 @@ namespace CANhandler.Helpers
             // Go one level above "bin"
             return dir?.Parent?.FullName ?? AppDomain.CurrentDomain.BaseDirectory;
         }
+         
+        public static void ShowCopyableMessage(string text, string title)
+        {
+            Form form = new Form();
+            form.Text = title;
+            form.Width = 800;
+            form.Height = 500;
+            form.StartPosition = FormStartPosition.CenterScreen;
+
+            RichTextBox rtb = new RichTextBox();
+            rtb.Dock = DockStyle.Fill;
+            rtb.ReadOnly = true;
+            rtb.Text = text;
+            rtb.Font = new Font("Consolas", 10);
+            rtb.BackColor = Color.White;
+
+            Button copyBtn = new Button();
+            copyBtn.Text = "Copy";
+            copyBtn.Dock = DockStyle.Bottom;
+            copyBtn.Height = 40;
+
+            copyBtn.Click += (s, e) =>
+            {
+                Clipboard.SetText(text);
+                MessageBox.Show("Copied!");
+            };
+
+            form.Controls.Add(rtb);
+            form.Controls.Add(copyBtn);
+
+            form.ShowDialog();
+        }
 
 
     }

@@ -22,6 +22,8 @@ namespace CANhandler.UI
             txt_msg.BackColor = Color.Black;
             txt_msg.ForeColor = Color.LightGreen;
             txt_msg.Font = new Font("Consolas", 10);
+
+            this.Hide();
         }
 
         // =========================

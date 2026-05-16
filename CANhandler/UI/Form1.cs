@@ -79,10 +79,10 @@ namespace CANhandler
             debugService = new SerialDebugService();
             debugService.OnDataReceived += DebugService_OnDataReceived;
             //////////////
-            InBuiltSim = new InBuiltSimService(rtb_debug);
+            //InBuiltSim = new InBuiltSimService(rtb_debug);
 
-            deviceAnim = new DeviceAnimationService(pb_animation);
-            deviceAnim.SetDevice(DeviceType.GRAIN_DISPENSER);
+            //deviceAnim = new DeviceAnimationService(pb_animation);
+            //deviceAnim.SetDevice(DeviceType.GRAIN_DISPENSER);
 
         }
         private void InitializeContextMenu()
@@ -642,12 +642,24 @@ namespace CANhandler
         #region Menu Item Events
         private void ShowPacket_Click(object sender, EventArgs e)
         {
+            //if (dg_prg.SelectedRows.Count == 0)
+            //    return;
+            //var step = GridProgramConverter.ReadRow(dg_prg.SelectedRows[0]);
+            //byte[] buffer = KBusBuilder.BuildPacket_From_GridRow(step);
+            //string debug = CommandHelper.ToDetailedString(buffer);
+            //MessageBox.Show(debug, "Packet Debug");
+
             if (dg_prg.SelectedRows.Count == 0)
                 return;
+
             var step = GridProgramConverter.ReadRow(dg_prg.SelectedRows[0]);
+
             byte[] buffer = KBusBuilder.BuildPacket_From_GridRow(step);
+
             string debug = CommandHelper.ToDetailedString(buffer);
-            MessageBox.Show(debug, "Packet Debug");
+
+          CommandHelper.ShowCopyableMessage(debug, "Packet Debug");
+
         }
 
         private void commToolStripMenuItem_DropDownOpening(object sender, EventArgs e)
@@ -939,7 +951,7 @@ namespace CANhandler
                 // Connect delegate
                 LogToSimulator = sim.AddLog;
 
-                sim.Show();
+                //sim.Show();
             }
             else
             {
@@ -1048,7 +1060,7 @@ namespace CANhandler
                     {
                         sim = new frm_Inbuilt_Simulator();
                         LogToSimulator = sim.AddLog;    // Connect delegate
-                        sim.Show();
+                        //sim.Show();
                         sim.BringToFront();
                     }
                     else
