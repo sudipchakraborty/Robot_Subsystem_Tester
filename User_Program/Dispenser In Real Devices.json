@@ -1,0 +1,57 @@
+[
+  {
+    "LineNo": 1,
+    "Enable": true,
+    "PicType": 107,
+    "Cast": 0,
+    "Operation": 2,
+    "Command": 1,
+    "Data": "90,100,150,200,300",
+    "Delay": 1000,
+    "Loop": 1
+  },
+  {
+    "LineNo": 2,
+    "Enable": true,
+    "PicType": 108,
+    "Cast": 0,
+    "Operation": 2,
+    "Command": 1,
+    "Data": "90,100",
+    "Delay": 1000,
+    "Loop": 1
+  },
+  {
+    "LineNo": 3,
+    "Enable": true,
+    "PicType": 109,
+    "Cast": 0,
+    "Operation": 2,
+    "Command": 1,
+    "Data": "90,100",
+    "Delay": 1000,
+    "Loop": 1
+  },
+  {
+    "LineNo": 4,
+    "Enable": true,
+    "PicType": 110,
+    "Cast": 0,
+    "Operation": 2,
+    "Command": 1,
+    "Data": "90,100",
+    "Delay": 1000,
+    "Loop": 1
+  },
+  {
+    "LineNo": 5,
+    "Enable": false,
+    "PicType": 111,
+    "Cast": 0,
+    "Operation": 2,
+    "Command": 1,
+    "Data": "90,100",
+    "Delay": 1000,
+    "Loop": 1
+  }
+]

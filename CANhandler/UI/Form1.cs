@@ -79,7 +79,7 @@ namespace CANhandler
             debugService = new SerialDebugService();
             debugService.OnDataReceived += DebugService_OnDataReceived;
             //////////////
-            //InBuiltSim = new InBuiltSimService(rtb_debug);
+            InBuiltSim = new InBuiltSimService(rtb_inbuilt_sim);
 
             //deviceAnim = new DeviceAnimationService(pb_animation);
             //deviceAnim.SetDevice(DeviceType.GRAIN_DISPENSER);
@@ -99,7 +99,7 @@ namespace CANhandler
             ctxGridMenu.Items.Add("Copy Row(s)", null, CopyRows_Click);
             ctxGridMenu.Items.Add("Paste Row(s)", null, PasteRows_Click);
             ctxGridMenu.Items.Add(new ToolStripSeparator());
-            //ctxGridMenu.Items.Add("Delete Row(s)", null, DeleteRow_Click);
+            ctxGridMenu.Items.Add("Delete Row(s)", null, DeleteRow_Click);
 
             dg_prg.ContextMenuStrip = ctxGridMenu;
         }

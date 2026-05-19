@@ -881,7 +881,7 @@
             groupBox3.Size = new Size(562, 355);
             groupBox3.TabIndex = 16;
             groupBox3.TabStop = false;
-            groupBox3.Text = "groupBox3";
+            groupBox3.Text = "InBuilt-Sim";
             // 
             // rtb_inbuilt_sim
             // 
